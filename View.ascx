@@ -42,12 +42,12 @@
                         </asp:TemplateColumn>
                         <asp:TemplateColumn HeaderText="Result">
                             <ItemTemplate>
-                                <div class="foo" id="Div1" runat="server"><%# DisplayResult((int) ((CheckResult) Container.DataItem).Severity, ((CheckResult) Container.DataItem).SuccessText, ((CheckResult) Container.DataItem).FailureText) %></div>
+                                <div class="foo" id="resultDiv" runat="server"><%# DisplayResult((int) ((CheckResult) Container.DataItem).Severity, ((CheckResult) Container.DataItem).SuccessText, ((CheckResult) Container.DataItem).FailureText) %></div>
                             </ItemTemplate>
                         </asp:TemplateColumn>
                         <asp:TemplateColumn HeaderText="Notes">
                             <ItemTemplate>
-                                <div class="foo" id="Div1" runat="server"><%# DisplayNotes(((CheckResult) Container.DataItem).Notes) %></div>
+                                <div class="foo" id="notesDiv" runat="server"><%# DisplayNotes(((CheckResult) Container.DataItem).Notes) %></div>
                             </ItemTemplate>
                         </asp:TemplateColumn>
 
