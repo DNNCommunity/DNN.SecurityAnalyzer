@@ -32,7 +32,7 @@
                     <Columns>
                         <asp:TemplateColumn HeaderText="CheckPurpose">
                             <ItemTemplate>
-                                <asp:label runat="server" Text="<%#  DisplayFriendlyName(((CheckResult) Container.DataItem).CheckNameText) %>" ToolTip=""/>
+                                <asp:label runat="server" Text="<%#  DisplayFriendlyName(((CheckResult) Container.DataItem).CheckNameText) %>" />
                             </ItemTemplate>
                         </asp:TemplateColumn>
                         <asp:TemplateColumn HeaderText="Severity" HeaderStyle-Width="50px" ItemStyle-HorizontalAlign="Center">

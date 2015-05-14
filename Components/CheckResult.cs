@@ -20,8 +20,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         {
             get
             {
-                var test = CheckName + "Reason.Text";
-                return Localization.GetString(test, LocalResourceFile);
+                return Localization.GetString(CheckName + "Reason", LocalResourceFile);
             }
         }
 
@@ -37,14 +36,18 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         public string CheckNameText
         {
-            get { return  Localization.GetString(CheckName + "Name", LocalResourceFile); }
+            get
+            {
+
+                return CheckName + " : " + Localization.GetString(CheckName + "Name", LocalResourceFile);
+            }
         }
 
         public IList<String> Notes { get; set; }
 
         private string LocalResourceFile
         {
-            get { return "~/DesktopModules/SecurityAnalyzer/App_LocalResources/view.ascx"; }
+            get { return "~/DesktopModules/DNNCorp/SecurityAnalyzer/App_LocalResources/view.ascx"; }
         }
     }
 }

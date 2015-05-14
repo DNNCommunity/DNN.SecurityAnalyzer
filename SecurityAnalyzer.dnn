@@ -20,7 +20,7 @@
         <component type="Cleanup" fileName="01.00.00.txt" version="01.00.00" />
         <component type="Script">
           <scripts>
-            <basePath>DesktopModules\SecurityAnalyzer</basePath>
+            <basePath>DesktopModules\DNNCorp\SecurityAnalyzer</basePath>
             <script type="Install">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>01.00.00.SqlDataProvider</name>
@@ -34,21 +34,12 @@
           </scripts>
         </component>
 
-        <component type="ResourceFile">
-          <resourceFiles>
-            <basePath>DesktopModules/SecurityAnalyzer</basePath>
-            <resourceFile>
-              <name>Resources.zip</name>
-            </resourceFile>
-          </resourceFiles>
-        </component>
-
         <component type="Module">
           <desktopModule>
             <moduleName>SecurityAnalyzer</moduleName>
-            <foldername>SecurityAnalyzer</foldername>
+            <foldername>DNNCorp/SecurityAnalyzer</foldername>
             <supportedFeatures />
-            <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController, DNN.Modules.SecurityAnalyzer.Components</businessControllerClass>
+            <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
             <supportedFeatures>
           <supportedFeature type="Upgradeable" />
         </supportedFeatures>
@@ -59,7 +50,7 @@
                 <moduleControls>
                   <moduleControl>
                     <controlKey />
-                    <controlSrc>DesktopModules/SecurityAnalyzer/View.ascx</controlSrc>
+                    <controlSrc>DesktopModules/DNNCorp/SecurityAnalyzer/View.ascx</controlSrc>
                     <supportsPartialRendering>False</supportsPartialRendering>
                     <controlTitle />
                     <controlType>Host</controlType>
@@ -81,6 +72,31 @@
         </attributes>
       </eventMessage>
         </component>
+        <component type="File">
+      <files>
+        <basePath>DesktopModules\DNNCorp\SecurityAnalyzer</basePath>
+        <file>
+          <name>License.txt</name>
+        </file>
+        <file>
+          <name>module.css</name>
+        </file>
+        <file>
+          <name>ReleaseNotes.txt</name>
+        </file>
+        <file>
+          <name>View.ascx</name>
+        </file>
+        <file>
+          <path>App_LocalResources</path>
+          <name>View.ascx.resx</name>
+        </file>
+      
+        <file>
+          <name>SecurityAnalyzer.dnn</name>
+        </file>
+      </files>
+    </component>
         <component type="Assembly">
           <assemblies>
             <assembly>
