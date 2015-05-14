@@ -263,7 +263,7 @@
     <value>Check if site(s) use public registration</value>
   </data>
   <data name="CheckSuperuserOldPasswordName.Text" xml:space="preserve">
-    <value>Check if supuers are not regularly changing passwords</value>
+    <value>Check if superusers are not regularly changing passwords</value>
   </data>
   <data name="CheckTracingName.Text" xml:space="preserve">
     <value>Check if asp.net tracing is enabled</value>
