@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using DNN.Modules.SecurityAnalyzer.Components;
+using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Users;
 using DotNetNuke.Services.Exceptions;
@@ -17,6 +18,11 @@ namespace DNN.Modules.SecurityAnalyzer
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!UserInfo.IsSuperUser)
+            {
+                Response.Redirect(Globals.NavigateURL("Access Denied"), true);
+            }
+
             try
             {
                 cmdSearch.Click += cmdSearch_Click;
