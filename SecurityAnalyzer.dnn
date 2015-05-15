@@ -100,7 +100,7 @@
         <component type="Assembly">
           <assemblies>
             <assembly>
-              <name>SecurityAnalyzer.dll</name>
+              <name>DNN.Modules.SecurityAnalyzer.dll</name>
               <path>bin</path>
             </assembly>
           </assemblies>

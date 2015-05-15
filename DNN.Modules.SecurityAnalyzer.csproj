@@ -12,7 +12,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DNN.Modules.SecurityAnalyzer</RootNamespace>
-    <AssemblyName>SecurityAnalyzer</AssemblyName>
+    <AssemblyName>DNN.Modules.SecurityAnalyzer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />

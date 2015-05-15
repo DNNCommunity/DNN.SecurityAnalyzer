@@ -65,13 +65,13 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         }
 
         /// <summary>
-        ///     search all website files for files with a particular extension
+        ///     search all website files for files with a potential dangerous extension
         /// </summary>
-        /// <param name="extensions">a regular expression for extension</param>
         /// <returns></returns>
-        public static string[] FindFiles(string extensions)
+        public static IEnumerable<string> FindUnexpectedExtensions()
         {
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, extensions);
+            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+            .Where(s => s.EndsWith(".asp") || s.EndsWith(".php"));
             return files;
         }
 
