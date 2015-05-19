@@ -8,7 +8,9 @@
 /*****                                                  *****/
 /************************************************************/
 
-
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SearchAllTables]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}SearchAllTables]
+GO
 
 /************************************************************/
 /*****              SqlDataProvider                     *****/
