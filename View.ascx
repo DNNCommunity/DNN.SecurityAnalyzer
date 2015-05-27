@@ -24,7 +24,7 @@
             <div>
                 <asp:DataGrid id="dgResults" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                     <headerstyle CssClass="dnnGridHeader"/>
-                    <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                    <itemstyle CssClass="dnnGridItem"/>
                     <alternatingitemstyle CssClass="dnnGridAltItem"/>
                     <edititemstyle/>
                     <selecteditemstyle/>
@@ -90,7 +90,7 @@
         <div>
             <asp:DataGrid id="dgUsers" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
-                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <itemstyle CssClass="dnnGridItem"/>
                 <alternatingitemstyle CssClass="dnnGridAltItem"/>
                 <edititemstyle/>
                 <selecteditemstyle/>

@@ -140,7 +140,7 @@ namespace DNN.Modules.SecurityAnalyzer
             var date = Null.NullString;
             try
             {
-                date = !Null.IsNull(userDate) ? userDate.ToString(CultureInfo.InvariantCulture) : "";
+                date = !Null.IsNull(userDate) ? userDate.ToString() : "";
             }
             catch (Exception exc) //Module failed to load
             {
