@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
@@ -9,8 +10,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             var result = new CheckResult(SeverityEnum.Unverified, "CheckUnexpectedExtensions");
             try
             {
-                var investigatefiles = Utility.FindFiles("*.asp;*.php");
-                if (investigatefiles.Length > 0)
+                var investigatefiles = Utility.FindUnexpectedExtensions();
+                if (investigatefiles.Count() > 0)
                 {
                     result.Severity = SeverityEnum.Failure;
                     foreach (var filename in investigatefiles)

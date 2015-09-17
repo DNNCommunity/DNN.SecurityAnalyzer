@@ -14,12 +14,13 @@
     <RootNamespace>DNN.Modules.SecurityAnalyzer</RootNamespace>
     <AssemblyName>DNN.Modules.SecurityAnalyzer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -147,7 +148,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://dnndev.me/desktopmodules/SecurityAnalyzer</IISUrl>
+          <IISUrl>http://localhost:30900/</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://dnndev.me</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -1,9 +1,9 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="SecurityAnalyzer" type="Module" version="01.00.00">
+    <package name="SecurityAnalyzer" type="Module" version="01.00.01">
       <friendlyName>SecurityAnalyzer</friendlyName>
       <description>SecurityAnalyzer module</description>
-      <iconFile>Images/icon_extensions.gif</iconFile>
+      <iconFile>~/Icons/Sigma/Extensions_32x32_standard.png</iconFile>
       <owner>
         <name>DNN Software</name>
         <organization>DNN Software</organization>
@@ -12,11 +12,11 @@
       </owner>
       <license src="License.txt"></license>
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
-	<azureCompatible>true</azureCompatible>
+      <azureCompatible>true</azureCompatible>
       <dependencies>
         <dependency type="CoreVersion">06.02.00</dependency>
       </dependencies>
-      
+
       <components>
         <component type="Cleanup" fileName="01.00.00.txt" version="01.00.00" />
         <component type="Script">
@@ -42,8 +42,8 @@
             <supportedFeatures />
             <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
             <supportedFeatures>
-          <supportedFeature type="Upgradeable" />
-        </supportedFeatures>
+              <supportedFeature type="Upgradeable" />
+            </supportedFeatures>
             <moduleDefinitions>
               <moduleDefinition>
                 <friendlyName>SecurityAnalyzer</friendlyName>
@@ -63,41 +63,30 @@
               </moduleDefinition>
             </moduleDefinitions>
           </desktopModule>
-        <eventMessage>
-        <processorType>DotNetNuke.Entities.Modules.EventMessageProcessor, DotNetNuke</processorType>
-        <processorCommand>UpgradeModule</processorCommand>
-        <attributes>
-          <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
-          <desktopModuleID>[DESKTOPMODULEID]</desktopModuleID>
-          <upgradeVersionsList>01.00.00</upgradeVersionsList>
-        </attributes>
-      </eventMessage>
+          <eventMessage>
+            <processorType>DotNetNuke.Entities.Modules.EventMessageProcessor, DotNetNuke</processorType>
+            <processorCommand>UpgradeModule</processorCommand>
+            <attributes>
+              <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
+              <desktopModuleID>[DESKTOPMODULEID]</desktopModuleID>
+              <upgradeVersionsList>01.00.00</upgradeVersionsList>
+            </attributes>
+          </eventMessage>
         </component>
         <component type="File">
-      <files>
-        <basePath>DesktopModules\DNNCorp\SecurityAnalyzer</basePath>
-        <file>
-          <name>License.txt</name>
-        </file>
-        <file>
-          <name>module.css</name>
-        </file>
-        <file>
-          <name>ReleaseNotes.txt</name>
-        </file>
-        <file>
-          <name>View.ascx</name>
-        </file>
-        <file>
-          <path>App_LocalResources</path>
-          <name>View.ascx.resx</name>
-        </file>
-      
-        <file>
-          <name>SecurityAnalyzer.dnn</name>
-        </file>
-      </files>
-    </component>
+          <files>
+            <basePath>DesktopModules\DNNCorp\SecurityAnalyzer</basePath>
+            <file>
+              <name>License.txt</name>
+            </file>
+            <file>
+              <name>ReleaseNotes.txt</name>
+            </file>
+            <file>
+              <name>SecurityAnalyzer.dnn</name>
+            </file>
+          </files>
+        </component>
         <component type="Assembly">
           <assemblies>
             <assembly>
@@ -105,6 +94,14 @@
               <path>bin</path>
             </assembly>
           </assemblies>
+        </component>
+        <component type="ResourceFile">
+          <resourceFiles>
+            <basePath>DesktopModules/DNNCorp/SecurityAnalyzer</basePath>
+            <resourceFile>
+              <name>Resources.zip</name>
+            </resourceFile>
+          </resourceFiles>
         </component>
       </components>
     </package>
