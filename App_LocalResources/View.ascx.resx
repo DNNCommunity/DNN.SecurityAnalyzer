@@ -232,7 +232,7 @@
     <value>No unexpected extensions found</value>
   </data>
   <data name="CheckViewstatemacFailure.Text" xml:space="preserve">
-    <value>viewstatemac is not enabled failure</value>
+    <value>viewstatemac validation is not enabled</value>
   </data>
   <data name="CheckViewstatemacReason.Text" xml:space="preserve">
     <value>A view-state MAC is an encrypted version of the hidden variable that a page's view state is persisted to when the page is sent to the browser. When this property is set to true, the encrypted view state is checked to verify that it has not been tampered with on the client. 
