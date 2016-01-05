@@ -205,13 +205,13 @@
     <value>All superusers are regular users of the system.</value>
   </data>
   <data name="CheckSiteRegistrationFailure.Text" xml:space="preserve">
-    <value>One or more portals are using public registration</value>
+    <value>One or more websites are using public registration</value>
   </data>
   <data name="CheckSiteRegistrationReason.Text" xml:space="preserve">
     <value>Sites that have public registration enabled are a prime target for spammers.</value>
   </data>
   <data name="CheckSiteRegistrationSuccess.Text" xml:space="preserve">
-    <value>All the portals are using non-public registration</value>
+    <value>All the websites are using non-public registration</value>
   </data>
   <data name="CheckSuperuserOldPasswordFailure.Text" xml:space="preserve">
     <value>At least one superuser account has a password that has not been changed in more than 6 months.</value>
