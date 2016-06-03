@@ -271,6 +271,18 @@
   <data name="CheckUnexpectedExtensionsName.Text" xml:space="preserve">
     <value>Check if asp/php files are found</value>
   </data>
+  <data name="CheckDefaultPageName.Text" xml:space="preserve">
+    <value>Check if default.aspx/default.aspx.cs have been modified</value>
+  </data>
+  <data name="CheckDefaultPageFailure.Text" xml:space="preserve">
+    <value>The default page has been modified - We recommend you evaluate these files carefully, they maybe modified by hacker and inject dangerous code,.</value>
+  </data>
+  <data name="CheckDefaultPageReason.Text" xml:space="preserve">
+    <value>DNN use default.aspx to load everything, so all requests will load this file when user browse the site, if someone modify this file, it may cause huge risk.</value>
+  </data>
+  <data name="CheckDefaultPageSuccess.Text" xml:space="preserve">
+    <value>The default page haven't been modified.</value>
+  </data>
   <data name="CheckViewstatemacName.Text" xml:space="preserve">
     <value>Check if viewstate is protected</value>
   </data>

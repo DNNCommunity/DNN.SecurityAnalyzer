@@ -74,6 +74,7 @@
     <Compile Include="Components\Checks\CheckTracing.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\Checks\CheckDefaultPage.cs" />
     <Compile Include="Components\Checks\CheckViewstatemac.cs" />
     <Compile Include="Components\Checks\CheckSiteRegistration.cs" />
     <Compile Include="Components\Checks\CheckBiography.cs" />
@@ -97,10 +98,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="01.00.00.txt" />
+    <Content Include="Cleanup\01.00.00.txt" />
     <Content Include="License.txt" />
     <Content Include="module.css" />
     <Content Include="ReleaseNotes.txt" />
+    <EmbeddedResource Include="Resources\sums.resouces" />
     <Content Include="View.ascx" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,11 @@
+﻿Install\DotNetNuke.install.config
+Install\DotNetNuke.install.config.resources
+Install\InstallWizard.aspx
+Install\InstallWizard.aspx.cs
+Install\InstallWizard.aspx.designer.cs
+Install\UpgradeWizard.aspx
+Install\UpgradeWizard.aspx.cs
+Install\UpgradeWizard.aspx.designer.cs
+Install\Install.aspx
+Install\Install.aspx.cs
+Install\Install.aspx.designer.cs

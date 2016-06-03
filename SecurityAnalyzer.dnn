@@ -18,7 +18,7 @@
       </dependencies>
 
       <components>
-        <component type="Cleanup" fileName="01.00.00.txt" version="01.00.00" />
+        <component type="Cleanup" fileName="Cleanup\01.00.00.txt" version="01.00.00" />
         <component type="Script">
           <scripts>
             <basePath>DesktopModules\DNNCorp\SecurityAnalyzer</basePath>
@@ -34,7 +34,6 @@
             </script>
           </scripts>
         </component>
-
         <component type="Module">
           <desktopModule>
             <moduleName>SecurityAnalyzer</moduleName>

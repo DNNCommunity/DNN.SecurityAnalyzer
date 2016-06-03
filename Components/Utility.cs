@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Xml;
+using DotNetNuke.Application;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Data;
 
@@ -14,8 +18,32 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         /// </summary>
         public static void CleanUpInstallerFiles()
         {
-            FileSystemUtils.DeleteFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Install\\InstallWizard.aspx"));
-            FileSystemUtils.DeleteFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Install\\InstallWizard.aspx.cs"));
+            var files = new List<string>
+            {
+                "DotNetNuke.install.config",
+                "DotNetNuke.install.config.resources",
+                "InstallWizard.aspx",
+                "InstallWizard.aspx.cs",
+                "InstallWizard.aspx.designer.cs",
+                "UpgradeWizard.aspx",
+                "UpgradeWizard.aspx.cs",
+                "UpgradeWizard.aspx.designer.cs",
+                "Install.aspx",
+                "Install.aspx.cs",
+                "Install.aspx.designer.cs",
+            };
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    FileSystemUtils.DeleteFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Install\\" + file));
+                }
+                catch (Exception ex)
+                {
+                    //do nothing.
+                }
+            }
         }
 
         private static string GetFileText(string name)
@@ -94,6 +122,59 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
             results = "Database instances Found:" + rowCount + "<br/>" + results;
             return results;
+        }
+
+        public static XmlDocument LoadFileSumData()
+        {
+            using (
+                var stream =
+                    Assembly.GetExecutingAssembly()
+                        .GetManifestResourceStream("DNN.Modules.SecurityAnalyzer.Resources.sums.resouces"))
+            {
+                if (stream != null)
+                {
+                    var xmlDocument = new XmlDocument();
+                    xmlDocument.Load(stream);
+
+                    return xmlDocument;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public static string GetFileCheckSum(string fileName)
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(fileName))
+                {
+                    return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
+                }
+            }
+        }
+
+        public static string GetApplicationVersion()
+        {
+            return DotNetNukeContext.Current.Application.Version.ToString(3);
+        }
+
+        public static string GetApplicationType()
+        {
+            switch (DotNetNukeContext.Current.Application.Name)
+            {
+                case "DNNCORP.CE":
+                    return "Platform";
+                case "DNNCORP.XE":
+                case "DNNCORP.PE":
+                    return "Content";
+                case "DNNCORP.SOCIAL":
+                    return "Social";
+                default:
+                    return "Platform";
+            }
         }
     }
 }

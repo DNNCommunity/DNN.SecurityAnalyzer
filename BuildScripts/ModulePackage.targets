@@ -60,6 +60,9 @@
     <CreateItem Include="**\ReleaseNotes.txt">
       <Output TaskParameter="Include" ItemName="PackageTxtFiles" />
     </CreateItem>
+    <CreateItem Include="**\Cleanup\*.txt">
+      <Output TaskParameter="Include" ItemName="CleanupFiles" />
+    </CreateItem>
 
 
     <CreateItem Include="**\*.sqldataprovider">
@@ -70,6 +73,7 @@
     <Copy SourceFiles="@(SqlDataProviderFiles)" DestinationFolder="$(MSBuildProjectDirectory)\Package\%(RecursiveDir)" />
     <Copy SourceFiles="@(PackageManifestFiles)" DestinationFolder="$(MSBuildProjectDirectory)\Package" />
     <Copy SourceFiles="@(PackageTxtFiles)" DestinationFolder="$(MSBuildProjectDirectory)\Package" />
+    <Copy SourceFiles="@(CleanupFiles)" DestinationFolder="$(MSBuildProjectDirectory)\Package\Cleanup" />
     
     
     <!-- create the INSTALL RESOURCES.ZIP file -->
