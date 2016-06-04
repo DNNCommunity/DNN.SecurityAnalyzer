@@ -121,7 +121,7 @@
     <value>Audit Checks</value>
   </data>
   <data name="SuperuserActivity.Text" xml:space="preserve">
-    <value>Superuser Activity</value>
+    <value>Super User Activity</value>
   </data>
   <data name="CheckDebugFailure.Text" xml:space="preserve">
     <value>debug is set to true - consider editing web.config and setting it to false (or use the configuration manager)</value>
@@ -272,10 +272,10 @@
     <value>Check if asp/php files are found</value>
   </data>
   <data name="CheckDefaultPageName.Text" xml:space="preserve">
-    <value>Check if default.aspx/default.aspx.cs have been modified</value>
+    <value>Check if default.aspx or default.aspx.cs files have been modified</value>
   </data>
   <data name="CheckDefaultPageFailure.Text" xml:space="preserve">
-    <value>The default page has been modified - We recommend you evaluate these files carefully, they maybe modified by hacker and inject dangerous code,.</value>
+    <value>The default page(s) have been modified. We recommend you evaluate these files carefully, they maybe modified by a hacker and may contain malicious code. It is best to compare these files with that from a standard install of your product. Ensure that the DNN or Evoq version of your current site matches with the standard site prior to comparison. Either remove the malicioius code or restore these files from standard installation.</value>
   </data>
   <data name="CheckDefaultPageReason.Text" xml:space="preserve">
     <value>DNN use default.aspx to load everything, so all requests will load this file when user browse the site, if someone modify this file, it may cause huge risk.</value>
