@@ -7,7 +7,9 @@
 <div class="License">
 	<h3>About the Security Analyzer module</h3>
 	<p class="Owner">
-		<b>Version 1.0.3</b><br /><br />
+		<b>Version 1.0.0</b> - Initial release.<br /><br />
+		<b>Version 1.0.1</b> - Fix icons.<br /><br />
+		<b>Version 1.0.2</b> - Fix resx.<br /><br />
+		<b>Version 8.0.2</b> - Check Default.aspx.<br /><br />
 	</p>
-	<p>Initial release.</p>
 	</div>

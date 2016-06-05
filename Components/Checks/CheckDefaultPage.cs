@@ -24,7 +24,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                     {
                         if (DotNetNukeContext.Current.Application.Version.Major > 6)
                         {
-                            result.Notes.Add("Doesn't find any data for current version, please upgrade this module to latest version.");
+                            result.Notes.Add("There is no data available about your current installation, please upgrade this module to it's latest version.");
                         }
                         else
                         {
