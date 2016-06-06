@@ -5,23 +5,29 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 {
     public class AuditChecks
     {
-        private readonly List<IAuditCheck> _auditChecks = new List<IAuditCheck>();
+        private readonly IEnumerable<IAuditCheck> _auditChecks;
+
+        public AuditChecks()
+        {
+            _auditChecks = new List<IAuditCheck>
+            {
+                new CheckDebug(),
+                new CheckTracing(),
+                new CheckViewstatemac(),
+                new CheckBiography(),
+                new CheckSiteRegistration(),
+                new CheckRarelyUsedSuperuser(),
+                new CheckSuperuserOldPassword(),
+                new CheckUnexpectedExtensions(),
+                new CheckDefaultPage(),
+                new CheckModuleHeaderAndFooter(),
+                new CheckPasswordFormat(),
+                new CheckDiskAcccessPermissions(),
+            }.AsReadOnly();
+        }
 
         public List<CheckResult> DoChecks()
         {
-            _auditChecks.Add(new CheckDebug());
-            _auditChecks.Add(new CheckTracing());
-            _auditChecks.Add(new CheckViewstatemac());
-            _auditChecks.Add(new CheckBiography());
-            _auditChecks.Add(new CheckSiteRegistration());
-            _auditChecks.Add(new CheckRarelyUsedSuperuser());
-            _auditChecks.Add(new CheckSuperuserOldPassword());
-            _auditChecks.Add(new CheckUnexpectedExtensions());
-            _auditChecks.Add(new CheckDefaultPage());
-            _auditChecks.Add(new CheckModuleHeaderAndFooter());
-            _auditChecks.Add(new CheckPasswordFormat());
-            //_auditChecks.Add(new DiskAcccessPermissions());
-
             var results = new List<CheckResult>();
             foreach (var check in _auditChecks)
             {

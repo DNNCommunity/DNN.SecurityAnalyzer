@@ -320,7 +320,7 @@
     <value>No modules were found that had header or footer values configured.</value>
   </data>
   <data name="CheckDiskAccessName.Text" xml:space="preserve">
-    <value>Checks for hackers ability access drives/folders outside the website</value>
+    <value>Checks extra drives/folders access permission outside the website folder</value>
   </data>
   <data name="CheckDiskAccessFailure.Text" xml:space="preserve">
     <value>Hackers could access drives/folders outside the website</value>

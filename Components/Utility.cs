@@ -27,7 +27,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         private const long MaxFileSize = 1024*1024*10; //10M
 
-        private const int ModifiedFilesCount = 30;
+        private const int ModifiedFilesCount = 50;
 
         /// <summary>
         ///     delete unnedded installwizard files

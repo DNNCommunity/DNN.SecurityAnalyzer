@@ -98,7 +98,7 @@ GO
 CREATE PROCEDURE {databaseOwner}[{objectQualifier}SecurityAnalyzer_GetModifiedSettings]
 AS
 BEGIN
-    SELECT TOP 10
+    SELECT TOP 20
             PortalID ,
             SettingName ,
             SettingValue ,
@@ -107,7 +107,7 @@ BEGIN
     FROM    {databaseOwner}[{objectQualifier}PortalSettings]
     ORDER BY LastModifiedOnDate DESC;
 
-    SELECT TOP 10
+    SELECT TOP 20
             SettingName ,
             SettingValue ,
             LastModifiedByUserID ,
@@ -115,7 +115,7 @@ BEGIN
     FROM    {databaseOwner}[{objectQualifier}HostSettings]
     ORDER BY LastModifiedOnDate DESC;
 
-    SELECT TOP 10
+    SELECT TOP 20
             t.TabID ,
             t.PortalID ,
             s.SettingName ,
@@ -126,7 +126,7 @@ BEGIN
             INNER JOIN {databaseOwner}[{objectQualifier}Tabs] t ON t.TabID = s.TabID
     ORDER BY s.LastModifiedOnDate DESC;
 
-    SELECT TOP 10
+    SELECT TOP 20
             T.*
     FROM    ( SELECT    'Module Settings' as Type,
                         m.ModuleID ,

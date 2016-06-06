@@ -71,6 +71,7 @@
     <Compile Include="Components\AuditChecks.cs" />
     <Compile Include="Components\CheckResult.cs" />
     <Compile Include="Components\Checks\CheckDebug.cs" />
+    <Compile Include="Components\Checks\CheckDiskAcccessPermissions.cs" />
     <Compile Include="Components\Checks\CheckModuleHeaderAndFooter.cs" />
     <Compile Include="Components\Checks\CheckPasswordFormat.cs" />
     <Compile Include="Components\Checks\CheckTracing.cs">
