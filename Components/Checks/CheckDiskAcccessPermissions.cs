@@ -68,7 +68,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 
         private static string GetPermissionText(DirectoryInfo dir, Permissions permissions)
         {
-            return $"{dir.FullName} - Read:{permissions.Read}, Write:{permissions.Write}, Create:{permissions.Create}, Delete:{permissions.Delete}";
+            return string.Format(@"{0} - Read:{1}, Write:{2}, Create:{3}, Delete:{4}",
+                dir.FullName, permissions.Read, permissions.Write, permissions.Create, permissions.Delete);
         }
 
         private static Permissions CheckPermissionOnDir(DirectoryInfo dir)
