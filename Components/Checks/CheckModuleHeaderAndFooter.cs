@@ -23,7 +23,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                 while (dr.Read())
                 {
                     result.Severity = SeverityEnum.Warning;
-                    var note = string.Format("TabId: {0}, Module Id: {1}", dr["TabId"], dr["ModuleId"]);
+                    var note = string.Format("<b>TabId:</b> {0}, Module Id: {1}", dr["TabId"], dr["ModuleId"]);
                     var headerValue = dr["Header"].ToString();
                     var footerValue = dr["Footer"].ToString();
                     if (!string.IsNullOrEmpty(headerValue))
@@ -34,6 +34,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                     {
                         note += string.Format("<br />Footer: {0}", HttpUtility.HtmlEncode(footerValue));
                     }
+                    note += "< br />";
 
                     result.Notes.Add(note);
                 }
