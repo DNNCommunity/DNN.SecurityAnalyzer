@@ -305,7 +305,7 @@
     <value>Last Modification Date</value>
   </data>
   <data name="ModifiedFiles.Text" xml:space="preserve">
-    <value>Last 30 Modified Files</value>
+    <value>Recently Modified Files</value>
   </data>
   <data name="CheckModuleHeaderAndFooterFailure.Text" xml:space="preserve">
     <value>There are modules in your system that have header and footer settings, please review them to to make sure no phishing code is present.</value>
@@ -335,7 +335,7 @@
     <value>Host Settings</value>
   </data>
   <data name="ModifiedSettings.Text" xml:space="preserve">
-    <value>Last Modification Settings</value>
+    <value>Recently Modified Settings</value>
   </data>
   <data name="ModuleSettings.Text" xml:space="preserve">
     <value>Module Settings</value>
