@@ -79,6 +79,7 @@ BEGIN
     SELECT ColumnName, ColumnValue FROM #Results
 END
 
+GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}SecurityAnalyzer_GetModulesHasHeaderFooter]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE {databaseOwner}[{objectQualifier}SecurityAnalyzer_GetModulesHasHeaderFooter]
 GO
@@ -87,7 +88,7 @@ CREATE PROCEDURE {databaseOwner}[{objectQualifier}SecurityAnalyzer_GetModulesHas
 AS
 BEGIN
     SELECT * FROM {databaseOwner}[{objectQualifier}TabModules]
-        WHERE (Header IS NOT NULL AND Header <> '') OR (Footer IS NOT NULL AND Footer <> '')
+        WHERE (Header IS NOT NULL AND CONVERT(NVARCHAR(MAX), Header) <> N'') OR (Footer IS NOT NULL AND CONVERT(NVARCHAR(MAX), Footer) <> N'')
 END
 GO
 
