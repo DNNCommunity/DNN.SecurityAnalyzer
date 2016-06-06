@@ -281,7 +281,7 @@
     <value>DNN use default.aspx to load everything, so all requests will load this file when user browse the site, if someone modify this file, it may cause huge risk.</value>
   </data>
   <data name="CheckDefaultPageSuccess.Text" xml:space="preserve">
-    <value>The default page haven't been modified.</value>
+    <value>The default.aspx and default.aspx.cs pages haven't been modified.</value>
   </data>
   <data name="CheckViewstatemacName.Text" xml:space="preserve">
     <value>Check if viewstate is protected</value>
@@ -308,13 +308,13 @@
     <value>Last 30 Modified Files</value>
   </data>
   <data name="CheckModuleHeaderAndFooterFailure.Text" xml:space="preserve">
-    <value>Ther have modules which set header and footer content, please review all these content to make sure no phishing code injected.</value>
+    <value>There are modules in your system that have header and footer settings, please review them to to make sure no phishing code is present.</value>
   </data>
   <data name="CheckModuleHeaderAndFooterName.Text" xml:space="preserve">
-    <value>Check Modules have Header or Footer content</value>
+    <value>Check Modules have Header or Footer settings</value>
   </data>
   <data name="CheckModuleHeaderAndFooterReason.Text" xml:space="preserve">
-    <value>Hackers may use module's header or footer value to inject phishing content.</value>
+    <value>Hackers may use module's header or footer settings to inject content for phishing attacks.</value>
   </data>
   <data name="CheckModuleHeaderAndFooterSuccess.Text" xml:space="preserve">
     <value>No module set header or footer value.</value>
