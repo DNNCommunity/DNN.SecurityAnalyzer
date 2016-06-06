@@ -19,6 +19,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             _auditChecks.Add(new CheckUnexpectedExtensions());
             _auditChecks.Add(new CheckDefaultPage());
             _auditChecks.Add(new CheckModuleHeaderAndFooter());
+            _auditChecks.Add(new CheckPasswordFormat());
 
 
             var results = new List<CheckResult>();

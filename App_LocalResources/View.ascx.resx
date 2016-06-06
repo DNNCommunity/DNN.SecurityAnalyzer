@@ -317,7 +317,7 @@
     <value>Hackers may use module's header or footer settings to inject content for phishing attacks.</value>
   </data>
   <data name="CheckModuleHeaderAndFooterSuccess.Text" xml:space="preserve">
-    <value>No module set header or footer value.</value>
+    <value>No modules were found that had header or footer values configured.</value>
   </data>
   <data name="HostSettings.Text" xml:space="preserve">
     <value>Host Settings</value>
@@ -342,5 +342,17 @@
   </data>
   <data name="SuperUserActivityExplaination.Text" xml:space="preserve">
     <value>Below are the SuperUser activities. Look for suspicous activities here. Pay close attention to the Creation and Last Login Dates. </value>
+  </data>
+  <data name="CheckPasswordFormatName.Text" xml:space="preserve">
+    <value>Check Password Format Setting</value>
+  </data>
+  <data name="CheckPasswordFormatFailure.Text" xml:space="preserve">
+    <value>The setting passwordFormat is not set to Hashed in web.config - consider editing web.config and setting it to Hashed (or use the configuration manager)</value>
+  </data>
+  <data name="CheckPasswordFormatReason.Text" xml:space="preserve">
+    <value>If the value is Clear or Encrypters, hacker can retrieve password from user's password from database.</value>
+  </data>
+  <data name="CheckPasswordFormatSuccess.Text" xml:space="preserve">
+    <value>The passwordFormat is set as Hashed in web.config</value>
   </data>
 </root>
