@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web.UI;
 using DNN.Modules.SecurityAnalyzer.Components;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
+using DotNetNuke.Data;
 using DotNetNuke.Entities.Users;
 using DotNetNuke.Services.Exceptions;
 using DotNetNuke.Services.Localization;
+using DotNetNuke.UI.Skins;
+using DotNetNuke.UI.Skins.Controls;
 
 namespace DNN.Modules.SecurityAnalyzer
 {
@@ -37,6 +43,8 @@ namespace DNN.Modules.SecurityAnalyzer
                 Utility.CleanUpInstallerFiles();
                 GetAuditResults();
                 GetSuperUsers();
+                GetModifiedFiles();
+                GetModifiedSettings();
             }
         }
 
@@ -50,21 +58,31 @@ namespace DNN.Modules.SecurityAnalyzer
 
         private void cmdSearch_Click(object sender, EventArgs e)
         {
-            pnlDatabaseresults.Visible = true;
-            pnlFileresults.Visible = true;
-            var foundinfiles = Utility.SearchFiles(txtSearchTerm.Text);
-            IEnumerable<string> files = foundinfiles as IList<string> ?? foundinfiles.ToList();
-            if (files.Any() == false)
+            var scriptTimeout = Server.ScriptTimeout;
+            try
             {
-                lblfileresults.Text = Localization.GetString("NoFileResults");
-            }
-            else
-            {
-                var results = files.Aggregate("", (current, filename) => current + filename + "<br/>");
-                lblfileresults.Text = results;
-            }
+                Server.ScriptTimeout = int.MaxValue;
 
-            lbldatabaseresults.Text = Utility.SearchDatabase(txtSearchTerm.Text);
+                pnlDatabaseresults.Visible = true;
+                pnlFileresults.Visible = true;
+                var foundinfiles = Utility.SearchFiles(txtSearchTerm.Text);
+                IEnumerable<string> files = foundinfiles as IList<string> ?? foundinfiles.ToList();
+                if (files.Any() == false)
+                {
+                    lblfileresults.Text = Localization.GetString("NoFileResults");
+                }
+                else
+                {
+                    var results = files.Aggregate("", (current, filename) => current + filename + "<br/>");
+                    lblfileresults.Text = results;
+                }
+
+                lbldatabaseresults.Text = Utility.SearchDatabase(txtSearchTerm.Text);
+            }
+            finally
+            {
+                Server.ScriptTimeout = scriptTimeout;
+            }
         }
 
         public string GetSeverityImageUrl(int severity)
@@ -135,6 +153,13 @@ namespace DNN.Modules.SecurityAnalyzer
             return displayEmail;
         }
 
+        public string GetFilePath(string filePath)
+        {
+            var path = Regex.Replace(filePath, Regex.Escape(Globals.ApplicationMapPath), string.Empty, RegexOptions.IgnoreCase);
+
+            return path.TrimStart('\\');
+        }
+
         public string DisplayDate(DateTime userDate)
         {
             var date = Null.NullString;
@@ -153,7 +178,6 @@ namespace DNN.Modules.SecurityAnalyzer
         {
             var totalRecords = 0;
 
-
             Users = UserController.GetUsers(-1, dgUsers.CurrentPageIndex, dgUsers.PageSize,
                 ref totalRecords, true, true);
 
@@ -161,5 +185,50 @@ namespace DNN.Modules.SecurityAnalyzer
             dgUsers.DataSource = Users;
             dgUsers.DataBind();
         }
+
+        private void GetModifiedFiles()
+        {
+            var files = Utility.GetLastModifiedFiles();
+            Localization.LocalizeDataGrid(ref dgModifiedFiles, LocalResourceFile);
+            dgModifiedFiles.DataSource = files;
+            dgModifiedFiles.DataBind();
+        }
+
+        private void GetModifiedSettings()
+        {
+            try
+            {
+                var reader = DataProvider.Instance().ExecuteReader("GetModifiedSettings");
+                if (reader != null)
+                {
+                    var tables = new List<DataTable>();
+                    do
+                    {
+                        var table = new DataTable { Locale = CultureInfo.CurrentCulture };
+                        table.Load(reader);
+                        tables.Add(table);
+                    }
+                    while (!reader.IsClosed); // table.Load automatically moves to the next result and closes the reader once there are no more
+
+                    dgPortalSettings.DataSource = tables[0];
+                    dgPortalSettings.DataBind();
+
+                    dgHostSettings.DataSource = tables[1];
+                    dgHostSettings.DataBind();
+
+                    dgTabSettings.DataSource = tables[2];
+                    dgTabSettings.DataBind();
+
+                    dgModuleSettings.DataSource = tables[3];
+                    dgModuleSettings.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                Skin.AddModuleMessage(this, ex.Message, ModuleMessage.ModuleMessageType.RedError);
+                throw;
+            }
+        }
+
     }
 }

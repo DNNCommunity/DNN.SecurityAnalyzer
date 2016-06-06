@@ -18,7 +18,6 @@
       </dependencies>
 
       <components>
-        <component type="Cleanup" fileName="Cleanup\01.00.00.txt" version="01.00.00" />
         <component type="Script">
           <scripts>
             <basePath>DesktopModules\DNNCorp\SecurityAnalyzer</basePath>
@@ -68,7 +67,7 @@
             <attributes>
               <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
               <desktopModuleID>[DESKTOPMODULEID]</desktopModuleID>
-              <upgradeVersionsList>01.00.00</upgradeVersionsList>
+              <upgradeVersionsList>01.00.00,08.00.02</upgradeVersionsList>
             </attributes>
           </eventMessage>
         </component>

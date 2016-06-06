@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Xml;
 using DotNetNuke.Application;
 using DotNetNuke.Common.Utilities;
@@ -13,6 +15,18 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 {
     public class Utility
     {
+        private static readonly IList<Regex> ExcludedFilePathRegexList = new List<Regex>()
+        {
+            new Regex(Regex.Escape("\\App_Data\\ClientDependency"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape("\\App_Data\\Search"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape("\\d+-System\\Cache\\Pages"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape("\\d+-System\\Thumbnailsy"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape("\\Portals\\_default\\Logs"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape("\\App_Data\\_imagecache"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        };
+
+        private const int ModifiedFilesCount = 30;
+
         /// <summary>
         ///     delete unnedded installwizard files
         /// </summary>
@@ -82,7 +96,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     from file in fileList
                     let fileText = GetFileText(file.FullName)
                     where fileText.Contains(searchText)
-                    select file.Name;
+                    select file.Name + "(" + file.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
                 return queryMatchingFiles;
             }
             catch
@@ -99,7 +113,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         public static IEnumerable<string> FindUnexpectedExtensions()
         {
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
-            .Where(s => s.EndsWith(".asp") || s.EndsWith(".php"));
+            .Where(s => s.EndsWith(".asp", StringComparison.InvariantCultureIgnoreCase) || s.EndsWith(".php", StringComparison.InvariantCultureIgnoreCase));
             return files;
         }
 
@@ -175,6 +189,17 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 default:
                     return "Platform";
             }
+        }
+
+        public static IList<FileInfo> GetLastModifiedFiles()
+        {
+            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(f => !ExcludedFilePathRegexList.Any(r => r.IsMatch(f)))
+                .Select(f => new FileInfo(f))
+                .OrderByDescending(f => f.LastWriteTime)
+                .Take(ModifiedFilesCount).ToList();
+
+            return files;
         }
     }
 }

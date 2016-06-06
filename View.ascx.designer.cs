@@ -55,7 +55,7 @@ namespace DNN.Modules.SecurityAnalyzer {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotNetNuke.UI.UserControls.LabelControl plSearchTerm;
+        protected global::System.Web.UI.UserControl plSearchTerm;
         
         /// <summary>
         /// txtSearchTerm control.
@@ -128,5 +128,50 @@ namespace DNN.Modules.SecurityAnalyzer {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataGrid dgUsers;
+        
+        /// <summary>
+        /// dgModifiedFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid dgModifiedFiles;
+        
+        /// <summary>
+        /// dgPortalSettings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid dgPortalSettings;
+        
+        /// <summary>
+        /// dgHostSettings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid dgHostSettings;
+        
+        /// <summary>
+        /// dgTabSettings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid dgTabSettings;
+        
+        /// <summary>
+        /// dgModuleSettings control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid dgModuleSettings;
     }
 }

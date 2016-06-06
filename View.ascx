@@ -14,6 +14,12 @@
         <li>
             <a href="#superuserActivity"><%= LocalizeString("SuperuserActivity") %></a>
         </li>
+        <li>
+            <a href="#modifiedFiles"><%= LocalizeString("ModifiedFiles") %></a>
+        </li>
+        <li>
+            <a href="#modifiedSettings"><%= LocalizeString("ModifiedSettings") %></a>
+        </li>
     </ul>
     <div id="auditChecks" class="dnnClear">
 
@@ -129,6 +135,76 @@
                     </asp:TemplateColumn>
                 </Columns>
 
+            </asp:DataGrid>
+        </div>
+    </div>
+    <div id="modifiedFiles" class="dnnClear">
+        <div>
+            <asp:DataGrid id="dgModifiedFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
+                <headerstyle CssClass="dnnGridHeader"/>
+                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <alternatingitemstyle CssClass="dnnGridAltItem"/>
+                <edititemstyle/>
+                <selecteditemstyle/>
+                <footerstyle/>
+                <Columns>
+                    <asp:TemplateColumn HeaderText="FileName">
+                        <ItemTemplate>
+                            <span><%# GetFilePath(Eval("FullName").ToString()) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateColumn>
+                    <asp:TemplateColumn HeaderText="LastModifiedDate">
+                        <ItemTemplate>
+                            <span><%# DisplayDate(Convert.ToDateTime(Eval("LastWriteTime"))) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateColumn>
+                </Columns>
+            </asp:DataGrid>
+        </div>
+    </div>
+    <div id="modifiedSettings" class="dnnClear">
+        <div>
+            <h2><%=LocalizeString("PortalSettings") %></h2>
+            <asp:DataGrid id="dgPortalSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
+                <headerstyle CssClass="dnnGridHeader"/>
+                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <alternatingitemstyle CssClass="dnnGridAltItem"/>
+                <edititemstyle/>
+                <selecteditemstyle/>
+                <footerstyle/>
+            </asp:DataGrid>
+        </div>
+        <div>
+            <h2><%=LocalizeString("HostSettings") %></h2>
+            <asp:DataGrid id="dgHostSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
+                <headerstyle CssClass="dnnGridHeader"/>
+                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <alternatingitemstyle CssClass="dnnGridAltItem"/>
+                <edititemstyle/>
+                <selecteditemstyle/>
+                <footerstyle/>
+            </asp:DataGrid>
+        </div>
+        <div>
+            <h2><%=LocalizeString("TabSettings") %></h2>
+            <asp:DataGrid id="dgTabSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
+                <headerstyle CssClass="dnnGridHeader"/>
+                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <alternatingitemstyle CssClass="dnnGridAltItem"/>
+                <edititemstyle/>
+                <selecteditemstyle/>
+                <footerstyle/>
+            </asp:DataGrid>
+        </div>
+        <div>
+            <h2><%=LocalizeString("ModuleSettings") %></h2>
+            <asp:DataGrid id="dgModuleSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
+                <headerstyle CssClass="dnnGridHeader"/>
+                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <alternatingitemstyle CssClass="dnnGridAltItem"/>
+                <edititemstyle/>
+                <selecteditemstyle/>
+                <footerstyle/>
             </asp:DataGrid>
         </div>
     </div>

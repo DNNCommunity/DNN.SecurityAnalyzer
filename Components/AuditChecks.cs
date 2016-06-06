@@ -18,6 +18,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             _auditChecks.Add(new CheckSuperuserOldPassword());
             _auditChecks.Add(new CheckUnexpectedExtensions());
             _auditChecks.Add(new CheckDefaultPage());
+            _auditChecks.Add(new CheckModuleHeaderAndFooter());
 
 
             var results = new List<CheckResult>();

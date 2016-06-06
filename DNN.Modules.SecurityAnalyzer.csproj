@@ -71,6 +71,7 @@
     <Compile Include="Components\AuditChecks.cs" />
     <Compile Include="Components\CheckResult.cs" />
     <Compile Include="Components\Checks\CheckDebug.cs" />
+    <Compile Include="Components\Checks\CheckModuleHeaderAndFooter.cs" />
     <Compile Include="Components\Checks\CheckTracing.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -98,7 +99,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Cleanup\01.00.00.txt" />
     <Content Include="License.txt" />
     <Content Include="module.css" />
     <Content Include="ReleaseNotes.txt" />

@@ -5,6 +5,7 @@ using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Definitions;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security.Permissions;
+using DotNetNuke.Services.Upgrade;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
@@ -23,6 +24,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     var moduleid = AddModuleToPage(auditPage, moduleDefId, "Security Analyzer",
                         "~/Icons/Sigma/Extensions_32x32_Standard.png");
 
+                    break;
+                case "08.00.02":
+                    Utility.CleanUpInstallerFiles();
                     break;
             }
 

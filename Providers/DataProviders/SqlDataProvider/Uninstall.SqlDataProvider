@@ -12,6 +12,14 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwne
 	DROP PROCEDURE {databaseOwner}[{objectQualifier}SearchAllTables]
 GO
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}GetModulesHasHeaderFooter]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}GetModulesHasHeaderFooter]
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}GetModifiedSettings]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE {databaseOwner}[{objectQualifier}GetModifiedSettings]
+GO
+
 /************************************************************/
 /*****              SqlDataProvider                     *****/
 /************************************************************/
