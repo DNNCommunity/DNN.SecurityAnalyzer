@@ -25,6 +25,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             new Regex(Regex.Escape("\\App_Data\\_imagecache"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
+        private const long MaxFileSize = 1024*1024*10; //10M
+
         private const int ModifiedFilesCount = 30;
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             {
                 // If the file has been deleted since we took  
                 // the snapshot, ignore it and return the empty string. 
-                if (File.Exists(name))
+                if (IsReadable(name))
                 {
                     fileContents = File.ReadAllText(name);
                 }
@@ -79,6 +81,22 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
           
             return fileContents;
+        }
+
+        private static bool IsReadable(string name)
+        {
+            if (!File.Exists(name))
+            {
+                return false;
+            }
+
+            var file = new FileInfo(name);
+            if (file.Length > MaxFileSize) //when file large than 10M, then don't read it.
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -95,8 +113,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 var queryMatchingFiles =
                     from file in fileList
                     let fileText = GetFileText(file.FullName)
-                    where fileText.Contains(searchText)
-                    select file.Name + "(" + file.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
+                    where fileText.IndexOf(searchText, StringComparison.InvariantCultureIgnoreCase) > -1
+                    select file.Name + " (" + file.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
                 return queryMatchingFiles;
             }
             catch
