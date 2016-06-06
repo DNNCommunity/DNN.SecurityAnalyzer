@@ -20,7 +20,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             _auditChecks.Add(new CheckDefaultPage());
             _auditChecks.Add(new CheckModuleHeaderAndFooter());
             _auditChecks.Add(new CheckPasswordFormat());
-            _auditChecks.Add(new DiskAcccessPermissions());
+            //_auditChecks.Add(new DiskAcccessPermissions());
 
             var results = new List<CheckResult>();
             foreach (var check in _auditChecks)
