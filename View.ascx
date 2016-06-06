@@ -92,7 +92,11 @@
     </div>
 
     <div id="superuserActivity" class="dnnClear">
-
+        <strong>
+            <asp:Label ID="lblSuperUserActivityExplaination" runat="server" resourceKey="SuperUserActivityExplaination"></asp:Label>
+        </strong>
+        <br/>
+        <br/>
         <div>
             <asp:DataGrid id="dgUsers" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
@@ -139,6 +143,11 @@
         </div>
     </div>
     <div id="modifiedFiles" class="dnnClear">
+         <strong>
+            <asp:Label ID="lblModifiedFilesExplaination" runat="server" resourceKey="ModifiedFilesExplaination"></asp:Label>
+        </strong>
+        <br/>
+        <br/>
         <div>
             <asp:DataGrid id="dgModifiedFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
@@ -163,6 +172,11 @@
         </div>
     </div>
     <div id="modifiedSettings" class="dnnClear">
+         <strong>
+            <asp:Label ID="lblModifiedSettingsExplaination" runat="server" resourceKey="ModifiedSettingsExplaination"></asp:Label>
+        </strong>
+        <br/>
+        <br/>
         <div>
             <h2><%=LocalizeString("PortalSettings") %></h2>
             <asp:DataGrid id="dgPortalSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">

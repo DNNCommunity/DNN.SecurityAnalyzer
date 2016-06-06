@@ -121,6 +121,15 @@ namespace DNN.Modules.SecurityAnalyzer {
         protected global::System.Web.UI.WebControls.Label lbldatabaseresults;
         
         /// <summary>
+        /// lblSuperUserActivityExplaination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSuperUserActivityExplaination;
+        
+        /// <summary>
         /// dgUsers control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,15 @@ namespace DNN.Modules.SecurityAnalyzer {
         protected global::System.Web.UI.WebControls.DataGrid dgUsers;
         
         /// <summary>
+        /// lblModifiedFilesExplaination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblModifiedFilesExplaination;
+        
+        /// <summary>
         /// dgModifiedFiles control.
         /// </summary>
         /// <remarks>
@@ -137,6 +155,15 @@ namespace DNN.Modules.SecurityAnalyzer {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataGrid dgModifiedFiles;
+        
+        /// <summary>
+        /// lblModifiedSettingsExplaination control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblModifiedSettingsExplaination;
         
         /// <summary>
         /// dgPortalSettings control.

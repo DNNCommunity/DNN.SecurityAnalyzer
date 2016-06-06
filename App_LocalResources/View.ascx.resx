@@ -334,4 +334,13 @@
   <data name="TabSettings.Text" xml:space="preserve">
     <value>Tab Settings</value>
   </data>
+  <data name="ModifiedSettingsExplaination.Text" xml:space="preserve">
+    <value>Below are the system settings that were modified recently. Have a look at these settings to see if something looks suspicous here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE ITEMS LISTED HERE.</value>
+  </data>
+  <data name="ModifiedFilesExplaination.Text" xml:space="preserve">
+    <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicous here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE FILES LISTED HERE.</value>
+  </data>
+  <data name="SuperUserActivityExplaination.Text" xml:space="preserve">
+    <value>Below are the SuperUser activities. Look for suspicous activities here. Pay close attention to the Creation and Last Login Dates. </value>
+  </data>
 </root>
