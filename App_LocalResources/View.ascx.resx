@@ -181,7 +181,7 @@
     <value>Last name</value>
   </data>
   <data name="ScannerExplanation.Text" xml:space="preserve">
-    <value>This tab allows you to search the filesystem and database for any term, which is useful for the case where your site is showing unwanted content you wish to locate. <br />THIS OPERATION MAY TIME OUT</value>
+    <value />
   </data>
   <data name="Username.Header" xml:space="preserve">
     <value>Username</value>
@@ -318,6 +318,18 @@
   </data>
   <data name="CheckModuleHeaderAndFooterSuccess.Text" xml:space="preserve">
     <value>No modules were found that had header or footer values configured.</value>
+  </data>
+  <data name="CheckDiskAccessName.Text" xml:space="preserve">
+    <value>Checks for hackers ability access drives/folders outside the website</value>
+  </data>
+  <data name="CheckDiskAccessFailure.Text" xml:space="preserve">
+    <value>Hackers could access drives/folders outside the website</value>
+  </data>
+  <data name="CheckDiskAccessReason.Text" xml:space="preserve">
+    <value>The user which your website is running under has access to drives and folders outside the website location. A hacker could access these files and either read, write, or do both activities.</value>
+  </data>
+  <data name="CheckDiskAccessSuccess.Text" xml:space="preserve">
+    <value>Hackers can not access drives/folders outside the website</value>
   </data>
   <data name="HostSettings.Text" xml:space="preserve">
     <value>Host Settings</value>

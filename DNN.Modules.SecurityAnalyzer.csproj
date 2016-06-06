@@ -83,6 +83,7 @@
     <Compile Include="Components\Checks\CheckSuperuserOldPassword.cs" />
     <Compile Include="Components\Checks\CheckRarelyUsedSuperuser.cs" />
     <Compile Include="Components\Checks\CheckUnexpectedExtensions.cs" />
+    <Compile Include="Components\Checks\DiskAcccessPermissions.cs" />
     <Compile Include="Components\FeatureController.cs" />
     <Compile Include="Components\IAuditCheck.cs" />
     <Compile Include="Components\SeverityEnum.cs" />
