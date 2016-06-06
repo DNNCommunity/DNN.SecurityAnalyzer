@@ -142,7 +142,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             var rowCount = 0;
             try
             {
-                var dr = dataProvider.ExecuteReader("SearchAllTables", searchText);
+                var dr = dataProvider.ExecuteReader("SecurityAnalyzer_SearchAllTables", searchText);
                 while (dr.Read())
                 {
                     rowCount = rowCount + 1;

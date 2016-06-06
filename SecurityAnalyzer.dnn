@@ -26,6 +26,11 @@
               <name>01.00.00.SqlDataProvider</name>
               <version>01.00.00</version>
             </script>
+            <script type="Install">
+              <path>Providers\DataProviders\SqlDataProvider</path>
+              <name>08.00.02.SqlDataProvider</name>
+              <version>08.00.02</version>
+            </script>
             <script type="UnInstall">
               <path>Providers\DataProviders\SqlDataProvider</path>
               <name>Uninstall.SqlDataProvider</name>

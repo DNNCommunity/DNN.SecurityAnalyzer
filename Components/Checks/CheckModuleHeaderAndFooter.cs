@@ -18,7 +18,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             var result = new CheckResult(SeverityEnum.Unverified, "CheckModuleHeaderAndFooter");
             try
             {
-                var dr = DataProvider.Instance().ExecuteReader("GetModulesHasHeaderFooter");
+                var dr = DataProvider.Instance().ExecuteReader("SecurityAnalyzer_GetModulesHasHeaderFooter");
                 result.Severity = SeverityEnum.Pass;
                 while (dr.Read())
                 {

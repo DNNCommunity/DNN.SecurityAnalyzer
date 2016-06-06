@@ -198,7 +198,7 @@ namespace DNN.Modules.SecurityAnalyzer
         {
             try
             {
-                var reader = DataProvider.Instance().ExecuteReader("GetModifiedSettings");
+                var reader = DataProvider.Instance().ExecuteReader("SecurityAnalyzer_GetModifiedSettings");
                 if (reader != null)
                 {
                     var tables = new List<DataTable>();
