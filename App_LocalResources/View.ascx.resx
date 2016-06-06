@@ -181,7 +181,7 @@
     <value>Last name</value>
   </data>
   <data name="ScannerExplanation.Text" xml:space="preserve">
-    <value>This tab allows you to search the filesystem and database for any term, which is useful for the case where your site is showing unwanted content you wish to locate</value>
+    <value>This tab allows you to search the filesystem and database for any term, which is useful for the case where your site is showing unwanted content you wish to locate. <br />THIS OPERATION MAY TIME OUT</value>
   </data>
   <data name="Username.Header" xml:space="preserve">
     <value>Username</value>
