@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Security.AccessControl;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
@@ -24,6 +24,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             return result;
         }
 
+        #region private methods
+
         private static IList<string> CheckAccessToDrives()
         {
             var errors = new List<string>();
@@ -35,7 +37,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                     var driveType = drive.DriveType;
                     if (driveType == DriveType.Fixed || driveType == DriveType.Network)
                     {
-                        var permissions = CheckCreateWrireRead(drive.RootDirectory);
+                        var permissions = CheckPermissionOnDir(drive.RootDirectory);
                         if (permissions.AnyYes)
                         {
                             errors.Add($"{drive.Name} - Read:{permissions.Read}, Write:{permissions.Write}, Create:{permissions.Create}, Delete:{permissions.Delete}");
@@ -54,60 +56,34 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             return errors;
         }
 
-        private static Permissions CheckCreateWrireRead(DirectoryInfo dir)
+        private static Permissions CheckPermissionOnDir(DirectoryInfo dir)
         {
             var permissions = new Permissions(No);
-            var text = Guid.NewGuid().ToString();
-            var buffer = Encoding.ASCII.GetBytes(text);
-            var fname = Path.Combine( dir.FullName, Path.GetRandomFileName());
-
-            try
+            var disSecurity = Directory.GetAccessControl(dir.FullName);
+            var accessRules = disSecurity?.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+            if (accessRules != null)
             {
-                using (var stream = File.OpenWrite(fname))
+                foreach (FileSystemAccessRule rule in accessRules)
                 {
-                    if (stream.CanTimeout)
+                    if (rule.AccessControlType == AccessControlType.Allow)
                     {
-                        stream.WriteTimeout = stream.ReadTimeout = 1000;
-                    }
+                        if ((rule.FileSystemRights & (FileSystemRights.Write | FileSystemRights.WriteData)) != 0)
+                            permissions.Write = Yes;
 
-                    permissions.Create = Yes;
-                    stream.Write(buffer, 0, buffer.Length);
-                    stream.Flush();
-                    stream.Close();
-                    permissions.Write = Yes;
-                }
+                        if ((rule.FileSystemRights & (FileSystemRights.Read | FileSystemRights.ReadData)) != 0)
+                            permissions.Read = Yes;
 
-                Array.Clear(buffer, 0, buffer.Length);
-                using (var stream2 = File.OpenRead(fname))
-                {
-                    stream2.Read(buffer, 0, buffer.Length);
-                    var text2 = Encoding.ASCII.GetString(buffer);
-                    if (text2 == text)
-                        permissions.Read = Yes;
-                }
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
-            finally
-            {
-                if (File.Exists(fname))
-                {
-                    try
-                    {
-                        File.Delete(fname);
-                        permissions.Delete = Yes;
-                    }
-                    catch (Exception)
-                    {
-                        //ignore
+                        if ((rule.FileSystemRights & FileSystemRights.Delete) != 0)
+                            permissions.Delete = Yes;
                     }
                 }
             }
-            
+
             return permissions;
         }
+        #endregion
+
+        #region helpers
 
         private const char Yes = 'Y';
         private const char No = 'N';
@@ -126,5 +102,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 
             public bool AnyYes => Create == Yes || Write == Yes || Read == Yes || Delete == Yes;
         }
+
+        #endregion
     }
 }
