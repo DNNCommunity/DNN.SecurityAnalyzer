@@ -20,7 +20,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                 foreach (PortalInfo portal in portalController.GetPortals())
                 {
                     var pd = ProfileController.GetPropertyDefinitionByName(portal.PortalID, "Biography");
-                    if (pd.DataType == richTextDataType.EntryID)
+                    if (pd != null && pd.DataType == richTextDataType.EntryID)
                     {
                         result.Severity = SeverityEnum.Failure;
                         result.Notes.Add("Portal:" + portal.PortalName);
