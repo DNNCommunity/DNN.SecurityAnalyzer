@@ -148,7 +148,7 @@ BEGIN
                         INNER JOIN {databaseOwner}[{objectQualifier}Modules] m ON m.ModuleID = tm.ModuleID
               )
             ) T
-            INNER JOIN dbo.Modules m ON m.ModuleID = T.ModuleID
+            INNER JOIN INNER JOIN {databaseOwner}[Modules] m ON m.ModuleID = T.ModuleID
     ORDER BY T.LastModifiedOnDate DESC;
 END
 GO
