@@ -70,9 +70,11 @@
                 <asp:Label ID="lblScannerExplanation" runat="server" resourceKey="ScannerExplanation"></asp:Label>
                 <div class="dnnFormItem">
                     <dnn:label id="plSearchTerm" controlname="txtSearchTerm" runat="server" CssClass="dnnFormRequired"/>
-                    <asp:TextBox ID="txtSearchTerm" runat="server" MaxLength="256" Text="rootkit"/>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtSearchTerm" CssClass="dnnFormMessage dnnFormError" resourcekey="SearchTermRequired"/>
-                    <asp:LinkButton ID="cmdSearch" runat="server" CssClass="dnnPrimaryAction" resourcekey="cmdSearch"/>
+                    <asp:TextBox ID="txtSearchTerm" runat="server" MaxLength="256" Text="rootkit" ValidationGroup="ScannerChecks" />
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" 
+                        EnableClientScript="true" ControlToValidate="txtSearchTerm" CssClass="dnnFormMessage dnnFormError"
+                         resourcekey="SearchTermRequired" ValidationGroup="ScannerChecks"/>
+                    <asp:LinkButton ID="cmdSearch" runat="server" CssClass="dnnPrimaryAction" resourcekey="cmdSearch" ValidationGroup="ScannerChecks"/>
                 </div>
             </div>
         </asp:Panel>
@@ -139,7 +141,7 @@
         <asp:Panel ID="panelModifiedFiles" runat="server" CssClass="dnnFormItem dnnClear" Width="450px">
             <div class="dnnLeft">
                 <div class="dnnFormItem">
-                    <asp:LinkButton ID="cmdModifiedFiles" runat="server" CssClass="dnnPrimaryAction" resourcekey="cmdModifiedFiles"/>
+                    <asp:LinkButton ID="cmdModifiedFiles" runat="server" CssClass="dnnPrimaryAction" resourcekey="cmdModifiedFiles" ValidationGroup="ModifiedFiles"/>
                 </div>
                 <asp:Label ID="LabelCheckModifiedFiles" runat="server" resourceKey="ModifiedFilesLoadWarning"></asp:Label>
             </div>

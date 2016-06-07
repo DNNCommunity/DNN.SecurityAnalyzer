@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DNN.Modules.SecurityAnalyzer.Components.Checks;
+using DotNetNuke.Common;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
@@ -9,11 +11,10 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         public AuditChecks()
         {
-            _auditChecks = new List<IAuditCheck>
+            var checks = new List<IAuditCheck>
             {
                 new CheckDebug(),
                 new CheckTracing(),
-                new CheckViewstatemac(),
                 new CheckBiography(),
                 new CheckSiteRegistration(),
                 new CheckRarelyUsedSuperuser(),
@@ -25,7 +26,14 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 new CheckDiskAcccessPermissions(),
                 new CheckSqlRisk(),
                 new CheckAllowableFileExtensions(),
-            }.AsReadOnly();
+            };
+
+            if (Globals.NETFrameworkVersion <= new Version(4, 5, 1))
+            {
+                checks.Insert(2, new CheckViewstatemac());
+            }
+
+            _auditChecks= checks.AsReadOnly();
         }
 
         public List<CheckResult> DoChecks()
