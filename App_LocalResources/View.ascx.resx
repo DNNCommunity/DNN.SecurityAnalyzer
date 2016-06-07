@@ -347,10 +347,10 @@
     <value>Tab Settings</value>
   </data>
   <data name="ModifiedSettingsExplaination.Text" xml:space="preserve">
-    <value>Below are the system settings that were modified recently. Have a look at these settings to see if something looks suspicous here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE ITEMS LISTED HERE.</value>
+    <value />
   </data>
   <data name="ModifiedFilesExplaination.Text" xml:space="preserve">
-    <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicous here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE FILES LISTED HERE.</value>
+    <value />
   </data>
   <data name="SuperUserActivityExplaination.Text" xml:space="preserve">
     <value>Below are the SuperUser activities. Look for suspicous activities here. Pay close attention to the Creation and Last Login Dates. </value>
@@ -366,5 +366,17 @@
   </data>
   <data name="CheckPasswordFormatSuccess.Text" xml:space="preserve">
     <value>The passwordFormat is set as Hashed in web.config</value>
+  </data>
+  <data name="CheckAllowableFileExtensionsFailure.Text" xml:space="preserve">
+    <value>The allowable file extensions contains unsafe value: asp/aspx/php, please go to host settings and remove them.</value>
+  </data>
+  <data name="CheckAllowableFileExtensionsName.Text" xml:space="preserve">
+    <value>Check Allowable File Extensions</value>
+  </data>
+  <data name="CheckAllowableFileExtensionsReason.Text" xml:space="preserve">
+    <value>If the allowable file extensions contains asp/aspx/php, then user will able to upload executeable files.</value>
+  </data>
+  <data name="CheckAllowableFileExtensionsSuccess.Text" xml:space="preserve">
+    <value>The allowable file extensions doesn't contains unsafe value.</value>
   </data>
 </root>
