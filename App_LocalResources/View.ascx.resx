@@ -275,7 +275,7 @@
     <value>Check if default.aspx or default.aspx.cs files have been modified</value>
   </data>
   <data name="CheckDefaultPageFailure.Text" xml:space="preserve">
-    <value>The default page(s) have been modified. We recommend you evaluate these files carefully, they maybe modified by a hacker and may contain malicious code. It is best to compare these files with that from a standard install of your product. Ensure that the DNN or Evoq version of your current site matches with the standard site prior to comparison. Either remove the malicioius code or restore these files from standard installation.</value>
+    <value>The default page(s) have been modified. We recommend you evaluate these files carefully, they may be modified by a hacker and may contain malicious code. It is best to compare these files with that from a standard install of your product. Ensure that the DNN or Evoq version of your current site matches with the standard site prior to comparison. Either remove the malicious code or restore these files from standard installation.</value>
   </data>
   <data name="CheckDefaultPageReason.Text" xml:space="preserve">
     <value>DNN use default.aspx to load everything, so all requests will load this file when user browse the site, if someone modify this file, it may cause huge risk.</value>
@@ -308,7 +308,7 @@
     <value>Recently Modified Files</value>
   </data>
   <data name="CheckModuleHeaderAndFooterFailure.Text" xml:space="preserve">
-    <value>There are modules in your system that have header and footer settings, please review them to to make sure no phishing code is present.</value>
+    <value>There are modules in your system that have header and footer settings, please review them to make sure no phishing code is present.</value>
   </data>
   <data name="CheckModuleHeaderAndFooterName.Text" xml:space="preserve">
     <value>Check Modules have Header or Footer settings</value>
@@ -329,7 +329,7 @@
     <value>The user which your website is running under has access to drives and folders outside the website location. A hacker could access these files and either read, write, or do both activities.</value>
   </data>
   <data name="CheckDiskAccessSuccess.Text" xml:space="preserve">
-    <value>Hackers can not access drives/folders outside the website</value>
+    <value>Hackers cannot access drives/folders outside the website</value>
   </data>
   <data name="HostSettings.Text" xml:space="preserve">
     <value>Host Settings</value>
@@ -350,10 +350,10 @@
     <value />
   </data>
   <data name="ModifiedFilesExplaination.Text" xml:space="preserve">
-    <value />
+    <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicious here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE FILES LISTED HERE.</value>
   </data>
   <data name="SuperUserActivityExplaination.Text" xml:space="preserve">
-    <value>Below are the SuperUser activities. Look for suspicous activities here. Pay close attention to the Creation and Last Login Dates. </value>
+    <value>Below are the SuperUser activities. Look for suspicious activities here. Pay close attention to the Creation and Last Login Dates. </value>
   </data>
   <data name="CheckPasswordFormatName.Text" xml:space="preserve">
     <value>Check Password Format Setting</value>
@@ -374,36 +374,36 @@
     <value>Check Allowable File Extensions</value>
   </data>
   <data name="CheckAllowableFileExtensionsReason.Text" xml:space="preserve">
-    <value>If the allowable file extensions contains asp/aspx/php, then user will able to upload executeable files.</value>
+    <value>If the allowable file extensions contains asp/aspx/php, then user will able to upload executable files.</value>
   </data>
   <data name="CheckAllowableFileExtensionsSuccess.Text" xml:space="preserve">
-    <value>The allowable file extensions doesn't contains unsafe value.</value>
+    <value>The allowable file extensions doesn't contain unsafe value.</value>
   </data>
   <data name="CheckFileExists.Error" xml:space="preserve">
-    <value>Current sql server account can execute xp_fileexist which can detect whether files exist on server.</value>
+    <value>Current SQL Server account can execute xp_fileexist which can detect whether files exist on server.</value>
   </data>
   <data name="CheckSqlRiskFailure.Text" xml:space="preserve">
-    <value>The current sql connection can execute dangerous command(s) which may cause server security risks.</value>
+    <value>The current SQL connection can execute dangerous command(s) which may lead to server security breaches.</value>
   </data>
   <data name="CheckSqlRiskName.Text" xml:space="preserve">
-    <value>Check Current Sql Account Permission</value>
+    <value>Check Current SQL Account Permission</value>
   </data>
   <data name="CheckSqlRiskReason.Text" xml:space="preserve">
-    <value>If the sql server account haven't config correctly, it may leave risk and hacker can exploite server by running special script.</value>
+    <value>If the SQL Server account isn't configured properly, it may leave risk and hackers can exploit the server by running special script.</value>
   </data>
   <data name="CheckSqlRiskSuccess.Text" xml:space="preserve">
-    <value>The sql server account configured correctly.</value>
+    <value>The SQL Server account configured correctly.</value>
   </data>
   <data name="ExecuteCommand.Error" xml:space="preserve">
-    <value>Current sql server account can execute xp_cmdshell which will running command line in sql server system.</value>
+    <value>Current SQL Server account can execute xp_cmdshell which will running command line in sql server system.</value>
   </data>
   <data name="GetFolderTree.Error" xml:space="preserve">
-    <value>Current sql server account can execute xp_dirtree which can see the server's folders structure.</value>
+    <value>Current SQL Server account can execute xp_dirtree which can see the server's folders structure.</value>
   </data>
   <data name="RegRead.Error" xml:space="preserve">
-    <value>Current sql server account can read registry values. You need to check the permissions of xp_regread, xp_regwrite, xp_regenumkeys, xp_regenumvalues, xp_regdeletekey, xp_regdeletekey, xp_regdeletevalue, xp_instance_regread, xp_instance_regwrite, xp_instance_regenumkeys, xp_instance_regenumvalues, xp_instance_regdeletekey, xp_instance_regdeletekey, xp_instance_regdeletevalue stored procedures.</value>
+    <value>Current SQL Server account can read registry values. You need to check the permissions of xp_regread, xp_regwrite, xp_regenumkeys, xp_regenumvalues, xp_regdeletekey, xp_regdeletekey, xp_regdeletevalue, xp_instance_regread, xp_instance_regwrite, xp_instance_regenumkeys, xp_instance_regenumvalues, xp_instance_regdeletekey, xp_instance_regdeletekey, xp_instance_regdeletevalue stored procedures.</value>
   </data>
   <data name="SysAdmin.Error" xml:space="preserve">
-    <value>Current sql server account is 'sysadmin'.</value>
+    <value>Current SQL Server account is 'sysadmin'.</value>
   </data>
 </root>
