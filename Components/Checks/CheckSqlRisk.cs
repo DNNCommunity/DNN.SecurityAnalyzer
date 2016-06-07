@@ -48,13 +48,13 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             {
                 var script = LoadScript(name);
                 var reader = DataProvider.Instance().ExecuteSQL(script);
-                if (reader.Read())
+                if (reader != null && reader.Read())
                 {
                     var affectCount = Convert.ToInt32(reader[0]);
                     return affectCount == 0;
                 }
 
-                if (!reader.IsClosed)
+                if (reader != null && !reader.IsClosed)
                 {
                     reader.Close();
                 }
