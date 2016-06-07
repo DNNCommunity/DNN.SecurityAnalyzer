@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Web;
+using System.Resources;
 using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Services.Localization;
-using Microsoft.SqlServer.Server;
 using Assembly = System.Reflection.Assembly;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
@@ -42,28 +40,28 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             return result;
         }
 
-        private bool VerifyScript(string name)
+        private static bool VerifyScript(string name)
         {
             try
             {
                 var script = LoadScript(name);
-                var reader = DataProvider.Instance().ExecuteSQL(script);
-                if (reader != null && reader.Read())
+                if (!string.IsNullOrEmpty(script))
                 {
-                    var affectCount = Convert.ToInt32(reader[0]);
-                    return affectCount == 0;
-                }
-
-                if (reader != null && !reader.IsClosed)
-                {
-                    reader.Close();
+                    using (var reader = DataProvider.Instance().ExecuteSQL(script))
+                    {
+                        if (reader != null && reader.Read())
+                        {
+                            int affectCount;
+                            int.TryParse(reader[0].ToString(), out affectCount);
+                            return affectCount == 0;
+                        }
+                    }
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException)
             {
-                return true;
+                //ignore; return no failure
             }
-
             return true;
         }
 
@@ -77,11 +75,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                     var script = new StreamReader(stream).ReadToEnd();
                     return script.Replace("%SiteRoot%", Globals.ApplicationMapPath);
                 }
-                else
-                {
-                    return null;
-                }
 
+                return null;
             }
         }
     }

@@ -368,10 +368,10 @@
     <value>The passwordFormat is set as Hashed in web.config</value>
   </data>
   <data name="CheckFileExists.Error" xml:space="preserve">
-    <value>Current sql server account can execute xp_fileexist  which can detect whether file exist on server.</value>
+    <value>Current sql server account can execute xp_fileexist which can detect whether files exist on server.</value>
   </data>
   <data name="CheckSqlRiskFailure.Text" xml:space="preserve">
-    <value>The current sql connection can execute dangerous command which may cause server under risk.</value>
+    <value>The current sql connection can execute dangerous command(s) which may cause server security risks.</value>
   </data>
   <data name="CheckSqlRiskName.Text" xml:space="preserve">
     <value>Check Current Sql Account Permission</value>
@@ -383,15 +383,15 @@
     <value>The sql server account configured correctly.</value>
   </data>
   <data name="ExecuteCommand.Error" xml:space="preserve">
-    <value>Current sql server account can execute xp_cmdshell  which will running command line in sql server system.</value>
+    <value>Current sql server account can execute xp_cmdshell which will running command line in sql server system.</value>
   </data>
   <data name="GetFolderTree.Error" xml:space="preserve">
-    <value>Current sql server account can execute xp_dirtree  which can see the server's folder structure.</value>
+    <value>Current sql server account can execute xp_dirtree which can see the server's folders structure.</value>
   </data>
   <data name="RegRead.Error" xml:space="preserve">
-    <value>Current sql server account can read reg values, you need check permission on sp xp_regread, xp_regwrite, xp_regenumkeys, xp_regenumvalues, xp_regdeletekey, xp_regdeletekey, xp_regdeletevalue, xp_instance_regread, xp_instance_regwrite, xp_instance_regenumkeys, xp_instance_regenumvalues, xp_instance_regdeletekey, xp_instance_regdeletekey, xp_instance_regdeletevalue.</value>
+    <value>Current sql server account can read registry values. You need to check the permissions of xp_regread, xp_regwrite, xp_regenumkeys, xp_regenumvalues, xp_regdeletekey, xp_regdeletekey, xp_regdeletevalue, xp_instance_regread, xp_instance_regwrite, xp_instance_regenumkeys, xp_instance_regenumvalues, xp_instance_regdeletekey, xp_instance_regdeletekey, xp_instance_regdeletevalue stored procedures.</value>
   </data>
   <data name="SysAdmin.Error" xml:space="preserve">
-    <value>Current sql server account is sysadmin.</value>
+    <value>Current sql server account is 'sysadmin'.</value>
   </data>
 </root>
