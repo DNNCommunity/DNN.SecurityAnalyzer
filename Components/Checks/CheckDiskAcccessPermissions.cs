@@ -33,24 +33,28 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             var errors = new List<string>();
             try
             {
-                var dir = new DirectoryInfo(Path.Combine(Globals.ApplicationMapPath, ".."));
-                var permissions = CheckPermissionOnDir(dir);
-                if (permissions.AnyYes)
+                var dir = new DirectoryInfo(Globals.ApplicationMapPath);
+                while (dir.Parent != null)
                 {
-                    errors.Add(GetPermissionText(dir, permissions));
+                    dir = dir.Parent;
+                    var permissions = CheckPermissionOnDir(dir);
+                    if (permissions.AnyYes)
+                    {
+                        errors.Add(GetPermissionText(dir, permissions));
+                    }
                 }
 
                 var drives = DriveInfo.GetDrives();
-                foreach (var drive in drives.Where(d => d.IsReady))
+                foreach (var drive in drives.Where(d => d.IsReady && d.RootDirectory.Name != dir.Root.Name))
                 {
                     var driveType = drive.DriveType;
                     if (driveType == DriveType.Fixed || driveType == DriveType.Network)
                     {
-                        dir = drive.RootDirectory;
-                        permissions = CheckPermissionOnDir(dir);
+                        var dir2 = drive.RootDirectory;
+                        var permissions = CheckPermissionOnDir(dir2);
                         if (permissions.AnyYes)
                         {
-                            errors.Add(GetPermissionText(dir, permissions));
+                            errors.Add(GetPermissionText(dir2, permissions));
                         }
                     }
                 }
