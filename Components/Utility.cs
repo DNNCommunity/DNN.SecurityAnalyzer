@@ -161,7 +161,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             using (
                 var stream =
                     Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream("DNN.Modules.SecurityAnalyzer.Resources.sums.resouces"))
+                        .GetManifestResourceStream("DNN.Modules.SecurityAnalyzer.Resources.sums.resources"))
             {
                 if (stream != null)
                 {

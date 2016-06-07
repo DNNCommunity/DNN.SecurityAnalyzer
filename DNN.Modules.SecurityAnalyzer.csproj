@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -71,6 +71,7 @@
     <Compile Include="Components\AuditChecks.cs" />
     <Compile Include="Components\CheckResult.cs" />
     <Compile Include="Components\Checks\CheckAllowableFileExtensions.cs" />
+    <Compile Include="Components\Checks\CheckSqlRisk.cs" />
     <Compile Include="Components\Checks\CheckDebug.cs" />
     <Compile Include="Components\Checks\CheckDiskAcccessPermissions.cs" />
     <Compile Include="Components\Checks\CheckModuleHeaderAndFooter.cs" />
@@ -105,7 +106,11 @@
     <Content Include="License.txt" />
     <Content Include="module.css" />
     <Content Include="ReleaseNotes.txt" />
-    <EmbeddedResource Include="Resources\sums.resouces" />
+    <EmbeddedResource Include="Resources\RegRead.resources" />
+    <EmbeddedResource Include="Resources\CheckFileExists.resources" />
+    <EmbeddedResource Include="Resources\GetFolderTree.resources" />
+    <EmbeddedResource Include="Resources\SysAdmin.resources" />
+    <EmbeddedResource Include="Resources\sums.resources" />
     <Content Include="View.ascx" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +137,7 @@
   <ItemGroup>
     <Content Include="web.config" />
     <Content Include="Providers\DataProviders\SqlDataProvider\08.00.02.SqlDataProvider" />
+    <EmbeddedResource Include="Resources\ExecuteCommand.resources" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
