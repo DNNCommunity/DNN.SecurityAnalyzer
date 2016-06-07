@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.UI;
 using DNN.Modules.SecurityAnalyzer.Components;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
@@ -32,6 +32,7 @@ namespace DNN.Modules.SecurityAnalyzer
             try
             {
                 cmdSearch.Click += cmdSearch_Click;
+                cmdModifiedFiles.Click += cmdModifiedFiles_Click;
             }
             catch (Exception exc) //Module failed to load
             {
@@ -43,8 +44,8 @@ namespace DNN.Modules.SecurityAnalyzer
                 Utility.CleanUpInstallerFiles();
                 GetAuditResults();
                 GetSuperUsers();
-                GetModifiedFiles();
                 GetModifiedSettings();
+                SetMinimalModifiedFilesGrid();
             }
         }
 
@@ -78,6 +79,36 @@ namespace DNN.Modules.SecurityAnalyzer
                 }
 
                 lbldatabaseresults.Text = Utility.SearchDatabase(txtSearchTerm.Text);
+            }
+            finally
+            {
+                Server.ScriptTimeout = scriptTimeout;
+            }
+        }
+
+        private void SetMinimalModifiedFilesGrid()
+        {
+            dgModifiedFiles.DataSource = new List<FileInfo>
+                {
+                    new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config"))
+                };
+            dgModifiedFiles.DataBind();
+        }
+
+        private void cmdModifiedFiles_Click(object sender, EventArgs e)
+        {
+            var scriptTimeout = Server.ScriptTimeout;
+            try
+            {
+                Server.ScriptTimeout = 600; // 10 minutes
+                var files = Utility.GetLastModifiedFiles();
+                Localization.LocalizeDataGrid(ref dgModifiedFiles, LocalResourceFile);
+                dgModifiedFiles.DataSource = files;
+                dgModifiedFiles.DataBind();
+            }
+            catch (Exception)
+            {
+                SetMinimalModifiedFilesGrid();
             }
             finally
             {
@@ -184,14 +215,6 @@ namespace DNN.Modules.SecurityAnalyzer
             Localization.LocalizeDataGrid(ref dgUsers, LocalResourceFile);
             dgUsers.DataSource = Users;
             dgUsers.DataBind();
-        }
-
-        private void GetModifiedFiles()
-        {
-            var files = Utility.GetLastModifiedFiles();
-            Localization.LocalizeDataGrid(ref dgModifiedFiles, LocalResourceFile);
-            dgModifiedFiles.DataSource = files;
-            dgModifiedFiles.DataBind();
         }
 
         private void GetModifiedSettings()

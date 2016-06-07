@@ -130,7 +130,7 @@
     <value>If the debug attribute is set to true it impacts performance and can reveal security exception details useful to hackers</value>
   </data>
   <data name="CheckDebugSuccess.Text" xml:space="preserve">
-    <value>Not in debug mode</value>
+    <value>Not in debug mode. This setting depends on debug value in web.config file.</value>
   </data>
   <data name="cmdCheck.Text" xml:space="preserve">
     <value>Check</value>
@@ -140,6 +140,9 @@
   </data>
   <data name="plSearchTerm.Text" xml:space="preserve">
     <value>Search term</value>
+  </data>
+  <data name="cmdModifiedFiles.Text" xml:space="preserve">
+    <value>Check Files</value>
   </data>
   <data name="ScannerChecks.Text" xml:space="preserve">
     <value>Scanner Checks</value>
@@ -181,7 +184,7 @@
     <value>Last name</value>
   </data>
   <data name="ScannerExplanation.Text" xml:space="preserve">
-    <value />
+    <value>This tab allows you to search the filesystem and database for any term, which is useful for the case where your site is showing unwanted content you wish to locate.<br />THIS OPERATION MAY TIME OUT</value>
   </data>
   <data name="Username.Header" xml:space="preserve">
     <value>Username</value>
@@ -347,10 +350,13 @@
     <value>Tab Settings</value>
   </data>
   <data name="ModifiedSettingsExplaination.Text" xml:space="preserve">
-    <value />
+    <value>Below are the system settings that were modified recently. Have a look at these settings to see if something looks suspicious here. Pay close attention to the Last Modification Date.<br />IT IS OK TO HAVE ITEMS LISTED HERE.</value>
   </data>
   <data name="ModifiedFilesExplaination.Text" xml:space="preserve">
     <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicious here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE FILES LISTED HERE.</value>
+  </data>
+  <data name="ModifiedFilesLoadWarning.Text" xml:space="preserve">
+    <value>Clicking the button will cause enumerating all files in the site. This could be a very lengthy process. Click only if you want to do that.</value>
   </data>
   <data name="SuperUserActivityExplaination.Text" xml:space="preserve">
     <value>Below are the SuperUser activities. Look for suspicious activities here. Pay close attention to the Creation and Last Login Dates. </value>
@@ -371,7 +377,7 @@
     <value>The allowable file extensions contains unsafe value: asp/aspx/php, please go to host settings and remove them.</value>
   </data>
   <data name="CheckAllowableFileExtensionsName.Text" xml:space="preserve">
-    <value>Check Allowable File Extensions</value>
+    <value>Check if there are any harmful extensions allowed by the file uploader</value>
   </data>
   <data name="CheckAllowableFileExtensionsReason.Text" xml:space="preserve">
     <value>If the allowable file extensions contains asp/aspx/php, then user will able to upload executable files.</value>

@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="DNN.Modules.SecurityAnalyzer.View" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="DNN.Modules.SecurityAnalyzer.View"  %>
 <%@ Import Namespace="DNN.Modules.SecurityAnalyzer.Components" %>
 <%@ Import Namespace="DotNetNuke.Entities.Users" %>
 <%@ Register TagPrefix="dnn" TagName="Label" Src="~/controls/LabelControl.ascx" %>
@@ -70,13 +70,12 @@
                 <asp:Label ID="lblScannerExplanation" runat="server" resourceKey="ScannerExplanation"></asp:Label>
                 <div class="dnnFormItem">
                     <dnn:label id="plSearchTerm" controlname="txtSearchTerm" runat="server" CssClass="dnnFormRequired"/>
-                    <asp:TextBox ID="txtSearchTerm" runat="server" MaxLength="256"/>
+                    <asp:TextBox ID="txtSearchTerm" runat="server" MaxLength="256" Text="rootkit"/>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" EnableClientScript="true" ControlToValidate="txtSearchTerm" CssClass="dnnFormMessage dnnFormError" resourcekey="SearchTermRequired"/>
                     <asp:LinkButton ID="cmdSearch" runat="server" CssClass="dnnPrimaryAction" resourcekey="cmdSearch"/>
                 </div>
             </div>
         </asp:Panel>
-
         <br/>
         <hr/>
         <asp:Panel ID="pnlFileresults" runat="server" CssClass="dnnFormItem dnnClear" Width="450px" Visible="False">
@@ -87,8 +86,6 @@
             <strong>Database Results</strong>
             <asp:Label ID="lbldatabaseresults" runat="server"></asp:Label>
         </asp:Panel>
-
-
     </div>
 
     <div id="superuserActivity" class="dnnClear">
@@ -106,13 +103,10 @@
                 <selecteditemstyle/>
                 <footerstyle/>
                 <Columns>
-
-
                     <asp:BoundColumn datafield="UserName" headertext="Username"/>
                     <asp:BoundColumn datafield="FirstName" headertext="FirstName"/>
                     <asp:BoundColumn datafield="LastName" headertext="LastName"/>
                     <asp:BoundColumn datafield="DisplayName" headertext="DisplayName"/>
-
                     <asp:TemplateColumn HeaderText="Email">
                         <ItemTemplate>
                             <asp:Label ID="lblEmail" Runat="server" Text="<%# DisplayEmail(((UserInfo) Container.DataItem).Email) %>">
@@ -138,11 +132,19 @@
                         </ItemTemplate>
                     </asp:TemplateColumn>
                 </Columns>
-
             </asp:DataGrid>
         </div>
     </div>
     <div id="modifiedFiles" class="dnnClear">
+        <asp:Panel ID="panelModifiedFiles" runat="server" CssClass="dnnFormItem dnnClear" Width="450px">
+            <div class="dnnLeft">
+                <div class="dnnFormItem">
+                    <asp:LinkButton ID="cmdModifiedFiles" runat="server" CssClass="dnnPrimaryAction" resourcekey="cmdModifiedFiles"/>
+                </div>
+                <asp:Label ID="LabelCheckModifiedFiles" runat="server" resourceKey="ModifiedFilesLoadWarning"></asp:Label>
+            </div>
+        </asp:Panel>
+        <br/>
          <strong>
             <asp:Label ID="lblModifiedFilesExplaination" runat="server" resourceKey="ModifiedFilesExplaination"></asp:Label>
         </strong>

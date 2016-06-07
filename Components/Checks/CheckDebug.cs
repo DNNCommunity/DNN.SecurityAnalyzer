@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
@@ -7,22 +6,12 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     {
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckDebug");
-            try
+            var result = new CheckResult(SeverityEnum.Unverified, "CheckDebug")
             {
-                if (HttpContext.Current.IsDebuggingEnabled)
-                {
-                    result.Severity = SeverityEnum.Warning;
-                }
-                else
-                {
-                    result.Severity = SeverityEnum.Pass;
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                Severity = HttpContext.Current.IsDebuggingEnabled
+                    ? SeverityEnum.Warning
+                    : SeverityEnum.Pass
+            };
             return result;
         }
     }

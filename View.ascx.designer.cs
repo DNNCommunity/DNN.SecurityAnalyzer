@@ -139,6 +139,33 @@ namespace DNN.Modules.SecurityAnalyzer {
         protected global::System.Web.UI.WebControls.DataGrid dgUsers;
         
         /// <summary>
+        /// panelModifiedFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel panelModifiedFiles;
+        
+        /// <summary>
+        /// cmdModifiedFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton cmdModifiedFiles;
+        
+        /// <summary>
+        /// LabelCheckModifiedFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label LabelCheckModifiedFiles;
+        
+        /// <summary>
         /// lblModifiedFilesExplaination control.
         /// </summary>
         /// <remarks>
