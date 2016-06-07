@@ -145,7 +145,7 @@
     <value>Find Recently Modified Files</value>
   </data>
   <data name="ScannerChecks.Text" xml:space="preserve">
-    <value>Scanner Checks</value>
+    <value>Search Filesystem and Database</value>
   </data>
   <data name="AuditExplanation.Text" xml:space="preserve">
     <value>Below are the results of an automatic scan of security best practices.</value>
@@ -374,7 +374,7 @@
     <value>The passwordFormat is set as Hashed in web.config</value>
   </data>
   <data name="CheckAllowableFileExtensionsFailure.Text" xml:space="preserve">
-    <value>The allowable file extensions contains unsafe value: asp/aspx/php, please go to host settings and remove them.</value>
+    <value>Either aspx, asp or php files were found in allowable file extensions setting. This will allow hackers to upload code. Remove these extensions at Host > Host Settings > Other Settings > Allowable File Extensions</value>
   </data>
   <data name="CheckAllowableFileExtensionsName.Text" xml:space="preserve">
     <value>Check if there are any harmful extensions allowed by the file uploader</value>
