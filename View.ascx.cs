@@ -45,7 +45,7 @@ namespace DNN.Modules.SecurityAnalyzer
                 GetAuditResults();
                 GetSuperUsers();
                 GetModifiedSettings();
-                SetMinimalModifiedFilesGrid();
+                //SetMinimalModifiedFilesGrid();
             }
         }
 
@@ -90,7 +90,8 @@ namespace DNN.Modules.SecurityAnalyzer
         {
             dgModifiedFiles.DataSource = new List<FileInfo>
                 {
-                    new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config"))
+                    new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config")),
+                    new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "default.aspx"))
                 };
             dgModifiedFiles.DataBind();
         }

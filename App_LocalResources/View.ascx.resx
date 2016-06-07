@@ -142,7 +142,7 @@
     <value>Search term</value>
   </data>
   <data name="cmdModifiedFiles.Text" xml:space="preserve">
-    <value>Check Files</value>
+    <value>Find Recently Modified Files</value>
   </data>
   <data name="ScannerChecks.Text" xml:space="preserve">
     <value>Scanner Checks</value>
@@ -190,7 +190,7 @@
     <value>Username</value>
   </data>
   <data name="CheckBiographyFailure.Text" xml:space="preserve">
-    <value>The field is richtext</value>
+    <value>The field is richtext. Spammers may put links to their website in their biography field.</value>
   </data>
   <data name="CheckBiographyReason.Text" xml:space="preserve">
     <value>The biography field is a common target for spammers as they can add links/html to it. In DNN 7.2.0 this was changed to a multiline textbox which removes this risk.</value>
@@ -356,7 +356,7 @@
     <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicious here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE FILES LISTED HERE.</value>
   </data>
   <data name="ModifiedFilesLoadWarning.Text" xml:space="preserve">
-    <value>Clicking the button will cause enumerating all files in the site. This could be a very lengthy process. Click only if you want to do that.</value>
+    <value>Tool will enumerate all files in your system to show the recently changed files. It may take a while on a site with lots of files.</value>
   </data>
   <data name="SuperUserActivityExplaination.Text" xml:space="preserve">
     <value>Below are the SuperUser activities. Look for suspicious activities here. Pay close attention to the Creation and Last Login Dates. </value>
@@ -380,16 +380,16 @@
     <value>Check if there are any harmful extensions allowed by the file uploader</value>
   </data>
   <data name="CheckAllowableFileExtensionsReason.Text" xml:space="preserve">
-    <value>If the allowable file extensions contains asp/aspx/php, then user will able to upload executable files.</value>
+    <value>Either aspx, asp or php files were found in allowable file extensions setting. This will allow hackers to upload code. Remove these extensions at Host > Host Settings > Other Settings > Allowable File Extensions</value>
   </data>
   <data name="CheckAllowableFileExtensionsSuccess.Text" xml:space="preserve">
-    <value>The allowable file extensions doesn't contain unsafe value.</value>
+    <value>The allowable file extensions is setup correctly.</value>
   </data>
   <data name="CheckFileExists.Error" xml:space="preserve">
     <value>Current SQL Server account can execute xp_fileexist which can detect whether files exist on server.</value>
   </data>
   <data name="CheckSqlRiskFailure.Text" xml:space="preserve">
-    <value>The current SQL connection can execute dangerous command(s) which may lead to server security breaches.</value>
+    <value>The current SQL connection can execute dangerous command(s) on your SQL Server.</value>
   </data>
   <data name="CheckSqlRiskName.Text" xml:space="preserve">
     <value>Check Current SQL Account Permission</value>
