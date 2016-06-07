@@ -23,6 +23,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 new CheckModuleHeaderAndFooter(),
                 new CheckPasswordFormat(),
                 new CheckDiskAcccessPermissions(),
+                new CheckSqlRisk(),
             }.AsReadOnly();
         }
 
