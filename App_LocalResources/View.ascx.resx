@@ -353,7 +353,7 @@
     <value>Below are the system settings that were modified recently. Have a look at these settings to see if something looks suspicious here. Pay close attention to the Last Modification Date.<br />IT IS OK TO HAVE ITEMS LISTED HERE.</value>
   </data>
   <data name="ModifiedFilesExplaination.Text" xml:space="preserve">
-    <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicious here. Pay close attention to the Last Modification Date. <br />IT IS OK TO HAVE FILES LISTED HERE.</value>
+    <value>Below are the files that were modified recently. Have a look at these files to see if something looks suspicious here. Pay close attention to the Last Modification Date. <br /> IT IS OK TO HAVE FILES LISTED HERE.</value>
   </data>
   <data name="ModifiedFilesLoadWarning.Text" xml:space="preserve">
     <value>Tool will enumerate all files in your system to show the recently changed files. It may take a while on a site with lots of files.</value>
