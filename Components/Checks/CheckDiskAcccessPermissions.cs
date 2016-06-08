@@ -20,7 +20,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             }
             else
             {
-                result.Severity = SeverityEnum.Failure;
+                result.Severity = SeverityEnum.Warning;
                 result.Notes = accessErrors;
             }
             return result;

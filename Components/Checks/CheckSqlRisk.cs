@@ -33,7 +33,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             {
                 if (!VerifyScript(name))
                 {
-                    result.Severity = SeverityEnum.Failure;
+                    result.Severity = SeverityEnum.Warning;
                     result.Notes.Add(Localization.GetString(name + ".Error", LocalResourceFile));
                 }
             }
