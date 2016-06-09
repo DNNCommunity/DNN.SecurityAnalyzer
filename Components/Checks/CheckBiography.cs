@@ -22,7 +22,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                     var pd = ProfileController.GetPropertyDefinitionByName(portal.PortalID, "Biography");
                     if (pd != null && pd.DataType == richTextDataType.EntryID)
                     {
-                        result.Severity = SeverityEnum.Warning;
+                        result.Severity = SeverityEnum.Failure;
                         result.Notes.Add("Portal:" + portal.PortalName);
                     }
                 }
