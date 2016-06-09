@@ -153,6 +153,7 @@
         <br/>
         <br/>
         <div>
+            <h2><%=LocalizeString("HighRiskFiles") %></h2>
             <asp:DataGrid id="dgModifiedExecutableFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -173,6 +174,7 @@
                     </asp:TemplateColumn>
                 </Columns>
             </asp:DataGrid>
+            <h2><%=LocalizeString("LowRiskFiles") %></h2>
             <asp:DataGrid id="dgModifiedFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>

@@ -23,6 +23,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             new Regex(Regex.Escape("\\d+-System\\Thumbnailsy"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
             new Regex(Regex.Escape("\\Portals\\_default\\Logs"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
             new Regex(Regex.Escape("\\App_Data\\_imagecache"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape(AppDomain.CurrentDomain.BaseDirectory + "Default.aspx"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape(AppDomain.CurrentDomain.BaseDirectory + "Default.aspx.cs"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            new Regex(Regex.Escape(AppDomain.CurrentDomain.BaseDirectory + "web.config"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
         private const long MaxFileSize = 1024*1024*10; //10M
@@ -228,12 +231,21 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 {
                     var extension = Path.GetExtension(f);
                     return extension != null && executableExtensions.Contains(extension.ToLowerInvariant());
-                })
-                .Select(f => new FileInfo(f))
-                .OrderByDescending(f => f.LastWriteTime)
-                .Take(ModifiedFilesCount).ToList();
+                }).ToList();
+            files.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Default.aspx.cs"));
+            files.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "web.config"));
 
-            return files;
+            var defaultPage = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Default.aspx");
+            if (!files.Contains(defaultPage))
+            {
+                files.Add(defaultPage);
+            }
+
+            return files
+            .Select(f => new FileInfo(f))
+            .OrderByDescending(f => f.LastWriteTime)
+            .Take(ModifiedFilesCount).ToList();
+
         }
     }
 }
