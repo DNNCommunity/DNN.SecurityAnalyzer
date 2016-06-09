@@ -102,9 +102,13 @@ namespace DNN.Modules.SecurityAnalyzer
             try
             {
                 Server.ScriptTimeout = 600; // 10 minutes
-                var files = Utility.GetLastModifiedFiles();
+
+                Localization.LocalizeDataGrid(ref dgModifiedExecutableFiles, LocalResourceFile);
+                dgModifiedExecutableFiles.DataSource = Utility.GetLastModifiedExecutableFiles();
+                dgModifiedExecutableFiles.DataBind();
+
                 Localization.LocalizeDataGrid(ref dgModifiedFiles, LocalResourceFile);
-                dgModifiedFiles.DataSource = files;
+                dgModifiedFiles.DataSource = Utility.GetLastModifiedFiles();
                 dgModifiedFiles.DataBind();
             }
             catch (Exception)

@@ -219,5 +219,21 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
             return files;
         }
+
+        public static IList<FileInfo> GetLastModifiedExecutableFiles()
+        {
+            var executableExtensions = new List<string>() {".asp", ".aspx", ".php"};
+            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(f =>
+                {
+                    var extension = Path.GetExtension(f);
+                    return extension != null && executableExtensions.Contains(extension.ToLowerInvariant());
+                })
+                .Select(f => new FileInfo(f))
+                .OrderByDescending(f => f.LastWriteTime)
+                .Take(ModifiedFilesCount).ToList();
+
+            return files;
+        }
     }
 }

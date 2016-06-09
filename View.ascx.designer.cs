@@ -175,6 +175,15 @@ namespace DNN.Modules.SecurityAnalyzer {
         protected global::System.Web.UI.WebControls.Label lblModifiedFilesExplaination;
         
         /// <summary>
+        /// dgModifiedExecutableFiles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataGrid dgModifiedExecutableFiles;
+        
+        /// <summary>
         /// dgModifiedFiles control.
         /// </summary>
         /// <remarks>

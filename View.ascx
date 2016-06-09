@@ -153,6 +153,26 @@
         <br/>
         <br/>
         <div>
+            <asp:DataGrid id="dgModifiedExecutableFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
+                <headerstyle CssClass="dnnGridHeader"/>
+                <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
+                <alternatingitemstyle CssClass="dnnGridAltItem"/>
+                <edititemstyle/>
+                <selecteditemstyle/>
+                <footerstyle/>
+                <Columns>
+                    <asp:TemplateColumn HeaderText="FileName">
+                        <ItemTemplate>
+                            <span><%# GetFilePath(Eval("FullName").ToString()) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateColumn>
+                    <asp:TemplateColumn HeaderText="LastModifiedDate">
+                        <ItemTemplate>
+                            <span><%# DisplayDate(Convert.ToDateTime(Eval("LastWriteTime"))) %></span>
+                        </ItemTemplate>
+                    </asp:TemplateColumn>
+                </Columns>
+            </asp:DataGrid>
             <asp:DataGrid id="dgModifiedFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
