@@ -32,26 +32,34 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         {
             var errors = new List<string>();
             var dir = new DirectoryInfo(Globals.ApplicationMapPath);
-            try
+
+
+            while (dir.Parent != null)
             {
 
-                while (dir.Parent != null)
+                try
                 {
+
+
                     dir = dir.Parent;
                     var permissions = CheckPermissionOnDir(dir);
                     if (permissions.AnyYes)
                     {
                         errors.Add(GetPermissionText(dir, permissions));
                     }
+
+
                 }
-            }
-            catch (IOException)
-            {
-                // e.g., a disk error or a drive was not ready
-            }
-            catch (UnauthorizedAccessException)
-            {
-                // The caller does not have the required permission.
+                catch (IOException)
+                {
+                    // e.g., a disk error or a drive was not ready
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // The caller does not have the required permission.
+
+                }
+
             }
 
             var drives = DriveInfo.GetDrives();
