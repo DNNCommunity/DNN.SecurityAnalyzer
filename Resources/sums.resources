@@ -165,4 +165,5 @@
   <sum name="Default.aspx" version="8.4.2" type="Social" sum="7fb46bf023e8a26476391523589b8629" />
   <sum name="Default.aspx" version="8.5.0" type="Social" sum="7fb46bf023e8a26476391523589b8629" />
   <sum name="Default.aspx" version="9.0.0" type="Social" sum="7fb46bf023e8a26476391523589b8629" />
+  <sum name="Default.aspx" version="9.0.1" type="Social" sum="7fb46bf023e8a26476391523589b8629" />
 </checksums>

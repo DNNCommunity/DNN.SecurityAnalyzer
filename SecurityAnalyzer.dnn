@@ -1,6 +1,6 @@
 <dotnetnuke type="Package" version="5.0">
   <packages>
-    <package name="SecurityAnalyzer" type="Module" version="08.00.02">
+    <package name="SecurityAnalyzer" type="Module" version="09.00.01">
       <friendlyName>Security Analyzer</friendlyName>
       <description>SecurityAnalyzer module</description>
       <iconFile>~/Icons/Sigma/Extensions_32x32_standard.png</iconFile>
@@ -72,7 +72,7 @@
             <attributes>
               <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
               <desktopModuleID>[DESKTOPMODULEID]</desktopModuleID>
-              <upgradeVersionsList>01.00.00,08.00.02</upgradeVersionsList>
+              <upgradeVersionsList>01.00.00,08.00.02,09.00.01</upgradeVersionsList>
             </attributes>
           </eventMessage>
         </component>
