@@ -28,9 +28,6 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 case "08.00.02":
                     Utility.CleanUpInstallerFiles();
                     break;
-                case "09.00.01":
-                    Utility.UpdateRegisterControl();
-                    break;
             }
 
             return String.Empty;

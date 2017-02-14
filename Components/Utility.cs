@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml;
 using DotNetNuke.Application;
-using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Data;
-using Assembly = System.Reflection.Assembly;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
@@ -29,7 +28,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             new Regex(Regex.Escape(AppDomain.CurrentDomain.BaseDirectory + "web.config"), RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
-        private const long MaxFileSize = 1024 * 1024 * 10; //10M
+        private const long MaxFileSize = 1024*1024*10; //10M
 
         private const int ModifiedFilesCount = 50;
 
@@ -80,10 +79,10 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
             catch (Exception)
             {
-
+                
                 //might be a locking issue
             }
-
+          
             return fileContents;
         }
 
@@ -226,7 +225,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         public static IList<FileInfo> GetLastModifiedExecutableFiles()
         {
-            var executableExtensions = new List<string>() { ".asp", ".aspx", ".php" };
+            var executableExtensions = new List<string>() {".asp", ".aspx", ".php"};
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f =>
                 {
@@ -247,34 +246,6 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             .OrderByDescending(f => f.LastWriteTime)
             .Take(ModifiedFilesCount).ToList();
 
-        }
-
-        public static void UpdateRegisterControl()
-        {
-            var regsiterControlFile = Path.Combine(Globals.ApplicationMapPath, "DesktopModules\\Admin\\Security\\Register.ascx");
-            if (DotNetNukeContext.Current.Application.Version < new Version(9, 1, 0) && File.Exists(regsiterControlFile))
-            {
-                //backup the old file
-                var backupFile = regsiterControlFile + ".old";
-                if (!File.Exists(backupFile))
-                {
-                    File.Copy(regsiterControlFile, backupFile);
-                }
-
-                File.AppendAllText(regsiterControlFile, @"
-<script runat=""server"">
-protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            if (Request.QueryString[""userid""] != null)
-            {
-                Response.Redirect(DotNetNuke.Common.Globals.AddHTTP(PortalSettings.PortalAlias.HTTPAlias), true);
-            }
-        }
-</script>
-");
-            }
         }
     }
 }
