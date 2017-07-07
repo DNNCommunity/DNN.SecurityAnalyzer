@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using DotNetNuke.Common;
-using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Controllers;
 using DotNetNuke.Entities.Host;
-using DotNetNuke.Security;
 using DotNetNuke.Services.Localization;
 using DotNetNuke.Services.Log.EventLog;
 using DotNetNuke.Services.Mail;
@@ -21,7 +19,20 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
     {
         private static bool _initialized;
         private static object _threadLocker = new object();
-        private static readonly IList<string> _defaultRestrictExtensions = new List<string>() {".asp", ".asa", ".aspx", ".asax", ".ashx", ".php"}; 
+
+        private static DateTime _lastRead;
+        private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
+        private static readonly IEnumerable<string> DefaultRestrictExtensions =
+            (
+                ".ade,.adp,.app,.ashx,.asmx,.asp,.aspx,.bas,.bat,.chm,.class,.cmd,.com,.cpl,.crt,.dll,.exe," +
+                ".fxp,.hlp,.hta,.ins,.isp,.jse,.lnk,.mda,.mdb,.mde,.mdt,.mdw,.mdz,.msc,.msi,.msp,.mst,.ops,.pcd,.php," +
+                ".pif,.prf,.prg,.py,.reg,.scf,.scr,.sct,.shb,.shs,.url,.vb,.vbe,.vbs,.wsc,.wsf,.wsh,"
+            )
+            .ToLowerInvariant()
+            .Split(',')
+            .Where(e => !string.IsNullOrEmpty(e))
+            .Select(e => e.Trim()).ToList();
+
         private const string ResourceFile = "~/DesktopModules/DNNCorp/SecurityAnalyzer/App_LocalResources/View.ascx.resx";
 
         public void Init(HttpApplication context)
@@ -43,7 +54,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
         }
 
-        private void Initialize()
+        private static void Initialize()
         {
             var fileWatcher = new FileSystemWatcher
             {
@@ -55,7 +66,6 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
             fileWatcher.Created += WatcherOnCreated;
             fileWatcher.Renamed += WatcherOnRenamed;
-            fileWatcher.Changed += WatcherOnChanged;
             fileWatcher.Error += WatcherOnError;
 
             fileWatcher.EnableRaisingEvents = true;
@@ -66,17 +76,12 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             };
         }
 
-        private void WatcherOnChanged(object sender, FileSystemEventArgs e)
+        private static void WatcherOnRenamed(object sender, RenamedEventArgs e)
         {
             CheckFile(e.FullPath);
         }
 
-        private void WatcherOnRenamed(object sender, RenamedEventArgs e)
-        {
-            CheckFile(e.FullPath);
-        }
-
-        private void WatcherOnCreated(object sender, FileSystemEventArgs e)
+        private static void WatcherOnCreated(object sender, FileSystemEventArgs e)
         {
             CheckFile(e.FullPath);
         }
@@ -85,83 +90,84 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
             LogException(e.GetException());
         }
+
         private static void LogException(Exception ex)
         {
-            Trace.WriteLine("Watcher Activity: N/A. Error: " + ex?.Message);
+            Trace.WriteLine("Watcher Activity: N/A. Error: " + ex?.Message ?? "N/A");
         }
 
-        private void CheckFile(string path)
+        private static void CheckFile(string path)
         {
             try
             {
-                var extension = Path.GetExtension(path)?.ToLowerInvariant();
-                if (!string.IsNullOrEmpty(extension) && IsRestrictExtension(extension))
+                if (IsRestrictdExtension(path))
                 {
-                    var thread = new Thread(() =>
-                    {
-                        try
-                        {
-                            AddEventLog(path);
-                            NotifyManager(path);
-                        }
-                        catch (Exception ex)
-                        {
-                            LogException(ex);
-                        }
-                        
-                    });
-                    thread.Start();
+                    ThreadPool.QueueUserWorkItem(_ => AddEventLog(path));
+                    ThreadPool.QueueUserWorkItem(_ => NotifyManager(path));
                 }
             }
             catch (Exception ex)
             {
                 LogException(ex);
             }
-            
         }
 
-        private bool IsRestrictExtension(string extension)
+        private static bool IsRestrictdExtension(string path)
         {
-            return GetRestrictExtensions().Select(WildCardToRegular).Any(pattern => Regex.IsMatch(extension, pattern));
+            var extension = Path.GetExtension(path)?.ToLowerInvariant();
+            return !string.IsNullOrEmpty(extension) &&
+                GetRestrictExtensions().Contains(extension);
         }
 
-        private IList<string> GetRestrictExtensions()
+        private static IEnumerable<string> GetRestrictExtensions()
         {
-            var settings = HostController.Instance.GetString("SA_RestrictExtensions", string.Empty);
-            if (string.IsNullOrEmpty(settings))
+            // obtain the setting and do calculations once every 5 minutes at most, plus no need for locking
+            if ((DateTime.Now - _lastRead).TotalMinutes > 5)
             {
-                return _defaultRestrictExtensions;
+                _lastRead = DateTime.Now;
+                var settings = HostController.Instance.GetString("SA_RestrictExtensions", string.Empty);
+                _settingsRestrictExtensions = string.IsNullOrEmpty(settings)
+                    ? DefaultRestrictExtensions
+                    : settings.ToLowerInvariant()
+                        .Split(',')
+                        .Where(e => !string.IsNullOrEmpty(e))
+                        .Select(e => e.Trim());
             }
 
-            return settings.ToLowerInvariant()
-                                .Split(',')
-                                .Where(e => !string.IsNullOrEmpty(e))
-                                .Select(e => e.Trim()).ToList();
+            return _settingsRestrictExtensions ?? DefaultRestrictExtensions;
         }
 
-        private static string WildCardToRegular(string value)
+        private static void AddEventLog(string path)
         {
-            return "^" + Regex.Escape(value).Replace("\\?", ".").Replace("\\*", ".*") + "$";
-        }
-
-        private void AddEventLog(string path)
-        {
-            var log = new LogInfo
+            try
             {
-                LogTypeKey = EventLogController.EventLogType.HOST_ALERT.ToString(),
-            };
-            log.AddProperty("Summary", "Dangerous File modification found in the website.");
-            log.AddProperty("File Name", path);
+                var log = new LogInfo
+                {
+                    LogTypeKey = EventLogController.EventLogType.HOST_ALERT.ToString(),
+                };
+                log.AddProperty("Summary", "Dangerous File modification found in the website.");
+                log.AddProperty("File Name", path);
 
-            new LogController().AddLog(log);
+                new LogController().AddLog(log);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+            }
         }
 
-        private void NotifyManager(string path)
+        private static void NotifyManager(string path)
         {
-            var subject = Localization.GetString("RestrictFileMail_Subject.Text", ResourceFile);
-            var body = Localization.GetString("RestrictFileMail_Body.Text", ResourceFile).Replace("[Path]", path);
-
-            Mail.SendEmail(Host.HostEmail, Host.HostEmail, subject, body);
+            try
+            {
+                var subject = Localization.GetString("RestrictFileMail_Subject.Text", ResourceFile);
+                var body = Localization.GetString("RestrictFileMail_Body.Text", ResourceFile).Replace("[Path]", path);
+                Mail.SendEmail(Host.HostEmail, Host.HostEmail, subject, body);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+            }
         }
     }
 }
