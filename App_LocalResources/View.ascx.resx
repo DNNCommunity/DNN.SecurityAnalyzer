@@ -430,4 +430,10 @@
   <data name="CheckTelerikVulnerabilitySuccess.Text" xml:space="preserve">
     <value>Telerik Component already patched.</value>
   </data>
+  <data name="RestrictFileMail_Body.Text" xml:space="preserve">
+    <value>&lt;p&gt;Dangerous File modification found in the website, please check the file content ASAP to verify its content.&lt;/p&gt;&lt;p&gt;File Path: [Path]&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;</value>
+  </data>
+  <data name="RestrictFileMail_Subject.Text" xml:space="preserve">
+    <value>Dangerous Files modification found in your website</value>
+  </data>
 </root>
