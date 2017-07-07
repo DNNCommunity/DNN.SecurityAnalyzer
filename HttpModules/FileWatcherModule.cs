@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -22,16 +21,20 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         private static DateTime _lastRead;
         private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
+
+        // Source: Configuring Blocked File Extensions
+        // https://msdn.microsoft.com/en-us/library/cc767397.aspx
         private static readonly IEnumerable<string> DefaultRestrictExtensions =
             (
                 ".ade,.adp,.app,.ashx,.asmx,.asp,.aspx,.bas,.bat,.chm,.class,.cmd,.com,.cpl,.crt,.dll,.exe," +
                 ".fxp,.hlp,.hta,.ins,.isp,.jse,.lnk,.mda,.mdb,.mde,.mdt,.mdw,.mdz,.msc,.msi,.msp,.mst,.ops,.pcd,.php," +
-                ".pif,.prf,.prg,.py,.reg,.scf,.scr,.sct,.shb,.shs,.url,.vb,.vbe,.vbs,.wsc,.wsf,.wsh,"
+                ".pif,.prf,.prg,.py,.reg,.scf,.scr,.sct,.shb,.shs,.url,.vb,.vbe,.vbs,.wsc,.wsf,.wsh"
             )
             .ToLowerInvariant()
             .Split(',')
             .Where(e => !string.IsNullOrEmpty(e))
-            .Select(e => e.Trim()).ToList();
+            .Select(e => e.Trim())
+            .ToList();
 
         private const string ResourceFile = "~/DesktopModules/DNNCorp/SecurityAnalyzer/App_LocalResources/View.ascx.resx";
 
@@ -131,7 +134,9 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                     : settings.ToLowerInvariant()
                         .Split(',')
                         .Where(e => !string.IsNullOrEmpty(e))
-                        .Select(e => e.Trim());
+                        .Select(e => e.Trim())
+                        .Concat(DefaultRestrictExtensions)
+                        .ToList();
             }
 
             return _settingsRestrictExtensions ?? DefaultRestrictExtensions;
