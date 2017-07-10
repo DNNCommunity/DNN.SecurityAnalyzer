@@ -6,8 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using DotNetNuke.Common;
+using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Controllers;
 using DotNetNuke.Entities.Host;
+using DotNetNuke.Services.Installer.Packages;
 using DotNetNuke.Services.Localization;
 using DotNetNuke.Services.Log.EventLog;
 using DotNetNuke.Services.Mail;
@@ -17,10 +19,12 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
     public class FileWatcherModule : IHttpModule
     {
         private static bool _initialized;
-        private static object _threadLocker = new object();
+        private static readonly object ThreadLocker = new object();
 
         private static DateTime _lastRead;
         private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
+
+        internal static bool Initialized => _initialized;
 
         // Source: Configuring Blocked File Extensions
         // https://msdn.microsoft.com/en-us/library/cc767397.aspx
@@ -42,7 +46,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
             if (!_initialized)
             {
-                lock (_threadLocker)
+                lock (ThreadLocker)
                 {
                     if (!_initialized)
                     {
@@ -150,7 +154,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 {
                     LogTypeKey = EventLogController.EventLogType.HOST_ALERT.ToString(),
                 };
-                log.AddProperty("Summary", "Dangerous File modification found in the website.");
+                log.AddProperty("Summary", "A dangerous file has been added to your website");
                 log.AddProperty("File Name", path);
 
                 new LogController().AddLog(log);
@@ -165,8 +169,17 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
             try
             {
+                var package = PackageController.GetPackages(Null.NullInteger)
+                    .FirstOrDefault(
+                        p =>
+                            p.Name.Equals("SecurityAnalyzer", StringComparison.InvariantCultureIgnoreCase) &&
+                            p.PackageType.Equals("Module", StringComparison.InvariantCultureIgnoreCase));
                 var subject = Localization.GetString("RestrictFileMail_Subject.Text", ResourceFile);
-                var body = Localization.GetString("RestrictFileMail_Body.Text", ResourceFile).Replace("[Path]", path);
+                var body = Localization.GetString("RestrictFileMail_Body.Text", ResourceFile)
+                    .Replace("[Path]", path)
+                    .Replace("[ModuleName]", package?.FriendlyName)
+                    .Replace("[ModuleVersion]", package?.Version.ToString());
+
                 Mail.SendEmail(Host.HostEmail, Host.HostEmail, subject, body);
             }
             catch (Exception ex)

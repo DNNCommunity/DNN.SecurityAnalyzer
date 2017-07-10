@@ -26,7 +26,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 new CheckDiskAcccessPermissions(),
                 new CheckSqlRisk(),
                 new CheckAllowableFileExtensions(),
-                new CheckTelerikVulnerability()
+                new CheckTelerikVulnerability(),
+                new CheckHttpModules()
             };
 
             if (Globals.NETFrameworkVersion <= new Version(4, 5, 1))
