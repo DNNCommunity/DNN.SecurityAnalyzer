@@ -111,11 +111,13 @@
             <install>
               <configuration>
                 <nodes>
-                  <node path="/configuration/system.web/httpModules" action="update" key="name" collision="overwrite">
-                    <add name="SA.FileWatcher" type="DNN.Modules.SecurityAnalyzer.HttpModules.FileWatcherModule, DNN.Modules.SecurityAnalyzer" />
+                  <node path="/configuration/system.web/httpModules/add[@name='SA.FileWatcher']" action="remove" />
+                  <node path="/configuration/system.webServer/modules/add[@name='SA.FileWatcher']" action="remove" />
+                  <node path="/configuration/system.web/httpModules/add[@name='UrlRewrite']" action="insertbefore" key="name" collision="overwrite">
+                    <add name="SA.FileWatcher" type="DNN.Modules.SecurityAnalyzer.HttpModules.SecurityAnalyzerModule, DNN.Modules.SecurityAnalyzer" />
                   </node>
-                  <node path="/configuration/system.webServer/modules" action="update" key="name" collision="overwrite">
-                    <add name="SA.FileWatcher" type="DNN.Modules.SecurityAnalyzer.HttpModules.FileWatcherModule, DNN.Modules.SecurityAnalyzer" preCondition="managedHandler" />
+                  <node path="/configuration/system.webServer/modules/add[@name='UrlRewrite']" action="insertbefore" key="name" collision="overwrite">
+                    <add name="SA.FileWatcher" type="DNN.Modules.SecurityAnalyzer.HttpModules.SecurityAnalyzerModule, DNN.Modules.SecurityAnalyzer" preCondition="managedHandler" />
                   </node>
                 </nodes>
               </configuration>

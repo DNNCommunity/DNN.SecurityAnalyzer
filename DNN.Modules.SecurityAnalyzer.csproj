@@ -76,7 +76,7 @@
     <Compile Include="Components\IAuditCheck.cs" />
     <Compile Include="Components\SeverityEnum.cs" />
     <Compile Include="Components\Utility.cs" />
-    <Compile Include="HttpModules\FileWatcherModule.cs" />
+    <Compile Include="HttpModules\SecurityAnalyzerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAnalyzerModuleBase.cs">
       <SubType>ASPXCodeBehind</SubType>

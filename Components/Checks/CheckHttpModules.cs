@@ -9,7 +9,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         {
             var result = new CheckResult(SeverityEnum.Unverified, "CheckHttpModules")
             {
-                Severity = !FileWatcherModule.Initialized
+                Severity = !SecurityAnalyzerModule.Initialized
                     ? SeverityEnum.Failure
                     : SeverityEnum.Pass
             };
