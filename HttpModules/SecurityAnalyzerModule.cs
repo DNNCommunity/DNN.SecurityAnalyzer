@@ -6,32 +6,28 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
-using System.Xml;
+using DotNetNuke.Application;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Controllers;
 using DotNetNuke.Entities.Host;
-using DotNetNuke.Entities.Portals;
-using DotNetNuke.Entities.Users;
 using DotNetNuke.Security;
 using DotNetNuke.Services.Installer.Packages;
 using DotNetNuke.Services.Localization;
 using DotNetNuke.Services.Log.EventLog;
 using DotNetNuke.Services.Mail;
-using DotNetNuke.Services.Personalization;
-using DotNetNuke.UI.UserControls;
 
 namespace DNN.Modules.SecurityAnalyzer.HttpModules
 {
     public class SecurityAnalyzerModule : IHttpModule
     {
-        private static bool _initialized;
         private static readonly object ThreadLocker = new object();
 
+        private static readonly Version DnnCutoffVer = new Version(9,1,1);
         private static DateTime _lastRead;
         private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
 
-        internal static bool Initialized => _initialized;
+        internal static bool Initialized { get; private set; }
 
         // Source: Configuring Blocked File Extensions
         // https://msdn.microsoft.com/en-us/library/cc767397.aspx
@@ -51,16 +47,19 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         public void Init(HttpApplication context)
         {
-            InitializeCookieHandler(context);
+            if (DnnCutoffVer < DotNetNukeContext.Current.Application.Version)
+            {
+                InitializeCookieHandler(context);
+            }
 
-            if (!_initialized)
+            if (!Initialized)
             {
                 lock (ThreadLocker)
                 {
-                    if (!_initialized)
+                    if (!Initialized)
                     {
-                        Initialize();
-                        _initialized = true;
+                        InitializeFileWatcher();
+                        Initialized = true;
                     }
                 }
             }
@@ -70,14 +69,9 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
         }
 
-        private void Initialize()
-        {
-            InitializeFileWatcher();
-        }
-
         #region File Watcher Functions
 
-        private void InitializeFileWatcher()
+        private static void InitializeFileWatcher()
         {
             var fileWatcher = new FileSystemWatcher
             {
@@ -99,27 +93,27 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             };
         }
 
-        private void WatcherOnRenamed(object sender, RenamedEventArgs e)
+        private static void WatcherOnRenamed(object sender, RenamedEventArgs e)
         {
             CheckFile(e.FullPath);
         }
 
-        private void WatcherOnCreated(object sender, FileSystemEventArgs e)
+        private static void WatcherOnCreated(object sender, FileSystemEventArgs e)
         {
             CheckFile(e.FullPath);
         }
 
-        private void WatcherOnError(object sender, ErrorEventArgs e)
+        private static void WatcherOnError(object sender, ErrorEventArgs e)
         {
             LogException(e.GetException());
         }
 
-        private void LogException(Exception ex)
+        private static void LogException(Exception ex)
         {
-            Trace.WriteLine("Watcher Activity: N/A. Error: " + ex?.Message ?? "N/A");
+            Trace.WriteLine("Watcher Activity: N/A. Error: " + ex?.Message);
         }
 
-        private void CheckFile(string path)
+        private static void CheckFile(string path)
         {
             try
             {
@@ -135,14 +129,14 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             }
         }
 
-        private bool IsRestrictdExtension(string path)
+        private static bool IsRestrictdExtension(string path)
         {
             var extension = Path.GetExtension(path)?.ToLowerInvariant();
             return !string.IsNullOrEmpty(extension) &&
                 GetRestrictExtensions().Contains(extension);
         }
 
-        private IEnumerable<string> GetRestrictExtensions()
+        private static IEnumerable<string> GetRestrictExtensions()
         {
             // obtain the setting and do calculations once every 5 minutes at most, plus no need for locking
             if ((DateTime.Now - _lastRead).TotalMinutes > 5)
@@ -162,7 +156,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             return _settingsRestrictExtensions ?? DefaultRestrictExtensions;
         }
 
-        private void AddEventLog(string path)
+        private static void AddEventLog(string path)
         {
             try
             {
@@ -181,7 +175,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             }
         }
 
-        private void NotifyManager(string path)
+        private static void NotifyManager(string path)
         {
             try
             {
@@ -208,34 +202,35 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         #region Personalization Cookie Functions
 
-        private void InitializeCookieHandler(HttpApplication application)
+        private static void InitializeCookieHandler(HttpApplication application)
         {
             application.PreRequestHandlerExecute += CookieHandler_OnBeginRequest;
             application.EndRequest += CookieHandler_OnEndRequest;
         }
 
-        private void CookieHandler_OnBeginRequest(object sender, EventArgs e)
+        private static void CookieHandler_OnBeginRequest(object sender, EventArgs e)
         {
-            var context = HttpContext.Current;
-            var request = context.Request;
-            if (request.Cookies["DNNPersonalization"] != null)
+            try
             {
-                var cookiesValue = request.Cookies["DNNPersonalization"].Value;
-                string decryptValue;
-                if (NeedDecrypt(cookiesValue, out decryptValue))
+                var httpApplication = sender as HttpApplication;
+                var request = httpApplication?.Request;
+                if (request?.Cookies["DNNPersonalization"] != null)
                 {
-                    try
+                    var cookiesValue = request.Cookies["DNNPersonalization"].Value;
+                    string decryptValue;
+                    if (NeedDecrypt(cookiesValue, out decryptValue))
                     {
-                        var cookie = request.Headers["Cookie"].Replace("DNNPersonalization=" + cookiesValue, "DNNPersonalization=" + decryptValue);
+                        var cookie = request.Headers["Cookie"]
+                            .Replace("DNNPersonalization=" + cookiesValue, "DNNPersonalization=" + decryptValue);
                         request.Headers["Cookie"] = cookie;
 
                         var workRequestField = request.GetType().GetField("_wr", BindingFlags.Instance | BindingFlags.NonPublic);
-                        var workRequest = workRequestField.GetValue(request);
+                        var workRequest = workRequestField?.GetValue(request);
 
-                        var headerField = workRequest.GetType().GetField("_knownRequestHeaders", BindingFlags.Instance | BindingFlags.NonPublic);
-                        var headers = headerField.GetValue(workRequest) as string[];
+                        var headerField = workRequest?.GetType().GetField("_knownRequestHeaders", BindingFlags.Instance | BindingFlags.NonPublic);
+                        var headers = headerField?.GetValue(workRequest) as string[];
 
-                        for (var i = 0; i < headers.Length; i++)
+                        for (var i = 0; i < headers?.Length; i++)
                         {
                             if (!string.IsNullOrEmpty(headers[i]) && headers[i].Contains("DNNPersonalization="))
                             {
@@ -244,38 +239,48 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                             }
                         }
 
-                        headerField.SetValue(workRequest, headers);
-
-                        context.Response.SetCookie(new HttpCookie("RegenerateCookies", "true"));
+                        headerField?.SetValue(workRequest, headers);
+                        httpApplication?.Response.SetCookie(new HttpCookie("RegenerateCookies", "true"));
                     }
-                    catch (Exception)
+                    else
                     {
+                        //TODO: remove plain text DNNPersonalization cookie
                     }
-
-                    
                 }
             }
-        }
-
-        private void CookieHandler_OnEndRequest(object sender, EventArgs e)
-        {
-            var response = (sender as HttpApplication).Response;
-
-            response.Cookies.Remove("RegenerateCookies");
-            if (response.Cookies.AllKeys.Contains("DNNPersonalization"))
+            catch (Exception)
             {
-                var cookiesValue = response.Cookies["DNNPersonalization"].Value;
-                if (!string.IsNullOrEmpty(cookiesValue) && IsPlainText(cookiesValue))
-                {
-                    var encryptValue = new PortalSecurity().Encrypt(Config.GetDecryptionkey(), cookiesValue);
-                    encryptValue = encryptValue.Replace("/", "_")
-                        .Replace("+", "-")
-                        .Replace("=", "%3d");
-                    response.Cookies["DNNPersonalization"].Value = encryptValue;
-                }
+                // ignore
             }
         }
 
+        private static void CookieHandler_OnEndRequest(object sender, EventArgs e)
+        {
+            try
+            {
+                var httpApplication = sender as HttpApplication;
+                if (httpApplication != null)
+                {
+                    var response = httpApplication.Response;
+                    if (response.Cookies.AllKeys.Contains("DNNPersonalization"))
+                    {
+                        var cookiesValue = response.Cookies["DNNPersonalization"]?.Value;
+                        if (!string.IsNullOrEmpty(cookiesValue) && IsPlainText(cookiesValue))
+                        {
+                            var encryptValue = new PortalSecurity().Encrypt(Config.GetDecryptionkey(), cookiesValue);
+                            response.Cookies["DNNPersonalization"].Value = encryptValue
+                                .Replace("/", "_")
+                                .Replace("+", "-")
+                                .Replace("=", "%3d");
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+        }
 
         private static bool NeedDecrypt(string cookiesValue, out string decryptValue)
         {
@@ -285,7 +290,9 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             {
                 return false;
             }
-            cookiesValue = cookiesValue.Replace("_", "/")
+
+            cookiesValue = cookiesValue
+                .Replace("_", "/")
                 .Replace("-", "+")
                 .Replace("%3d", "=");
             decryptValue = new PortalSecurity().Decrypt(Config.GetDecryptionkey(), cookiesValue);
@@ -300,17 +307,8 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         private static bool IsPlainText(string cookiesValue)
         {
-            try
-            {
-                var document = new XmlDocument();
-                document.LoadXml(cookiesValue);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            // we need this to be very fast and not throw any exception
+            return cookiesValue.IndexOf("<profile", StringComparison.InvariantCultureIgnoreCase) > 0;
         }
 
         #endregion
