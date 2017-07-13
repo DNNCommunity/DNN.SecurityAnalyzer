@@ -59,6 +59,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             }
 
             var drives = DriveInfo.GetDrives();
+            var checkedDrives = new List<string>();
             foreach (var drive in drives.Where(d => d.IsReady && d.RootDirectory.Name != dir.Root.Name))
             {
                 try
@@ -67,6 +68,14 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                     if (driveType == DriveType.Fixed || driveType == DriveType.Network)
                     {
                         var dir2 = drive.RootDirectory;
+                        var key = dir2.FullName.ToLowerInvariant();
+                        if (checkedDrives.Contains(key))
+                        {
+                            continue;
+                        }
+
+                        checkedDrives.Add(key);
+
                         var permissions = CheckPermissionOnDir(dir2);
                         if (permissions.AnyYes)
                         {
@@ -111,7 +120,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                             else
                                 permissions.SetThenLockCreate(No);
 
-                        if ((rule.FileSystemRights & (FileSystemRights.Modify | FileSystemRights.WriteData)) != 0)
+                        if ((rule.FileSystemRights & FileSystemRights.Write) != 0)
                             if (rule.AccessControlType == AccessControlType.Allow)
                                 permissions.Write = Yes;
                             else
