@@ -47,7 +47,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         public void Init(HttpApplication context)
         {
-            if (DnnCutoffVer < DotNetNukeContext.Current.Application.Version)
+            if (DotNetNukeContext.Current.Application.Version < DnnCutoffVer)
             {
                 InitializeCookieHandler(context);
             }
@@ -204,7 +204,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         private static void InitializeCookieHandler(HttpApplication application)
         {
-            application.PreRequestHandlerExecute += CookieHandler_OnBeginRequest;
+            application.BeginRequest += CookieHandler_OnBeginRequest;
             application.EndRequest += CookieHandler_OnEndRequest;
         }
 
@@ -240,11 +240,19 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                         }
 
                         headerField?.SetValue(workRequest, headers);
+
+                        if (string.IsNullOrEmpty(decryptValue))
+                        {
+                            var personalizationCookie = new HttpCookie("DNNPersonalization", string.Empty)
+                            {
+                                Expires = DateTime.Now.AddDays(-1),
+                                Path = (!string.IsNullOrEmpty(Globals.ApplicationPath) ? Globals.ApplicationPath : "/")
+                            };
+
+                            httpApplication?.Response.SetCookie(personalizationCookie);
+                        }
+
                         httpApplication?.Response.SetCookie(new HttpCookie("RegenerateCookies", "true"));
-                    }
-                    else
-                    {
-                        //TODO: remove plain text DNNPersonalization cookie
                     }
                 }
             }
@@ -286,9 +294,15 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
             decryptValue = string.Empty;
 
-            if (string.IsNullOrEmpty(cookiesValue) || IsPlainText(cookiesValue))
+            if (string.IsNullOrEmpty(cookiesValue))
             {
                 return false;
+            }
+
+            if (IsPlainText(cookiesValue))
+            {
+                decryptValue = string.Empty;
+                return true;
             }
 
             cookiesValue = cookiesValue
@@ -308,7 +322,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private static bool IsPlainText(string cookiesValue)
         {
             // we need this to be very fast and not throw any exception
-            return cookiesValue.IndexOf("<profile", StringComparison.InvariantCultureIgnoreCase) > 0;
+            return cookiesValue.IndexOf("<profile", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger;
         }
 
         #endregion

@@ -39,16 +39,12 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 
                 try
                 {
-
-
                     dir = dir.Parent;
                     var permissions = CheckPermissionOnDir(dir);
                     if (permissions.AnyYes)
                     {
                         errors.Add(GetPermissionText(dir, permissions));
                     }
-
-
                 }
                 catch (IOException)
                 {
