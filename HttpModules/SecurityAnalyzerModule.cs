@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
+using System.Web.Configuration;
 using DotNetNuke.Application;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
@@ -275,7 +276,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                         var cookiesValue = response.Cookies["DNNPersonalization"]?.Value;
                         if (!string.IsNullOrEmpty(cookiesValue) && IsPlainText(cookiesValue))
                         {
-                            var encryptValue = new PortalSecurity().Encrypt(Config.GetDecryptionkey(), cookiesValue);
+                            var encryptValue = new PortalSecurity().Encrypt(GetDecryptionkey(), cookiesValue);
                             response.Cookies["DNNPersonalization"].Value = encryptValue
                                 .Replace("/", "_")
                                 .Replace("+", "-")
@@ -288,6 +289,12 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             {
                 // ignore
             }
+        }
+
+        private static string GetDecryptionkey()
+        {
+            MachineKeySection key = System.Configuration.ConfigurationManager.GetSection("system.web/machineKey") as MachineKeySection;
+            return key?.DecryptionKey.ToString() ?? string.Empty;
         }
 
         private static bool NeedDecrypt(string cookiesValue, out string decryptValue)
@@ -309,7 +316,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 .Replace("_", "/")
                 .Replace("-", "+")
                 .Replace("%3d", "=");
-            decryptValue = new PortalSecurity().Decrypt(Config.GetDecryptionkey(), cookiesValue);
+            decryptValue = new PortalSecurity().Decrypt(GetDecryptionkey(), cookiesValue);
 
             if (!IsPlainText(decryptValue))
             {

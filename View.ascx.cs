@@ -45,7 +45,12 @@ namespace DNN.Modules.SecurityAnalyzer
                 GetAuditResults();
                 GetSuperUsers();
                 GetModifiedSettings();
-                //SetMinimalModifiedFilesGrid();
+
+
+                if (DotNetNuke.Application.DotNetNukeContext.Current.Application.Version < new Version(6, 0, 0))
+                {
+                    panelResources.Visible = true;
+                }
             }
         }
 

@@ -19,10 +19,10 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     //Add Extensions Host Page
                     var moduleDefId = GetModuleDefinition("SecurityAnalyzer", "SecurityAnalyzer");
                     var auditPage = AddHostPage("Security Analyzer", "Audit site security for best practices.",
-                        "~/Icons/Sigma/Extensions_16x16_Standard.png", "~/Icons/Sigma/Extensions_32x32_Standard.png", true);
+                        "~/DesktopModules/DNNCorp/SecurityAnalyzer/Images/Extensions_16x16_Standard.png", "~/DesktopModules/DNNCorp/SecurityAnalyzer/Images/Extensions_32x32_Standard.png", true);
 
                     var moduleid = AddModuleToPage(auditPage, moduleDefId, "Security Analyzer",
-                        "~/Icons/Sigma/Extensions_32x32_Standard.png");
+                        "~/DesktopModules/DNNCorp/SecurityAnalyzer/Images/Extensions_32x32_Standard.png");
 
                     break;
                 case "08.00.02":

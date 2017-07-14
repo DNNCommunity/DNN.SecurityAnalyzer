@@ -72,7 +72,9 @@
     <Compile Include="Components\Checks\CheckSuperuserOldPassword.cs" />
     <Compile Include="Components\Checks\CheckRarelyUsedSuperuser.cs" />
     <Compile Include="Components\Checks\CheckUnexpectedExtensions.cs" />
+    <Compile Include="Components\EscapedString.cs" />
     <Compile Include="Components\FeatureController.cs" />
+    <Compile Include="Components\FileExtensionWhitelist.cs" />
     <Compile Include="Components\IAuditCheck.cs" />
     <Compile Include="Components\SeverityEnum.cs" />
     <Compile Include="Components\Utility.cs" />
@@ -90,6 +92,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Extensions_16x16_Standard.png" />
+    <Content Include="Images\Extensions_32x32_Standard.png" />
     <Content Include="License.txt" />
     <Content Include="module.css" />
     <Content Include="ReleaseNotes.txt" />
@@ -98,6 +102,9 @@
     <EmbeddedResource Include="Resources\GetFolderTree.resources" />
     <EmbeddedResource Include="Resources\SysAdmin.resources" />
     <EmbeddedResource Include="Resources\sums.resources" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\dnnscripts.js" />
+    <Content Include="Styles\dnnstyles.css" />
     <Content Include="View.ascx" />
   </ItemGroup>
   <ItemGroup>

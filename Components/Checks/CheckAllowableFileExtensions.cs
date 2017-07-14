@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using DotNetNuke.Entities.Controllers;
 using DotNetNuke.Entities.Host;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
@@ -9,14 +10,15 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, "CheckAllowableFileExtensions");
+            var allowedExtensions = new FileExtensionWhitelist(HostController.Instance.GetString("FileExtensions"));
             try
             {
-                if (Host.AllowedExtensionWhitelist.IsAllowedExtension("asp")
-                        || Host.AllowedExtensionWhitelist.IsAllowedExtension("aspx")
-                        || Host.AllowedExtensionWhitelist.IsAllowedExtension("php"))
+                if (allowedExtensions.IsAllowedExtension("asp")
+                        || allowedExtensions.IsAllowedExtension("aspx")
+                        || allowedExtensions.IsAllowedExtension("php"))
                 {
                     result.Severity = SeverityEnum.Failure;
-                    result.Notes.Add("Extensions: " + Host.AllowedExtensionWhitelist.ToDisplayString());
+                    result.Notes.Add("Extensions: " + allowedExtensions.ToDisplayString());
                 }
                 else
                 {

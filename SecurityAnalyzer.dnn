@@ -3,7 +3,7 @@
     <package name="SecurityAnalyzer" type="Module" version="08.00.03">
       <friendlyName>Security Analyzer</friendlyName>
       <description>SecurityAnalyzer module</description>
-      <iconFile>~/Icons/Sigma/Extensions_32x32_standard.png</iconFile>
+      <iconFile>~/DesktopModules/DNNCorp/SecurityAnalyzer/Images/Extensions_32x32_standard.png</iconFile>
       <owner>
         <name>DNN Software</name>
         <organization>DNN Software</organization>
@@ -14,7 +14,7 @@
       <releaseNotes src="ReleaseNotes.txt"></releaseNotes>
       <azureCompatible>true</azureCompatible>
       <dependencies>
-        <dependency type="CoreVersion">06.00.00</dependency>
+        <dependency type="CoreVersion">05.06.02</dependency>
       </dependencies>
       <components>
         <component type="Script">

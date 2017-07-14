@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetNuke.Entities.Users;
+using DotNetNuke.Security.Membership;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {

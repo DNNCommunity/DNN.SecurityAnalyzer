@@ -1,24 +1,25 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="DNN.Modules.SecurityAnalyzer.View"  %>
 <%@ Import Namespace="DNN.Modules.SecurityAnalyzer.Components" %>
 <%@ Import Namespace="DotNetNuke.Entities.Users" %>
+<%@ Import Namespace="DotNetNuke.Services.Localization" %>
 <%@ Register TagPrefix="dnn" TagName="Label" Src="~/controls/LabelControl.ascx" %>
 
 <div class="dnnForm" id="SecurityAnalyzer">
     <ul class="dnnAdminTabNav">
         <li>
-            <a href="#auditChecks"><%= LocalizeString("AuditChecks") %></a>
+            <a href="#auditChecks"><%= GetString("AuditChecks") %></a>
         </li>
         <li>
-            <a href="#scannerChecks"><%= LocalizeString("ScannerChecks") %></a>
+            <a href="#scannerChecks"><%= GetString("ScannerChecks") %></a>
         </li>
         <li>
-            <a href="#superuserActivity"><%= LocalizeString("SuperuserActivity") %></a>
+            <a href="#superuserActivity"><%= GetString("SuperuserActivity") %></a>
         </li>
         <li>
-            <a href="#modifiedFiles"><%= LocalizeString("ModifiedFiles") %></a>
+            <a href="#modifiedFiles"><%= GetString("ModifiedFiles") %></a>
         </li>
         <li>
-            <a href="#modifiedSettings"><%= LocalizeString("ModifiedSettings") %></a>
+            <a href="#modifiedSettings"><%= GetString("ModifiedSettings") %></a>
         </li>
     </ul>
     <div id="auditChecks" class="dnnClear">
@@ -153,7 +154,7 @@
         <br/>
         <br/>
         <div>
-            <h2><%=LocalizeString("HighRiskFiles") %></h2>
+            <h2><%=GetString("HighRiskFiles") %></h2>
             <asp:DataGrid id="dgModifiedExecutableFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -174,7 +175,7 @@
                     </asp:TemplateColumn>
                 </Columns>
             </asp:DataGrid>
-            <h2><%=LocalizeString("LowRiskFiles") %></h2>
+            <h2><%=GetString("LowRiskFiles") %></h2>
             <asp:DataGrid id="dgModifiedFiles" runat="server" AutoGenerateColumns="false" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -204,7 +205,7 @@
         <br/>
         <br/>
         <div>
-            <h2><%=LocalizeString("PortalSettings") %></h2>
+            <h2><%=GetString("PortalSettings") %></h2>
             <asp:DataGrid id="dgPortalSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -215,7 +216,7 @@
             </asp:DataGrid>
         </div>
         <div>
-            <h2><%=LocalizeString("HostSettings") %></h2>
+            <h2><%=GetString("HostSettings") %></h2>
             <asp:DataGrid id="dgHostSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -226,7 +227,7 @@
             </asp:DataGrid>
         </div>
         <div>
-            <h2><%=LocalizeString("TabSettings") %></h2>
+            <h2><%=GetString("TabSettings") %></h2>
             <asp:DataGrid id="dgTabSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -237,7 +238,7 @@
             </asp:DataGrid>
         </div>
         <div>
-            <h2><%=LocalizeString("ModuleSettings") %></h2>
+            <h2><%=GetString("ModuleSettings") %></h2>
             <asp:DataGrid id="dgModuleSettings" runat="server" AutoGenerateColumns="true" AllowPaging="false" visible="true" width="100%" GridLines="None" CssClass="dnnGrid">
                 <headerstyle CssClass="dnnGridHeader"/>
                 <itemstyle CssClass="dnnGridItem" horizontalalign="Left"/>
@@ -249,8 +250,19 @@
         </div>
     </div>
 </div>
+<asp:Panel runat="server" ID="panelResources" Visible="False">
+    <script type="text/javascript" src="<%=Page.ResolveUrl("~/DesktopModules/DnnCorp/SecurityAnalyzer/Scripts/jquery-ui.min.js") %>"></script>
+    <script type="text/javascript" src="<%=Page.ResolveUrl("~/DesktopModules/DnnCorp/SecurityAnalyzer/Scripts/dnnscripts.js?cdv=" + DateTime.Now.Ticks) %>"></script>
+    <link rel="stylesheet" type="text/css" href="<%=Page.ResolveUrl("~/DesktopModules/DnnCorp/SecurityAnalyzer/Styles/dnnstyles.css?cdv=" + DateTime.Now.Ticks) %>"/>
+</asp:Panel>
 <script type="text/javascript">
     jQuery(function($) {
-        $("#SecurityAnalyzer").dnnTabs();
+        $("#SecurityAnalyzer").dnnTabs({selected: 0});
     });
+</script>
+<script runat="server">
+    protected string GetString(string key)
+    {
+        return Localization.GetString(key, "~/DesktopModules/DnnCorp/SecurityAnalyzer/App_LocalResources/View.ascx.resx");
+    }
 </script>
