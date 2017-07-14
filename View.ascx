@@ -257,7 +257,7 @@
 </asp:Panel>
 <script type="text/javascript">
     jQuery(function($) {
-        $("#SecurityAnalyzer").dnnTabs({selected: 0});
+        $("#SecurityAnalyzer").dnnTabs();
     });
 </script>
 <script runat="server">

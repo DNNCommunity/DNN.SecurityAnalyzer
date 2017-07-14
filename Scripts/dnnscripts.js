@@ -13,13 +13,13 @@
             if (this.id) {
                 cookieId = 'dnnTabs-' + this.id;
                 if (opts.selected === -1) {
-                    //var cookieValue = dnn.dom.getCookie(cookieId);
-                    //if (cookieValue) {
-                    //    opts.selected = cookieValue;
-                    //}
-                    //if (opts.selected === -1) {
-                    //    opts.selected = 0;
-                    //}
+                    var cookieValue = dnn.dom.getCookie(cookieId);
+                    if (cookieValue) {
+                        opts.selected = cookieValue;
+                    }
+                    if (opts.selected === -1) {
+                        opts.selected = 0;
+                    }
                 }
                 showEvent = (function (cid) {
                     return function (event, ui) {
