@@ -24,7 +24,8 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
     {
         private static readonly object ThreadLocker = new object();
 
-        private static readonly Version DnnCutoffVer = new Version(9,1,1);
+        private static readonly Version Dnn911Ver = new Version(9, 1, 1);
+        private static readonly Version Dnn920Ver = new Version(9, 2, 0);
         private static DateTime _lastRead;
         private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
 
@@ -48,7 +49,8 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         public void Init(HttpApplication context)
         {
-            if (DotNetNukeContext.Current.Application.Version < DnnCutoffVer)
+            var currentAppVersion = DotNetNukeContext.Current.Application.Version;
+            if (currentAppVersion < Dnn911Ver)
             {
                 InitializeCookieHandler(context);
             }
@@ -59,7 +61,10 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 {
                     if (!Initialized)
                     {
-                        InitializeFileWatcher();
+                        if (currentAppVersion < Dnn920Ver)
+                        {
+                            InitializeFileWatcher();
+                        }
                         Initialized = true;
                     }
                 }
@@ -214,7 +219,10 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             try
             {
                 var httpApplication = sender as HttpApplication;
-                var request = httpApplication?.Request;
+                if (httpApplication == null) return;
+
+                httpApplication.BeginRequest -= CookieHandler_OnBeginRequest;
+                var request = httpApplication.Request;
                 if (request?.Cookies["DNNPersonalization"] != null)
                 {
                     var cookiesValue = request.Cookies["DNNPersonalization"].Value;
@@ -257,9 +265,9 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignore
+                Trace.WriteLine(ex);
             }
         }
 
@@ -268,33 +276,33 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             try
             {
                 var httpApplication = sender as HttpApplication;
-                if (httpApplication != null)
+                if (httpApplication == null) return;
+
+                httpApplication.EndRequest -= CookieHandler_OnEndRequest;
+                var response = httpApplication.Response;
+                if (response.Cookies.AllKeys.Contains("DNNPersonalization"))
                 {
-                    var response = httpApplication.Response;
-                    if (response.Cookies.AllKeys.Contains("DNNPersonalization"))
+                    var cookiesValue = response.Cookies["DNNPersonalization"]?.Value;
+                    if (!string.IsNullOrEmpty(cookiesValue) && IsPlainText(cookiesValue))
                     {
-                        var cookiesValue = response.Cookies["DNNPersonalization"]?.Value;
-                        if (!string.IsNullOrEmpty(cookiesValue) && IsPlainText(cookiesValue))
-                        {
-                            var encryptValue = new PortalSecurity().Encrypt(GetDecryptionkey(), cookiesValue);
-                            response.Cookies["DNNPersonalization"].Value = encryptValue
-                                .Replace("/", "_")
-                                .Replace("+", "-")
-                                .Replace("=", "%3d");
-                        }
+                        var encryptValue = new PortalSecurity().Encrypt(GetDecryptionkey(), cookiesValue);
+                        response.Cookies["DNNPersonalization"].Value = encryptValue
+                            .Replace("/", "_")
+                            .Replace("+", "-")
+                            .Replace("=", "%3d");
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignore
+                Trace.WriteLine(ex);
             }
         }
 
         private static string GetDecryptionkey()
         {
-            MachineKeySection key = System.Configuration.ConfigurationManager.GetSection("system.web/machineKey") as MachineKeySection;
-            return key?.DecryptionKey.ToString() ?? string.Empty;
+            var key = System.Configuration.ConfigurationManager.GetSection("system.web/machineKey") as MachineKeySection;
+            return key?.DecryptionKey ?? string.Empty;
         }
 
         private static bool NeedDecrypt(string cookiesValue, out string decryptValue)
@@ -308,7 +316,6 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
             if (IsPlainText(cookiesValue))
             {
-                decryptValue = string.Empty;
                 return true;
             }
 
