@@ -170,7 +170,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 {
                     LogTypeKey = EventLogController.EventLogType.HOST_ALERT.ToString(),
                 };
-                log.AddProperty("Summary", "A dangerous file has been added to your website");
+                log.AddProperty("Summary", Localization.GetString("PotentialDangerousFile.Text", ResourceFile));
                 log.AddProperty("File Name", path);
 
                 new LogController().AddLog(log);
