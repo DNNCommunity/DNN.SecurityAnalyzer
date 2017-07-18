@@ -221,7 +221,6 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 var httpApplication = sender as HttpApplication;
                 if (httpApplication == null) return;
 
-                httpApplication.BeginRequest -= CookieHandler_OnBeginRequest;
                 var request = httpApplication.Request;
                 if (request?.Cookies["DNNPersonalization"] != null)
                 {
@@ -278,7 +277,6 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 var httpApplication = sender as HttpApplication;
                 if (httpApplication == null) return;
 
-                httpApplication.EndRequest -= CookieHandler_OnEndRequest;
                 var response = httpApplication.Response;
                 if (response.Cookies.AllKeys.Contains("DNNPersonalization"))
                 {
