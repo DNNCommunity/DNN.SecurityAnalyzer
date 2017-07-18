@@ -116,7 +116,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         private static void LogException(Exception ex)
         {
-            Trace.WriteLine("Watcher Activity: N/A. Error: " + ex?.Message);
+            Trace.WriteLine("Watcher Activity Error: " + ex?.Message);
         }
 
         private static void CheckFile(string path)
@@ -125,8 +125,12 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             {
                 if (IsRestrictdExtension(path))
                 {
-                    ThreadPool.QueueUserWorkItem(_ => AddEventLog(path));
-                    ThreadPool.QueueUserWorkItem(_ => NotifyManager(path));
+                    var appStatus = Globals.Status;
+                    if (appStatus != Globals.UpgradeStatus.Install && appStatus != Globals.UpgradeStatus.Upgrade)
+                    {
+                        ThreadPool.QueueUserWorkItem(_ => AddEventLog(path));
+                        ThreadPool.QueueUserWorkItem(_ => NotifyManager(path));
+                    }
                 }
             }
             catch (Exception ex)
