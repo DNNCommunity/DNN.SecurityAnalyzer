@@ -1,4 +1,25 @@
-﻿using System;
+﻿#region Copyright
+// 
+// DotNetNuke® - http://www.dnnsoftware.com
+// Copyright (c) 2002-2017
+// by DotNetNuke Corporation
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+// of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// DEALINGS IN THE SOFTWARE.
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -22,13 +43,20 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 {
     public class SecurityAnalyzerModule : IHttpModule
     {
-        private static readonly object ThreadLocker = new object();
-
+        private static FileSystemWatcher _fileWatcher;
         private static readonly Version Dnn911Ver = new Version(9, 1, 1);
         private static readonly Version Dnn920Ver = new Version(9, 2, 0);
         private static DateTime _lastRead;
         private static Globals.UpgradeStatus _appStatus = Globals.UpgradeStatus.None;
         private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
+        private static Queue<string> _filesQ;
+        private static Timer _qTimer;
+
+        // used to indicate already send first real-time email within last SlidingDelay period
+        private static int _notificationSent;
+
+        private const int CacheTimeOut = 5; //obtain the setting and do calculations once every 5 minutes at most, plus no need for locking
+        private const int SlidingDelay = 10 * 1000; // milliseconds
 
         internal static bool Initialized { get; private set; }
 
@@ -58,7 +86,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
             if (!Initialized)
             {
-                lock (ThreadLocker)
+                lock (typeof(SecurityAnalyzerModule))
                 {
                     if (!Initialized)
                     {
@@ -80,7 +108,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         private static void InitializeFileWatcher()
         {
-            var fileWatcher = new FileSystemWatcher
+            _fileWatcher = new FileSystemWatcher
             {
                 Filter = "*.*",
                 Path = Globals.ApplicationMapPath,
@@ -88,16 +116,42 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 IncludeSubdirectories = true,
             };
 
-            fileWatcher.Created += WatcherOnCreated;
-            fileWatcher.Renamed += WatcherOnRenamed;
-            fileWatcher.Error += WatcherOnError;
+            _fileWatcher.Created += WatcherOnCreated;
+            _fileWatcher.Renamed += WatcherOnRenamed;
+            _fileWatcher.Error += WatcherOnError;
 
-            fileWatcher.EnableRaisingEvents = true;
+            _filesQ = new Queue<string>();
+            _qTimer = new Timer(QTimerCallBack);
 
             AppDomain.CurrentDomain.DomainUnload += (sender, args) =>
             {
-                fileWatcher.Dispose();
+                _fileWatcher.Dispose();
+                QTimerCallBack(null);
             };
+
+            _fileWatcher.EnableRaisingEvents = true;
+        }
+
+        private static void QTimerCallBack(object obj)
+        {
+            try
+            {
+                string[] items;
+                lock (_filesQ)
+                {
+                    while (!_qTimer.Change(Timeout.Infinite, Timeout.Infinite)) { }
+                    Interlocked.Exchange(ref _notificationSent, 0);
+                    items = _filesQ.ToArray();
+                    while (_filesQ.Count > 0) _filesQ.Dequeue();
+                }
+
+                if (items.Length > 0)
+                    NotifyManager(items);
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+            }
         }
 
         private static void WatcherOnRenamed(object sender, RenamedEventArgs e)
@@ -117,7 +171,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         private static void LogException(Exception ex)
         {
-            Trace.WriteLine("Watcher Activity Error: " + ex?.Message);
+            Trace.TraceError("Watcher Activity Error: " + ex?.Message);
         }
 
         private static void CheckFile(string path)
@@ -128,14 +182,39 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 {
                     if (_appStatus != Globals.UpgradeStatus.Install && _appStatus != Globals.UpgradeStatus.Upgrade)
                     {
-                        ThreadPool.QueueUserWorkItem(_ => AddEventLog(path));
-                        ThreadPool.QueueUserWorkItem(_ => NotifyManager(path));
+                        Globals.UpgradeStatus appStatus;
+
+                        try
+                        {
+                            appStatus = Globals.Status;
+                        }
+                        catch (NullReferenceException)
+                        {
+                            appStatus = Globals.UpgradeStatus.None;
+                        }
 
                         // make status sticky; once set to install/upgrade, it stays so until finishing & appl restarts
-                        var appStatus = Globals.Status;
                         if (appStatus == Globals.UpgradeStatus.Install || appStatus == Globals.UpgradeStatus.Upgrade)
                         {
                             _appStatus = appStatus;
+                        }
+                        else
+                        {
+                            ThreadPool.QueueUserWorkItem(_ => AddEventLog(path));
+                            var val = Interlocked.Increment(ref _notificationSent);
+                            if (val <= 1)
+                            {
+                                // first notification goes immediately
+                                ThreadPool.QueueUserWorkItem(_ => NotifyManager(new[] { path }));
+                            }
+                            else
+                            {
+                                lock (_filesQ)
+                                {
+                                    while (!_qTimer.Change(val >= 100 ? 1 : SlidingDelay, Timeout.Infinite)) { }
+                                    _filesQ.Enqueue(path);
+                                }
+                            }
                         }
                     }
                 }
@@ -156,7 +235,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private static IEnumerable<string> GetRestrictExtensions()
         {
             // obtain the setting and do calculations once every 5 minutes at most, plus no need for locking
-            if ((DateTime.Now - _lastRead).TotalMinutes > 5)
+            if ((DateTime.Now - _lastRead).TotalMinutes > CacheTimeOut)
             {
                 _lastRead = DateTime.Now;
                 var settings = HostController.Instance.GetString("SA_RestrictExtensions", string.Empty);
@@ -192,7 +271,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             }
         }
 
-        private static void NotifyManager(string path)
+        private static void NotifyManager(string[] paths)
         {
             try
             {
@@ -201,9 +280,10 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                         p =>
                             p.Name.Equals("SecurityAnalyzer", StringComparison.InvariantCultureIgnoreCase) &&
                             p.PackageType.Equals("Module", StringComparison.InvariantCultureIgnoreCase));
+                var pathNames = string.Join("<br/>", paths);
                 var subject = Localization.GetString("RestrictFileMail_Subject.Text", ResourceFile);
                 var body = Localization.GetString("RestrictFileMail_Body.Text", ResourceFile)
-                    .Replace("[Path]", path)
+                    .Replace("[Path]", pathNames)
                     .Replace("[ModuleName]", package?.FriendlyName)
                     .Replace("[ModuleVersion]", package?.Version.ToString());
 
@@ -233,7 +313,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 if (httpApplication == null) return;
 
                 var request = httpApplication.Request;
-                if (request?.Cookies["DNNPersonalization"] != null)
+                if (request.Cookies["DNNPersonalization"] != null)
                 {
                     var cookiesValue = request.Cookies["DNNPersonalization"].Value;
                     string decryptValue;
@@ -268,10 +348,10 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                                 Path = (!string.IsNullOrEmpty(Globals.ApplicationPath) ? Globals.ApplicationPath : "/")
                             };
 
-                            httpApplication?.Response.SetCookie(personalizationCookie);
+                            httpApplication.Response.SetCookie(personalizationCookie);
                         }
 
-                        httpApplication?.Response.SetCookie(new HttpCookie("RegenerateCookies", "true"));
+                        httpApplication.Response.SetCookie(new HttpCookie("RegenerateCookies", "true"));
                     }
                 }
             }
