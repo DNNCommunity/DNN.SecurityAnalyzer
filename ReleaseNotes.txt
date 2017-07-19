@@ -1,16 +1,17 @@
 ﻿<h3>Security Analyzer</h3>
 <p class="Contributor">
-	Cathal Connolly <br />
-	DNN Corp <br />
+	DNN Corp.<br />
 </p>
 <hr/>
 <div class="License">
 	<h3>About the Security Analyzer module</h3>
 	<p class="Owner">
-		<b>Version 1.0.0</b> - Initial release.<br /><br />
-		<b>Version 1.0.1</b> - Fix icons.<br /><br />
-		<b>Version 1.0.2</b> - Fix resx.<br /><br />
-		<b>Version 8.0.2</b> - Check Default.aspx.<br /><br />
-		<b>Version 8.0.3</b> - Real Time Suspicious File Monitoring.<br /><br />
+		<ul>
+			<li><b>Version 1.0.0</b> - Initial release.</li>
+			<li><b>Version 1.0.1</b> - Fix icons.</li>
+			<li><b>Version 1.0.2</b> - Fix resx.</li>
+			<li><b>Version 8.0.2</b> - Check Default.aspx.</li>
+			<li><b>Version 8.1.0</b> - Real Time Suspicious File Monitoring.</li>
+		</ul>
 	</p>
-	</div>
+</div>
