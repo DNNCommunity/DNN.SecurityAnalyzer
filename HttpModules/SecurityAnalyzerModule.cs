@@ -27,6 +27,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private static readonly Version Dnn911Ver = new Version(9, 1, 1);
         private static readonly Version Dnn920Ver = new Version(9, 2, 0);
         private static DateTime _lastRead;
+        private static Globals.UpgradeStatus _appStatus = Globals.UpgradeStatus.None;
         private static IEnumerable<string> _settingsRestrictExtensions = new string[] { };
 
         internal static bool Initialized { get; private set; }
@@ -125,11 +126,17 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             {
                 if (IsRestrictdExtension(path))
                 {
-                    var appStatus = Globals.Status;
-                    if (appStatus != Globals.UpgradeStatus.Install && appStatus != Globals.UpgradeStatus.Upgrade)
+                    if (_appStatus != Globals.UpgradeStatus.Install && _appStatus != Globals.UpgradeStatus.Upgrade)
                     {
                         ThreadPool.QueueUserWorkItem(_ => AddEventLog(path));
                         ThreadPool.QueueUserWorkItem(_ => NotifyManager(path));
+
+                        // make status sticky; once set to install/upgrade, it stays so until finishing & appl restarts
+                        var appStatus = Globals.Status;
+                        if (appStatus == Globals.UpgradeStatus.Install || appStatus == Globals.UpgradeStatus.Upgrade)
+                        {
+                            _appStatus = appStatus;
+                        }
                     }
                 }
             }
