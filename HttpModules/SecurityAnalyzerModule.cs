@@ -31,6 +31,7 @@ using System.Web.Configuration;
 using DotNetNuke.Application;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
+using DotNetNuke.Data;
 using DotNetNuke.Entities.Controllers;
 using DotNetNuke.Entities.Host;
 using DotNetNuke.Security;
@@ -58,7 +59,13 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private const int CacheTimeOut = 5; //obtain the setting and do calculations once every 5 minutes at most, plus no need for locking
         private const int SlidingDelay = 30 * 1000; // milliseconds
 
-        internal static bool Initialized { get; private set; }
+        private static bool FileWatcherInitialized { get; set; }
+        private const int FileWatcherUpgradeGracePeriod = 5; //Wait x minutes after major upgrade is done
+        private static DateTime _fileWatcherRecheckTime = DateTime.MinValue;
+        private static bool _siteReadyForFileWatch = false; //Is site past the upgrade cycle and ready for file watching
+
+        //indicates whether the SA Http Module is present or not
+        internal static bool SAHttpModuleExists { get; private set; }
 
         // Source: Configuring Blocked File Extensions
         // https://msdn.microsoft.com/en-us/library/cc767397.aspx
@@ -78,23 +85,26 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
 
         public void Init(HttpApplication context)
         {
+            if(!SAHttpModuleExists)
+                SAHttpModuleExists = true;
+
             var currentAppVersion = DotNetNukeContext.Current.Application.Version;
             if (currentAppVersion < Dnn911Ver)
             {
                 InitializeCookieHandler(context);
             }
 
-            if (!Initialized)
+            if (currentAppVersion < Dnn920Ver)
             {
-                lock (typeof(SecurityAnalyzerModule))
+                if (!FileWatcherInitialized)
                 {
-                    if (!Initialized)
+                    lock (typeof(SecurityAnalyzerModule))
                     {
-                        if (currentAppVersion < Dnn920Ver)
+                        if (!FileWatcherInitialized)
                         {
-                            InitializeFileWatcher();
+                             InitializeFileWatcher();
+                            FileWatcherInitialized = true;
                         }
-                        Initialized = true;
                     }
                 }
             }
@@ -178,7 +188,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         {
             try
             {
-                if (IsRestrictdExtension(path))
+                if (IsRestrictdExtension(path) && ReadyToFileWatch())
                 {
                     if (_appStatus != Globals.UpgradeStatus.Install && _appStatus != Globals.UpgradeStatus.Upgrade)
                     {
@@ -223,6 +233,49 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             {
                 LogException(ex);
             }
+        }
+
+
+        //Ensure few minutes have elapsed since last upgrade, or else it will send lots of notifications
+        private static bool ReadyToFileWatch()
+        {
+            if (_siteReadyForFileWatch) return true;
+
+            //Don't bother making SQL calls as we know that time has not come to recheck
+            if (DateTime.Now < _fileWatcherRecheckTime) return false;
+
+            var elapsedMinutes = GetElapsedMinutesSinceUpgrade();
+
+            if (elapsedMinutes >= FileWatcherUpgradeGracePeriod)
+            {
+                _siteReadyForFileWatch = true;
+                return true;
+            }
+            _fileWatcherRecheckTime = DateTime.Now.AddMinutes(FileWatcherUpgradeGracePeriod - elapsedMinutes);
+            return false;
+        }
+
+
+        private static int GetElapsedMinutesSinceUpgrade()
+        {
+            var elapsedMinutes = 0;
+            try
+            {
+                using (var reader = DataProvider.Instance().ExecuteSQL("SELECT DATEDIFF(MI,MAX([CreatedDate]), GETDATE()) AS ElapsedMinutes FROM {databaseOwner}[{objectQualifier}Version]"))
+                {
+                    if (reader.Read())
+                    {
+                        elapsedMinutes = Convert.ToInt32(reader["ElapsedMinutes"]);
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+
+            return elapsedMinutes;
         }
 
         private static bool IsRestrictdExtension(string path)
@@ -274,7 +327,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private static void NotifyManager(string[] paths)
         {
             try
-            {
+            {                
                 var package = PackageController.GetPackages(Null.NullInteger)
                     .FirstOrDefault(
                         p =>

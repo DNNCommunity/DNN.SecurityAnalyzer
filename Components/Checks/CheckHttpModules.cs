@@ -9,7 +9,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         {
             var result = new CheckResult(SeverityEnum.Unverified, "CheckHttpModules")
             {
-                Severity = !SecurityAnalyzerModule.Initialized
+                Severity = !SecurityAnalyzerModule.SAHttpModuleExists
                     ? SeverityEnum.Failure
                     : SeverityEnum.Pass
             };
