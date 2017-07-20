@@ -89,7 +89,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 SAHttpModuleExists = true;
 
             var currentAppVersion = DotNetNukeContext.Current.Application.Version;
-            if (currentAppVersion < Dnn911Ver)
+            if (currentAppVersion < Dnn920Ver)
             {
                 InitializeCookieHandler(context);
             }
