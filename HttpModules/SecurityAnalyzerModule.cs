@@ -94,6 +94,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                 InitializeCookieHandler(context);
             }
 
+            /*
             if (currentAppVersion < Dnn920Ver)
             {
                 if (!FileWatcherInitialized)
@@ -108,6 +109,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
                     }
                 }
             }
+            */
         }
 
         public void Dispose()
