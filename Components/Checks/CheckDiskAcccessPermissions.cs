@@ -41,9 +41,10 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                 {
                     dir = dir.Parent;
                     var permissions = CheckPermissionOnDir(dir);
-                    if (permissions.AnyYes)
+                    var isRoot = dir.Name == dir.Root.Name;
+                    if (permissions.Create == Yes || permissions.Write == Yes || permissions.Delete == Yes || (!isRoot && permissions.Read == Yes))
                     {
-                        errors.Add(GetPermissionText(dir, permissions));
+                        errors.Add(GetPermissionText(dir, permissions, isRoot));
                     }
                 }
                 catch (IOException)
@@ -96,8 +97,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             return errors;
         }
 
-        private static string GetPermissionText(DirectoryInfo dir, Permissions permissions)
+        private static string GetPermissionText(DirectoryInfo dir, Permissions permissions, bool ignoreRead = false)
         {
+            var message = ignoreRead
+                ? @"{0} - Write:{2}, Create:{3}, Delete:{4}"
+                : @"{0} - Read:{1}, Write:{2}, Create:{3}, Delete:{4}";
             return string.Format(@"{0} - Read:{1}, Write:{2}, Create:{3}, Delete:{4}",
                 dir.FullName, permissions.Read, permissions.Write, permissions.Create, permissions.Delete);
         }
