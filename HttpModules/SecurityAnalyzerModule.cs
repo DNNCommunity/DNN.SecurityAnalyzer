@@ -56,7 +56,7 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private static int _notificationSent;
 
         private const int CacheTimeOut = 5; //obtain the setting and do calculations once every 5 minutes at most, plus no need for locking
-        private const int SlidingDelay = 10 * 1000; // milliseconds
+        private const int SlidingDelay = 30 * 1000; // milliseconds
 
         internal static bool Initialized { get; private set; }
 
