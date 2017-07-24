@@ -182,11 +182,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         public static string GetFileCheckSum(string fileName)
         {
-            using (var md5 = MD5.Create())
+            using (var cryptographyProvider = SHA256.Create(AllowOnlyFipsAlgorithms() ? "System.Security.Cryptography.SHA256CryptoServiceProvider" : "System.Security.Cryptography.SHA256Cng"))
             {
                 using (var stream = File.OpenRead(fileName))
                 {
-                    return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
+                    return BitConverter.ToString(cryptographyProvider.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
                 }
             }
         }
@@ -246,6 +246,13 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             .OrderByDescending(f => f.LastWriteTime)
             .Take(ModifiedFilesCount).ToList();
 
+        }
+
+        private static bool AllowOnlyFipsAlgorithms()
+        {
+            var property = typeof (CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
+
+            return property != null && (bool) property.GetValue(null, null);
         }
     }
 }

@@ -480,7 +480,11 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
         private static bool IsPlainText(string cookiesValue)
         {
             // we need this to be very fast and not throw any exception
-            return cookiesValue.IndexOf("<profile", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger;
+            return cookiesValue.IndexOf("<profile", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger
+                    || cookiesValue.IndexOf("item", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger
+                    || cookiesValue.IndexOf("System.", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger
+                    || cookiesValue.IndexOf("MethodName", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger
+                    || cookiesValue.IndexOf("MethodParameters", StringComparison.InvariantCultureIgnoreCase) > Null.NullInteger;
         }
 
         #endregion
