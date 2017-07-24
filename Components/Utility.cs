@@ -250,9 +250,15 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         private static bool AllowOnlyFipsAlgorithms()
         {
-            var property = typeof (CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
-
-            return property != null && (bool) property.GetValue(null, null);
+            try
+            {
+                var property = typeof(CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
+                return property != null && (bool)property.GetValue(null, null);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
