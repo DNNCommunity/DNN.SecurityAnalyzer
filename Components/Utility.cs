@@ -184,11 +184,17 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         {
             using (var cryptographyProvider = SHA256.Create(AllowOnlyFipsAlgorithms() ? "System.Security.Cryptography.SHA256CryptoServiceProvider" : "System.Security.Cryptography.SHA256Cng"))
             {
-                using (var stream = File.OpenRead(fileName))
+                if (cryptographyProvider != null)
                 {
-                    return BitConverter.ToString(cryptographyProvider.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
+                    using (var stream = File.OpenRead(fileName))
+                    {
+                        return BitConverter.ToString(cryptographyProvider.ComputeHash(stream)).Replace("-", "")
+                            .ToLowerInvariant();
+                    }
                 }
             }
+
+            return string.Empty;
         }
 
         public static string GetApplicationVersion()
