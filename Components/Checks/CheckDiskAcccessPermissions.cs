@@ -13,7 +13,26 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, "CheckDiskAccess");
-            var accessErrors = CheckAccessToDrives();
+            IList<string> accessErrors = new List<string>();
+            try
+            {
+                accessErrors = CheckAccessToDrives();
+            }
+            catch (IOException)
+            {
+                // e.g., a disk error or a drive was not ready
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // The caller does not have the required permission.
+
+            }
+            catch (System.Security.SecurityException)
+            {
+                //Some security exception
+            }
+
+
             if (accessErrors.Count == 0)
             {
                 result.Severity = SeverityEnum.Pass;
