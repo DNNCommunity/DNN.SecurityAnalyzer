@@ -182,7 +182,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         public static string GetFileCheckSum(string fileName)
         {
-            using (var cryptographyProvider = SHA256.Create(AllowOnlyFipsAlgorithms() ? "System.Security.Cryptography.SHA256CryptoServiceProvider" : "System.Security.Cryptography.SHA256Cng"))
+            using (var cryptographyProvider = CreateCryptographyProvider())
             {
                 if (cryptographyProvider != null)
                 {
@@ -195,6 +195,29 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
 
             return string.Empty;
+        }
+
+        private static SHA256 CreateCryptographyProvider()
+        {
+            try
+            {
+                var property = typeof(CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
+                if (property == null)
+                {
+                    return SHA256.Create();
+                }
+
+                if ((bool) property.GetValue(null, null))
+                {
+                    return SHA256.Create("System.Security.Cryptography.SHA256CryptoServiceProvider");
+                }
+
+                return SHA256.Create("System.Security.Cryptography.SHA256Cng");
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static string GetApplicationVersion()
@@ -252,19 +275,6 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             .OrderByDescending(f => f.LastWriteTime)
             .Take(ModifiedFilesCount).ToList();
 
-        }
-
-        private static bool AllowOnlyFipsAlgorithms()
-        {
-            try
-            {
-                var property = typeof(CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
-                return property != null && (bool)property.GetValue(null, null);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
     }
 }

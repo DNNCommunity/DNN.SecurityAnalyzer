@@ -14,13 +14,6 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, "CheckDefaultPage");
-            var version = Environment.Version.ToString(2);
-            if (version == "2.0")
-            {
-                result.Notes.Add("This check requires .Net Version 4.0 or above");
-                return result;
-            }
-            
             try
             {
                 IList<string> modifiedFiles;
