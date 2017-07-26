@@ -11,7 +11,7 @@
 			<li><b>Version 1.0.1</b> - Fix icons.</li>
 			<li><b>Version 1.0.2</b> - Fix resx.</li>
 			<li><b>Version 8.0.2</b> - Check Default.aspx.</li>
-			<li><b>Version 8.1.0</b> - Real Time Suspicious File Monitoring.</li>
+			<li><b>Version 8.1.0</b> - Fix for critical issue 2017-08sds dsd.</li>
 		</ul>
 	</p>
 </div>
