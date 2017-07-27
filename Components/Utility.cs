@@ -278,10 +278,15 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
         }
 
+        /// <summary>
+        /// Recursively finds file
+        /// </summary>
+        /// <returns></returns>
         private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption)
         {
             try
             {
+                //Looking at the root folder only. There should not be any permission issue here.
                 var files = Directory.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly).ToList();
 
                 if (searchOption == SearchOption.AllDirectories)
@@ -289,6 +294,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     var folders = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
                     foreach (var folder in folders)
                     {
+                        //recursive call to the same method
                         files.AddRange(GetFiles(folder, searchPattern, searchOption));
                     }
                 }
