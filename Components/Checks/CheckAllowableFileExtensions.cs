@@ -7,9 +7,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckAllowableFileExtensions : IAuditCheck
     {
+        public string Id => "CheckAllowableFileExtensions";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckAllowableFileExtensions");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             var allowedExtensions = new FileExtensionWhitelist(HostController.Instance.GetString("FileExtensions"));
             try
             {

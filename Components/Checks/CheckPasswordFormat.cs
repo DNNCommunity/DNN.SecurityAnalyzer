@@ -7,9 +7,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckPasswordFormat : IAuditCheck
     {
+        public string Id => "CheckPasswordFormat";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckPasswordFormat");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             try
             {
                 var format = MembershipProvider.Instance().PasswordFormat;

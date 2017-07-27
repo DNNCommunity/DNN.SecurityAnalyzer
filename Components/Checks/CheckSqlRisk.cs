@@ -11,6 +11,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckSqlRisk : IAuditCheck
     {
+        public string Id => "CheckSqlRisk";
+
         private string LocalResourceFile
         {
             get { return "~/DesktopModules/DNNCorp/SecurityAnalyzer/App_LocalResources/view.ascx"; }
@@ -18,7 +20,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckSqlRisk");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             IList<string> checkList = new List<string>()
             {
                 "SysAdmin",

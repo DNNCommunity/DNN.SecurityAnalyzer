@@ -11,9 +11,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckDefaultPage : IAuditCheck
     {
+        public string Id => "CheckDefaultPage";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckDefaultPage");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             try
             {
                 IList<string> modifiedFiles;

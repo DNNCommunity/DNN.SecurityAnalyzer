@@ -5,9 +5,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckUnexpectedExtensions : IAuditCheck
     {
+        public string Id => "CheckUnexpectedExtensions";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckUnexpectedExtensions");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             try
             {
                 var investigatefiles = Utility.FindUnexpectedExtensions();

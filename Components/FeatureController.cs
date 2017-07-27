@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Modules;
 using DotNetNuke.Entities.Modules.Definitions;
 using DotNetNuke.Entities.Tabs;
+using DotNetNuke.Security;
 using DotNetNuke.Security.Permissions;
 using DotNetNuke.Services.Upgrade;
 
@@ -27,6 +30,12 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     break;
                 case "08.00.02":
                     Utility.CleanUpInstallerFiles();
+                    break;
+                case "08.01.01":
+                    if (TelerikAssemblyExists())
+                    {
+                        UpdateTelerikEncryptionKey("Telerik.Web.UI.DialogParametersEncryptionKey");
+                    }
                     break;
             }
 
@@ -212,6 +221,47 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
 
             return tab;
+        }
+
+        private bool TelerikAssemblyExists()
+        {
+            return File.Exists(Path.Combine(Globals.ApplicationMapPath, "bin\\Telerik.Web.UI.dll"));
+        }
+
+        private static string UpdateTelerikEncryptionKey(string keyName)
+        {
+            const string defaultValue = "MDEyMzQ1Njc4OUFCQ0RFRjAxMjM0NTY3ODlBQkNERUYwMTIzNDU2Nzg5QUJDREVG";
+
+            var strError = "";
+            var currentKey = Config.GetSetting(keyName);
+            if (string.IsNullOrEmpty(currentKey) || defaultValue.Equals(currentKey) || currentKey.Length < 40)
+            {
+                try
+                {
+                    //open the web.config
+                    var xmlConfig = Config.Load();
+
+                    //save the current config file
+                    Config.BackupConfig();
+
+                    //create a random Telerik encryption key and add it under <appSettings>
+                    var newKey = new PortalSecurity().CreateKey(32);
+                    newKey = Convert.ToBase64String(Encoding.ASCII.GetBytes(newKey));
+                    Config.AddAppSetting(xmlConfig, keyName, newKey);
+
+                    //save a copy of the exitsing web.config
+                    var backupFolder = string.Concat(Globals.glbConfigFolder, "Backup_", DateTime.Now.ToString("yyyyMMddHHmm"), "\\");
+                    strError += Config.Save(xmlConfig, backupFolder + "web_.config") + Environment.NewLine;
+
+                    //save the web.config
+                    strError += Config.Save(xmlConfig) + Environment.NewLine;
+                }
+                catch (Exception ex)
+                {
+                    strError += ex.Message;
+                }
+            }
+            return strError;
         }
     }
 }

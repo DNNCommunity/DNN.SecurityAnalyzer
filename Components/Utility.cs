@@ -10,6 +10,7 @@ using System.Xml;
 using DotNetNuke.Application;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Data;
+using DotNetNuke.Entities.Controllers;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
@@ -65,43 +66,6 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
         }
 
-        private static string GetFileText(string name)
-        {
-            var fileContents = String.Empty;
-            try
-            {
-                // If the file has been deleted since we took  
-                // the snapshot, ignore it and return the empty string. 
-                if (IsReadable(name))
-                {
-                    fileContents = File.ReadAllText(name);
-                }
-            }
-            catch (Exception)
-            {
-                
-                //might be a locking issue
-            }
-          
-            return fileContents;
-        }
-
-        private static bool IsReadable(string name)
-        {
-            if (!File.Exists(name))
-            {
-                return false;
-            }
-
-            var file = new FileInfo(name);
-            if (file.Length > MaxFileSize) //when file large than 10M, then don't read it.
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         /// <summary>
         ///     search all files in the website for matching text
         /// </summary>
@@ -111,13 +75,13 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         {
             try
             {
-                var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-                IEnumerable<FileInfo> fileList = dir.GetFiles("*.*", SearchOption.AllDirectories);
+                IEnumerable<string> fileList = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories);
                 var queryMatchingFiles =
                     from file in fileList
-                    let fileText = GetFileText(file.FullName)
+                    let fileText = GetFileText(file)
+                    let fileInfo = new FileInfo(file)
                     where fileText.IndexOf(searchText, StringComparison.InvariantCultureIgnoreCase) > -1
-                    select file.Name + " (" + file.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
+                    select fileInfo.Name + " (" + fileInfo.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
                 return queryMatchingFiles;
             }
             catch
@@ -133,7 +97,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         /// <returns></returns>
         public static IEnumerable<string> FindUnexpectedExtensions()
         {
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
             .Where(s => s.EndsWith(".asp", StringComparison.InvariantCultureIgnoreCase) || s.EndsWith(".php", StringComparison.InvariantCultureIgnoreCase));
             return files;
         }
@@ -197,29 +161,6 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             return string.Empty;
         }
 
-        private static SHA256 CreateCryptographyProvider()
-        {
-            try
-            {
-                var property = typeof(CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
-                if (property == null)
-                {
-                    return SHA256.Create();
-                }
-
-                if ((bool) property.GetValue(null, null))
-                {
-                    return SHA256.Create("System.Security.Cryptography.SHA256CryptoServiceProvider");
-                }
-
-                return SHA256.Create("System.Security.Cryptography.SHA256Cng");
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         public static string GetApplicationVersion()
         {
             return DotNetNukeContext.Current.Application.Version.ToString(3);
@@ -243,7 +184,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         public static IList<FileInfo> GetLastModifiedFiles()
         {
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f => !ExcludedFilePathRegexList.Any(r => r.IsMatch(f)))
                 .Select(f => new FileInfo(f))
                 .OrderByDescending(f => f.LastWriteTime)
@@ -255,7 +196,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         public static IList<FileInfo> GetLastModifiedExecutableFiles()
         {
             var executableExtensions = new List<string>() {".asp", ".aspx", ".php"};
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f =>
                 {
                     var extension = Path.GetExtension(f);
@@ -275,6 +216,90 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             .OrderByDescending(f => f.LastWriteTime)
             .Take(ModifiedFilesCount).ToList();
 
+        }
+
+        private static string GetFileText(string name)
+        {
+            var fileContents = String.Empty;
+            try
+            {
+                // If the file has been deleted since we took  
+                // the snapshot, ignore it and return the empty string. 
+                if (IsReadable(name))
+                {
+                    fileContents = File.ReadAllText(name);
+                }
+            }
+            catch (Exception)
+            {
+
+                //might be a locking issue
+            }
+
+            return fileContents;
+        }
+
+        private static bool IsReadable(string name)
+        {
+            if (!File.Exists(name))
+            {
+                return false;
+            }
+
+            var file = new FileInfo(name);
+            if (file.Length > MaxFileSize) //when file large than 10M, then don't read it.
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static SHA256 CreateCryptographyProvider()
+        {
+            try
+            {
+                var property = typeof(CryptoConfig).GetProperty("AllowOnlyFipsAlgorithms", BindingFlags.Public | BindingFlags.Static);
+                if (property == null)
+                {
+                    return SHA256.Create();
+                }
+
+                if ((bool)property.GetValue(null, null))
+                {
+                    return SHA256.Create("System.Security.Cryptography.SHA256CryptoServiceProvider");
+                }
+
+                return SHA256.Create("System.Security.Cryptography.SHA256Cng");
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption)
+        {
+            try
+            {
+                var files = Directory.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly).ToList();
+
+                if (searchOption == SearchOption.AllDirectories)
+                {
+                    var folders = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+                    foreach (var folder in folders)
+                    {
+                        files.AddRange(GetFiles(folder, searchPattern, searchOption));
+                    }
+                }
+
+                return files;
+            }
+            catch (Exception)
+            {
+                return new List<string>();
+            }
+            
         }
     }
 }

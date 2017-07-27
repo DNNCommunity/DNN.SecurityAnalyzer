@@ -5,9 +5,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckTracing : IAuditCheck
     {
+        public string Id => "CheckTracing";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckTracing");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             var page = HttpContext.Current.Handler as Page;
 
             if (page != null)

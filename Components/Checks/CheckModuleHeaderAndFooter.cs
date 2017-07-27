@@ -13,9 +13,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckModuleHeaderAndFooter : IAuditCheck
     {
+        public string Id => "CheckModuleHeaderAndFooter";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckModuleHeaderAndFooter");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             try
             {
                 var dr = DataProvider.Instance().ExecuteReader("SecurityAnalyzer_GetModulesHasHeaderFooter");

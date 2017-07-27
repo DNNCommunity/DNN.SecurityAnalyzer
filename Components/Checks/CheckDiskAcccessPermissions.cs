@@ -10,9 +10,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckDiskAcccessPermissions : IAuditCheck
     {
+        public string Id => "CheckDiskAccess";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckDiskAccess");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             IList<string> accessErrors = new List<string>();
             try
             {

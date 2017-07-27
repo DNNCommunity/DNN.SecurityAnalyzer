@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using DNN.Modules.SecurityAnalyzer.Components.Checks;
 using DotNetNuke.Common;
 
@@ -43,8 +44,18 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             var results = new List<CheckResult>();
             foreach (var check in _auditChecks)
             {
-                var result = check.Execute();
-                results.Add(result);
+                try
+                {
+                    var result = check.Execute();
+                    results.Add(result);
+                }
+                catch (Exception ex)
+                {
+                    var result = new CheckResult(SeverityEnum.Unverified, check.Id);
+                    result.Notes.Add("Exception throw out during the checking process, Message: " + HttpUtility.HtmlEncode(ex.Message));
+                    results.Add(result);
+                }
+                
             }
             return results;
         }

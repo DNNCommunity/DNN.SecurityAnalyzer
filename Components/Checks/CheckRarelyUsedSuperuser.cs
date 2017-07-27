@@ -6,9 +6,11 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
     public class CheckRarelyUsedSuperuser : IAuditCheck
     {
+        public string Id => "CheckRarelyUsedSuperuser";
+
         public CheckResult Execute()
         {
-            var result = new CheckResult(SeverityEnum.Unverified, "CheckRarelyUsedSuperuser");
+            var result = new CheckResult(SeverityEnum.Unverified, Id);
             try
             {
                 var totalRecords = 0;
