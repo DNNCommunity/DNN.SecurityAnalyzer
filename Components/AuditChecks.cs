@@ -52,7 +52,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 catch (Exception ex)
                 {
                     var result = new CheckResult(SeverityEnum.Unverified, check.Id);
-                    result.Notes.Add("Exception throw out during the checking process, Message: " + HttpUtility.HtmlEncode(ex.Message));
+                    result.Notes.Add("An error occured, Message: " + HttpUtility.HtmlEncode(ex.Message));
                     results.Add(result);
                 }
                 

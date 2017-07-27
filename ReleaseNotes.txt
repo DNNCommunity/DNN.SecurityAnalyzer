@@ -12,6 +12,7 @@
 			<li><b>Version 1.0.2</b> - Fix resx.</li>
 			<li><b>Version 8.0.2</b> - Check Default.aspx.</li>
 			<li><b>Version 8.1.0</b> - Fix for critical issue 2017-08.</li>
+			<li><b>Version 8.1.1</b> - Auto add Telerik key and better error handling.</li>
 		</ul>
 	</p>
 </div>
