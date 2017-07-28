@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
@@ -11,32 +10,25 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, Id);
-            try
+            var invalidFolders = new List<string>();
+            var investigatefiles = Utility.FindUnexpectedExtensions(invalidFolders).ToList();
+            if (investigatefiles.Count > 0)
             {
-                IList<string> invalidFolders = new List<string>();
-                var investigatefiles = Utility.FindUnexpectedExtensions(ref invalidFolders);
-                if (investigatefiles.Count() > 0)
+                result.Severity = SeverityEnum.Failure;
+                foreach (var filename in investigatefiles)
                 {
-                    result.Severity = SeverityEnum.Failure;
-                    foreach (var filename in investigatefiles)
-                    {
-                        result.Notes.Add("file:" + filename);
-                    }
-                }
-                else
-                {
-                    result.Severity = SeverityEnum.Pass;
-                }
-
-                if (invalidFolders.Count > 0)
-                {
-                    var folders = string.Join("", invalidFolders.Select(f => $"<p>{f}</p>").ToArray());
-                    result.Notes.Add($"<p>Below folders are not able to access by permission restriction:</p>{folders}");
+                    result.Notes.Add("file:" + filename);
                 }
             }
-            catch (Exception)
+            else
             {
-                throw;
+                result.Severity = SeverityEnum.Pass;
+            }
+
+            if (invalidFolders.Count > 0)
+            {
+                var folders = string.Join("", invalidFolders.Select(f => $"<p>{f}</p>").ToArray());
+                result.Notes.Add($"<p>The following folders are inaccessible due to permission restrictions:</p>{folders}");
             }
             return result;
         }

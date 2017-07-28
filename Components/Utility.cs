@@ -10,7 +10,6 @@ using System.Xml;
 using DotNetNuke.Application;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Data;
-using DotNetNuke.Entities.Controllers;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
@@ -75,7 +74,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         {
             try
             {
-                IEnumerable<string> fileList = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories);
+                var fileList = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories);
                 var queryMatchingFiles =
                     from file in fileList
                     let fileText = GetFileText(file)
@@ -95,9 +94,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         ///     search all website files for files with a potential dangerous extension
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<string> FindUnexpectedExtensions(ref IList<string> invalidFolders)
+        public static IEnumerable<string> FindUnexpectedExtensions(IList<string> invalidFolders)
         {
-            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories, ref invalidFolders)
+            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories, invalidFolders)
             .Where(s => s.EndsWith(".asp", StringComparison.InvariantCultureIgnoreCase) || s.EndsWith(".php", StringComparison.InvariantCultureIgnoreCase));
             return files;
         }
@@ -118,6 +117,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
             catch
             {
+                // ignore
             }
             results = "Database instances Found:" + rowCount + "<br/>" + results;
             return results;
@@ -285,14 +285,14 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption)
         {
             IList<string> invalidFolders = new List<string>();
-            return GetFiles(path, searchPattern, searchOption, ref invalidFolders);
+            return GetFiles(path, searchPattern, searchOption, invalidFolders);
         } 
 
         /// <summary>
         /// Recursively finds file
         /// </summary>
         /// <returns></returns>
-        private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption, ref IList<string> invalidFolders)
+        private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption, IList<string> invalidFolders)
         {
             try
             {
@@ -305,7 +305,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     foreach (var folder in folders)
                     {
                         //recursive call to the same method
-                        files.AddRange(GetFiles(folder, searchPattern, searchOption, ref invalidFolders));
+                        var fs = GetFiles(folder, searchPattern, searchOption, invalidFolders);
+                        files.AddRange(fs);
                     }
                 }
 
