@@ -95,9 +95,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         ///     search all website files for files with a potential dangerous extension
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<string> FindUnexpectedExtensions()
+        public static IEnumerable<string> FindUnexpectedExtensions(ref IList<string> invalidFolders)
         {
-            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories, ref invalidFolders)
             .Where(s => s.EndsWith(".asp", StringComparison.InvariantCultureIgnoreCase) || s.EndsWith(".php", StringComparison.InvariantCultureIgnoreCase));
             return files;
         }
@@ -284,6 +284,16 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         /// <returns></returns>
         private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption)
         {
+            IList<string> invalidFolders = new List<string>();
+            return GetFiles(path, searchPattern, searchOption, ref invalidFolders);
+        } 
+
+        /// <summary>
+        /// Recursively finds file
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption, ref IList<string> invalidFolders)
+        {
             try
             {
                 //Looking at the root folder only. There should not be any permission issue here.
@@ -295,7 +305,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     foreach (var folder in folders)
                     {
                         //recursive call to the same method
-                        files.AddRange(GetFiles(folder, searchPattern, searchOption));
+                        files.AddRange(GetFiles(folder, searchPattern, searchOption, ref invalidFolders));
                     }
                 }
 
@@ -303,9 +313,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }
             catch (Exception)
             {
+                invalidFolders.Add(path);
                 return new List<string>();
-            }
-            
+            }            
         }
     }
 }

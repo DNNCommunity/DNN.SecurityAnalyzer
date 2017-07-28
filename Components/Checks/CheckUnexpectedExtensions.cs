@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
@@ -12,7 +13,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
             var result = new CheckResult(SeverityEnum.Unverified, Id);
             try
             {
-                var investigatefiles = Utility.FindUnexpectedExtensions();
+                IList<string> invalidFolders = new List<string>();
+                var investigatefiles = Utility.FindUnexpectedExtensions(ref invalidFolders);
                 if (investigatefiles.Count() > 0)
                 {
                     result.Severity = SeverityEnum.Failure;
@@ -24,6 +26,12 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
                 else
                 {
                     result.Severity = SeverityEnum.Pass;
+                }
+
+                if (invalidFolders.Count > 0)
+                {
+                    var folders = string.Join("", invalidFolders.Select(f => $"<p>{f}</p>").ToArray());
+                    result.Notes.Add($"<p>Below folders are not able to access by permission restriction:</p>{folders}");
                 }
             }
             catch (Exception)

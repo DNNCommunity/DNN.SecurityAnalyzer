@@ -230,11 +230,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
         private static string UpdateTelerikEncryptionKey(string keyName)
         {
-            const string defaultValue = "MDEyMzQ1Njc4OUFCQ0RFRjAxMjM0NTY3ODlBQkNERUYwMTIzNDU2Nzg5QUJDREVG";
-
             var strError = "";
             var currentKey = Config.GetSetting(keyName);
-            if (string.IsNullOrEmpty(currentKey) || defaultValue.Equals(currentKey) || currentKey.Length < 40)
+            if (string.IsNullOrEmpty(currentKey) || currentKey.Length < 40)
             {
                 try
                 {
