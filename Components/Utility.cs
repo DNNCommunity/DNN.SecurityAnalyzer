@@ -101,6 +101,26 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             return files;
         }
 
+        /// <summary>
+        ///     search all website files which are hidden or system.
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> FineHiddenSystemFiles()
+        {
+            var files = GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.*", SearchOption.AllDirectories)
+            .Where(f =>
+            {
+                if (Path.GetFileName(f)?.Equals("thumbs.db", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    return false;
+                }
+
+                var attributes = File.GetAttributes(f);
+                return (attributes & FileAttributes.Hidden) != 0 || (attributes & FileAttributes.System) != 0;
+            });
+            return files;
+        }
+
         public static string SearchDatabase(string searchText)
         {
             var results = "";

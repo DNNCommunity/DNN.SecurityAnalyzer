@@ -27,6 +27,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 new CheckDiskAcccessPermissions(),
                 new CheckSqlRisk(),
                 new CheckAllowableFileExtensions(),
+                new CheckHiddenSystemFiles(),
                 new CheckTelerikVulnerability(),
                 new CheckHttpModules()
             };

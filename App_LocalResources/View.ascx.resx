@@ -453,4 +453,16 @@ If you expect this addition, then just ignore this email; otherwise, an immediat
   <data name="CheckHttpModulesSuccess.Text" xml:space="preserve">
     <value>The Security Analyzer Http Module is installed.</value>
   </data>
+  <data name="CheckHiddenSystemFilesFailure.Text" xml:space="preserve">
+    <value>There are files marked as system file or hidden in the website folder.</value>
+  </data>
+  <data name="CheckHiddenSystemFilesName.Text" xml:space="preserve">
+    <value>Check Hidden Files</value>
+  </data>
+  <data name="CheckHiddenSystemFilesReason.Text" xml:space="preserve">
+    <value>Hackers may upload rootkits into the website, they marked them as system file or hidden in file system, then you can not see these files in file explorer.</value>
+  </data>
+  <data name="CheckHiddenSystemFilesSuccess.Text" xml:space="preserve">
+    <value>There are no files marked as system file or hidden in the website folder.</value>
+  </data>
 </root>
