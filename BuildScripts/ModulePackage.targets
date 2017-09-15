@@ -83,9 +83,9 @@
       <Output TaskParameter="Include" ItemName="OutputContent" />
     </CreateItem>
     <!-- Create the Install package -->    
-    <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)_'$(BUILD_NUMBER)_Install.$(Extension)" />
+    <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)_$(BUILD_NUMBER)_Install.$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_'$(BUILD_NUMBER)_Install.$(Extension)" DestinationFolder="install/" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(BUILD_NUMBER)_Install.$(Extension)" DestinationFolder="install/" />
     
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\ResourcesZip" />
@@ -110,11 +110,11 @@
       <Output TaskParameter="Include" ItemName="OutputSource" />
     </CreateItem>
 
-    <Zip Files="@(OutputSource)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)_'$(BUILD_NUMBER)_Source.$(Extension)" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_'$(BUILD_NUMBER)_Source.$(Extension)" DestinationFolder="install/" />
+    <Zip Files="@(OutputSource)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)_$(BUILD_NUMBER)_Source.$(Extension)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(BUILD_NUMBER)_Source.$(Extension)" DestinationFolder="install/" />
 
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)_'$(BUILD_NUMBER)_Install.$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)_'$(BUILD_NUMBER)_Source.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)_$(BUILD_NUMBER)_Install.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)_$(BUILD_NUMBER)_Source.$(Extension)" />
 
     <Delete Files="$(MSBuildProjectDirectory)\Resources.Zip" />
 
