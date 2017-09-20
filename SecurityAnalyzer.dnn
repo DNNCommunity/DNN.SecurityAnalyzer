@@ -71,7 +71,7 @@
             <attributes>
               <businessControllerClass>DNN.Modules.SecurityAnalyzer.Components.FeatureController</businessControllerClass>
               <desktopModuleID>[DESKTOPMODULEID]</desktopModuleID>
-              <upgradeVersionsList>01.00.00,08.00.02,08.01.01</upgradeVersionsList>
+              <upgradeVersionsList>01.00.00,08.00.02,08.01.01,08.01.04</upgradeVersionsList>
             </attributes>
           </eventMessage>
         </component>

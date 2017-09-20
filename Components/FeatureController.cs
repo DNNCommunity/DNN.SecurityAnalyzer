@@ -37,6 +37,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                         UpdateTelerikEncryptionKey("Telerik.Web.UI.DialogParametersEncryptionKey");
                     }
                     break;
+                case "08.01.04":
+                    Utility.CheckTelerikSettings();
+                    break;
             }
 
             return String.Empty;
