@@ -345,6 +345,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         //DNN-10259: Site loses ability to add pages after Security Patch install
         public static bool CheckTelerikSettings()
         {
+            const string skinAssemblyKey = "Telerik.Web.SkinsAssembly";
+
             // add the entry for versions older than DNN 7.1.2 which started using Telerik 2017.2.717.40
             var dnnVerWithoutSkin = new Version(7,1,2);
             var dnnLibVer = GetDnnLibraryVersion();
@@ -352,14 +354,17 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 return true;
 
             var assemblyFile = Path.Combine(Globals.ApplicationMapPath, "bin\\Telerik.Web.UI.Skins.dll");
-            var appSetting = Config.GetSetting("Telerik.Web.SkinsAssembly");
-            if (File.Exists(assemblyFile) && (string.IsNullOrEmpty(appSetting) || appSetting.Equals("Disabled", StringComparison.InvariantCultureIgnoreCase)))
+            if (File.Exists(assemblyFile))
             {
-                var version = Assembly.LoadFile(assemblyFile).GetName().Version;
                 var config = Config.Load();
-                Config.AddAppSetting(config, "Telerik.Web.SkinsAssembly", version.ToString());
-                Config.Save(config);
+                var asmFullName = Assembly.LoadFile(assemblyFile).GetName().ToString();
 
+                var appSetting = Config.GetSetting(skinAssemblyKey);
+                if (string.IsNullOrEmpty(appSetting) || !appSetting.Equals(asmFullName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Config.AddAppSetting(config, skinAssemblyKey, asmFullName);
+                    Config.Save(config);
+                }
                 return true;
             }
 
