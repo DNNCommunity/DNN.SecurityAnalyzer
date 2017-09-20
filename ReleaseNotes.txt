@@ -14,6 +14,7 @@
 			<li><b>Version 8.1.0</b> - Fix for critical issue 2017-08.</li>
 			<li><b>Version 8.1.1</b> - Auto add Telerik key and better error handling.</li>
 			<li><b>Version 8.1.3</b> - Updated latest Telerik patch check.</li>
+			<li><b>Version 8.1.4</b> - Check app setting for Telerik skins assembly.</li>
 		</ul>
 	</p>
 </div>

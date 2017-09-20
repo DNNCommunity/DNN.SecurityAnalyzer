@@ -8,8 +8,10 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Xml;
 using DotNetNuke.Application;
+using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Data;
+using Assembly = System.Reflection.Assembly;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
@@ -337,6 +339,25 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 invalidFolders.Add(path);
                 return new List<string>();
             }            
+        }
+
+        public static bool CheckTelerikSettings()
+        {
+            var assemblyFile = Path.Combine(Globals.ApplicationMapPath, "bin\\Telerik.Web.UI.Skins.dll");
+            var appSetting = Config.GetSetting("Telerik.Web.SkinsAssembly");
+            if (File.Exists(assemblyFile) && (string.IsNullOrEmpty(appSetting) || appSetting.Equals("Disabled", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                var version = Assembly.LoadFile(assemblyFile).GetName().Version.ToString();
+                var settingValue = $"Telerik.Web.UI.Skins, Version={version}, Culture=neutral, PublicKeyToken=121fae78165ba3d4";
+
+                var config = Config.Load();
+                Config.AddAppSetting(config, "Telerik.Web.SkinsAssembly", settingValue);
+                Config.Save(config);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

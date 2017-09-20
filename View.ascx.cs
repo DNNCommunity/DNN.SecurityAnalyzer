@@ -42,6 +42,12 @@ namespace DNN.Modules.SecurityAnalyzer
             if (!Page.IsPostBack)
             {
                 Utility.CleanUpInstallerFiles();
+
+                if (Utility.CheckTelerikSettings())
+                {
+                    Response.Redirect(Request.RawUrl, true);
+                }
+
                 GetAuditResults();
                 GetSuperUsers();
                 GetModifiedSettings();
