@@ -341,23 +341,35 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             }            
         }
 
+        //DNN-10258: Site loses ability to edit content after Security Patch install
+        //DNN-10259: Site loses ability to add pages after Security Patch install
         public static bool CheckTelerikSettings()
         {
+            // add the entry for versions older than DNN 7.1.2 which started using Telerik 2017.2.717.40
+            var dnnVerWithoutSkin = new Version(7,1,2);
+            var dnnLibVer = GetDnnLibraryVersion();
+            if (dnnLibVer >= dnnVerWithoutSkin)
+                return true;
+
             var assemblyFile = Path.Combine(Globals.ApplicationMapPath, "bin\\Telerik.Web.UI.Skins.dll");
             var appSetting = Config.GetSetting("Telerik.Web.SkinsAssembly");
             if (File.Exists(assemblyFile) && (string.IsNullOrEmpty(appSetting) || appSetting.Equals("Disabled", StringComparison.InvariantCultureIgnoreCase)))
             {
-                var version = Assembly.LoadFile(assemblyFile).GetName().Version.ToString();
-                var settingValue = $"Telerik.Web.UI.Skins, Version={version}, Culture=neutral, PublicKeyToken=121fae78165ba3d4";
-
+                var version = Assembly.LoadFile(assemblyFile).GetName().Version;
                 var config = Config.Load();
-                Config.AddAppSetting(config, "Telerik.Web.SkinsAssembly", settingValue);
+                Config.AddAppSetting(config, "Telerik.Web.SkinsAssembly", version.ToString());
                 Config.Save(config);
 
                 return true;
             }
 
             return false;
+        }
+
+        private static Version GetDnnLibraryVersion()
+        {
+            var assemblyFile = Path.Combine(Globals.ApplicationMapPath, "bin\\DotNetNuke.dll");
+            return File.Exists(assemblyFile) ? Assembly.LoadFile(assemblyFile).GetName().Version : new Version(0, 0, 0);
         }
     }
 }
