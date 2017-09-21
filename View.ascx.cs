@@ -43,7 +43,7 @@ namespace DNN.Modules.SecurityAnalyzer
             {
                 Utility.CleanUpInstallerFiles();
 
-                if (Utility.CheckTelerikSettings())
+                if (Utility.UpdateTelerikSkinsSettings())
                 {
                     Response.Redirect(Request.RawUrl, true);
                 }

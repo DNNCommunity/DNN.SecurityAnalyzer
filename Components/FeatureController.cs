@@ -38,7 +38,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     }
                     break;
                 case "08.01.04":
-                    Utility.CheckTelerikSettings();
+                    Utility.UpdateTelerikSkinsSettings();
                     break;
             }
 
