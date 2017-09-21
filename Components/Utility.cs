@@ -364,8 +364,9 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 {
                     Config.AddAppSetting(config, skinAssemblyKey, asmFullName);
                     Config.Save(config);
+
+                    return true;
                 }
-                return true;
             }
 
             return false;
