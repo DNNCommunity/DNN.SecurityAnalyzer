@@ -80,6 +80,7 @@
     <Compile Include="Components\SeverityEnum.cs" />
     <Compile Include="Components\Utility.cs" />
     <Compile Include="HttpModules\SecurityAnalyzerModule.cs" />
+    <Compile Include="Components\TelerikCompatibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAnalyzerModuleBase.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -139,6 +140,16 @@
     <None Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Support Projects\Dnn.PatchedFileBrowserProvider62\Dnn.PatchedFileBrowserProvider62.csproj">
+      <Project>{796b4bd5-2e5a-4138-b206-d72c72b362ff}</Project>
+      <Name>Dnn.PatchedFileBrowserProvider62</Name>
+    </ProjectReference>
+    <ProjectReference Include="Support Projects\Dnn.PatchedFileBrowserProviderPre62\Dnn.PatchedFileBrowserProviderPre62.csproj">
+      <Project>{2c579d53-47a0-43bd-8a4a-0597c3c83ac9}</Project>
+      <Name>Dnn.PatchedFileBrowserProviderPre62</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Configuration;
+using DNN.Modules.SecurityAnalyzer.Components;
 using DotNetNuke.Application;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
@@ -93,6 +94,8 @@ namespace DNN.Modules.SecurityAnalyzer.HttpModules
             {
                 InitializeCookieHandler(context);
             }
+
+            new TelerikCompatibility().PatchIt();
 
             /*
             if (currentAppVersion < Dnn920Ver)

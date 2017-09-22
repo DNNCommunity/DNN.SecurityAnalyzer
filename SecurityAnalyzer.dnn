@@ -95,6 +95,14 @@
               <name>DNN.Modules.SecurityAnalyzer.dll</name>
               <path>bin</path>
             </assembly>
+            <assembly>
+              <name>Dnn.PatchedFileBrowserProviderPre62.dll</name>
+              <path>bin</path>
+            </assembly>
+            <assembly>
+              <name>Dnn.PatchedFileBrowserProvider62.dll</name>
+              <path>bin</path>
+            </assembly>
           </assemblies>
         </component>
         <component type="ResourceFile">
