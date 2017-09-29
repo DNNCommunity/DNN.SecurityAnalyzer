@@ -244,8 +244,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
                     //save the current config file
                     Config.BackupConfig();
-
-                    var decrypted = Utility.DecryptConfigFile();
+                    string providerName;
+                    var decrypted = Utility.DecryptConfigFile(out providerName);
 
                     //create a random Telerik encryption key and add it under <appSettings>
                     var newKey = new PortalSecurity().CreateKey(32);
@@ -261,7 +261,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
                     if (decrypted)
                     {
-                        Utility.EncryptConfigFile();
+                        Utility.EncryptConfigFile(providerName);
                     }
                 }
                 catch (Exception ex)

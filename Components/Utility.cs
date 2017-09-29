@@ -357,7 +357,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 var appSetting = Config.GetSetting(skinAssemblyKey);
                 if (string.IsNullOrEmpty(appSetting) || !appSetting.Equals(asmFullName, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var decrypted = DecryptConfigFile();
+                    string providerName;
+                    var decrypted = DecryptConfigFile(out providerName);
                     var config = Config.Load();
 
                     Config.AddAppSetting(config, skinAssemblyKey, asmFullName);
@@ -365,7 +366,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
 
                     if (decrypted)
                     {
-                        EncryptConfigFile();
+                        EncryptConfigFile(providerName);
                     }
 
                     return true;
@@ -375,12 +376,14 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             return false;
         }
 
-        public static bool DecryptConfigFile()
+        public static bool DecryptConfigFile(out string providerName)
         {
+            providerName = string.Empty;
             var config = WebConfigurationManager.OpenWebConfiguration("~/");
             var section = config.GetSection("appSettings");
             if (section != null && section.SectionInformation.IsProtected)
             {
+                providerName = section.SectionInformation.ProtectionProvider.Name;
                 section.SectionInformation.UnprotectSection();
                 config.Save();
 
@@ -390,14 +393,13 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             return false;
         }
 
-        public static void EncryptConfigFile()
+        public static void EncryptConfigFile(string providerName)
         {
             var config = WebConfigurationManager.OpenWebConfiguration("~/");
             var section = config.GetSection("appSettings");
-            const string provider = "RSAProtectedConfigurationProvider";
             if (section != null)
             {
-                section.SectionInformation.ProtectSection(provider);
+                section.SectionInformation.ProtectSection(providerName);
                 config.Save();
             }
         }
