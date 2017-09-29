@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Web.Configuration;
 using System.Xml;
 using DotNetNuke.Application;
 using DotNetNuke.Common;
@@ -349,20 +351,55 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             var assemblyFile = Path.Combine(Globals.ApplicationMapPath, "bin\\Telerik.Web.UI.Skins.dll");
             if (File.Exists(assemblyFile))
             {
-                var config = Config.Load();
+                
                 var asmFullName = Assembly.LoadFile(assemblyFile).GetName().ToString();
 
                 var appSetting = Config.GetSetting(skinAssemblyKey);
                 if (string.IsNullOrEmpty(appSetting) || !appSetting.Equals(asmFullName, StringComparison.InvariantCultureIgnoreCase))
                 {
+                    var decrypted = DecryptConfigFile();
+                    var config = Config.Load();
+
                     Config.AddAppSetting(config, skinAssemblyKey, asmFullName);
                     Config.Save(config);
+
+                    if (decrypted)
+                    {
+                        EncryptConfigFile();
+                    }
 
                     return true;
                 }
             }
 
             return false;
+        }
+
+        public static bool DecryptConfigFile()
+        {
+            var config = WebConfigurationManager.OpenWebConfiguration("~/");
+            var section = config.GetSection("appSettings");
+            if (section != null && section.SectionInformation.IsProtected)
+            {
+                section.SectionInformation.UnprotectSection();
+                config.Save();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void EncryptConfigFile()
+        {
+            var config = WebConfigurationManager.OpenWebConfiguration("~/");
+            var section = config.GetSection("appSettings");
+            const string provider = "RSAProtectedConfigurationProvider";
+            if (section != null)
+            {
+                section.SectionInformation.ProtectSection(provider);
+                config.Save();
+            }
         }
     }
 }
