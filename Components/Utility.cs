@@ -357,8 +357,14 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 var appSetting = Config.GetSetting(skinAssemblyKey);
                 if (string.IsNullOrEmpty(appSetting) || !appSetting.Equals(asmFullName, StringComparison.InvariantCultureIgnoreCase))
                 {
+                    //save the current config file
+                    Config.BackupConfig();
+
+                    //decrypt the web.config if needed.
                     string providerName;
-                    var decrypted = DecryptConfigFile(out providerName);
+                    var decrypted = Utility.DecryptConfigFile(out providerName);
+
+                    //open the web.config
                     var config = Config.Load();
 
                     Config.AddAppSetting(config, skinAssemblyKey, asmFullName);

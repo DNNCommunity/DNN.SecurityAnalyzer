@@ -239,22 +239,20 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             {
                 try
                 {
-                    //open the web.config
-                    var xmlConfig = Config.Load();
-
                     //save the current config file
                     Config.BackupConfig();
+
+                    //decrypt the web.config if needed.
                     string providerName;
                     var decrypted = Utility.DecryptConfigFile(out providerName);
+
+                    //open the web.config
+                    var xmlConfig = Config.Load();
 
                     //create a random Telerik encryption key and add it under <appSettings>
                     var newKey = new PortalSecurity().CreateKey(32);
                     newKey = Convert.ToBase64String(Encoding.ASCII.GetBytes(newKey));
                     Config.AddAppSetting(xmlConfig, keyName, newKey);
-
-                    //save a copy of the exitsing web.config
-                    var backupFolder = string.Concat(Globals.glbConfigFolder, "Backup_", DateTime.Now.ToString("yyyyMMddHHmm"), "\\");
-                    strError += Config.Save(xmlConfig, backupFolder + "web_.config") + Environment.NewLine;
 
                     //save the web.config
                     strError += Config.Save(xmlConfig) + Environment.NewLine;
