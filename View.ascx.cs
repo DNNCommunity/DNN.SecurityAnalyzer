@@ -81,7 +81,7 @@ namespace DNN.Modules.SecurityAnalyzer
                 IEnumerable<string> files = foundinfiles as IList<string> ?? foundinfiles.ToList();
                 if (files.Any() == false)
                 {
-                    lblfileresults.Text = Localization.GetString("NoFileResults");
+                    lblfileresults.Text = Localization.GetString("NoFileResults", LocalResourceFile);
                 }
                 else
                 {
