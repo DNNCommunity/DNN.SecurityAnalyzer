@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
@@ -7,28 +6,23 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     {
         public string Id => "CheckHiddenSystemFiles";
 
+        public bool LazyLoad => true;
+
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, Id);
-            try
+            var investigatefiles = Utility.FineHiddenSystemFiles();
+            if (investigatefiles.Any())
             {
-                var investigatefiles = Utility.FineHiddenSystemFiles();
-                if (investigatefiles.Any())
+                result.Severity = SeverityEnum.Failure;
+                foreach (var filename in investigatefiles)
                 {
-                    result.Severity = SeverityEnum.Failure;
-                    foreach (var filename in investigatefiles)
-                    {
-                        result.Notes.Add("file:" + filename);
-                    }
-                }
-                else
-                {
-                    result.Severity = SeverityEnum.Pass;
+                    result.Notes.Add("file:" + filename);
                 }
             }
-            catch (Exception)
+            else
             {
-                throw;
+                result.Severity = SeverityEnum.Pass;
             }
             return result;
         }

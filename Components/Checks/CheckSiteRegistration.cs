@@ -1,5 +1,4 @@
-﻿using System;
-using DotNetNuke.Entities.Portals;
+﻿using DotNetNuke.Entities.Portals;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
@@ -7,28 +6,22 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     {
         public string Id => "CheckSiteRegistration";
 
+        public bool LazyLoad => false;
+
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, Id);
-            try
+            var portalController = new PortalController();
+            result.Severity = SeverityEnum.Pass;
+            foreach (PortalInfo portal in portalController.GetPortals())
             {
-                var portalController = new PortalController();
-                result.Severity = SeverityEnum.Pass;
-                foreach (PortalInfo portal in portalController.GetPortals())
+                //check for public registration
+                if (portal.UserRegistration == 2)
                 {
-                    //check for public registration
-                    if (portal.UserRegistration == 2)
-                    {
-                        result.Severity = SeverityEnum.Warning;
-                        result.Notes.Add("Portal:" + portal.PortalName);
-                    }
+                    result.Severity = SeverityEnum.Warning;
+                    result.Notes.Add("Portal:" + portal.PortalName);
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
-
             return result;
         }
     }

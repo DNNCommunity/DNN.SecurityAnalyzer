@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Resources;
 using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Services.Localization;
@@ -12,6 +11,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     public class CheckSqlRisk : IAuditCheck
     {
         public string Id => "CheckSqlRisk";
+
+        public bool LazyLoad => false;
 
         private string LocalResourceFile
         {

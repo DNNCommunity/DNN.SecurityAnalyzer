@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml;
 using DotNetNuke.Application;
 using DotNetNuke.Common;
@@ -13,41 +10,36 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     {
         public string Id => "CheckDefaultPage";
 
+        public bool LazyLoad => false;
+
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, Id);
-            try
+            IList<string> modifiedFiles;
+            var fileModified = CheckDefaultPageModified(out modifiedFiles);
+            if (fileModified)
             {
-                IList<string> modifiedFiles;
-                var fileModified = CheckDefaultPageModified(out modifiedFiles);
-                if (fileModified)
+                if (modifiedFiles.Count == 0)
                 {
-                    if (modifiedFiles.Count == 0)
+                    if (DotNetNukeContext.Current.Application.Version.Major > 6)
                     {
-                        if (DotNetNukeContext.Current.Application.Version.Major > 6)
-                        {
-                            result.Notes.Add("There is no data available about your current installation, please upgrade this module to it's latest version.");
-                        }
-                        else
-                        {
-                            fileModified = false;
-                        }
+                        result.Notes.Add("There is no data available about your current installation, please upgrade this module to it's latest version.");
                     }
-
-                    result.Severity = SeverityEnum.Failure;
-                    foreach (var filename in modifiedFiles)
+                    else
                     {
-                        result.Notes.Add("file:" + filename);
+                        fileModified = false;
                     }
                 }
-                else
+
+                result.Severity = SeverityEnum.Failure;
+                foreach (var filename in modifiedFiles)
                 {
-                    result.Severity = SeverityEnum.Pass;
+                    result.Notes.Add("file:" + filename);
                 }
             }
-            catch (Exception)
+            else
             {
-                throw;
+                result.Severity = SeverityEnum.Pass;
             }
             return result;
         }

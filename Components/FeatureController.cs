@@ -8,7 +8,6 @@ using DotNetNuke.Entities.Modules.Definitions;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Security;
 using DotNetNuke.Security.Permissions;
-using DotNetNuke.Services.Upgrade;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
