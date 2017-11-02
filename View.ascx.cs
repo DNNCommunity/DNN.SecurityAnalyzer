@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.UI.WebControls;
 using DNN.Modules.SecurityAnalyzer.Components;
 using DotNetNuke.Common;
 using DotNetNuke.Common.Utilities;
@@ -21,6 +22,20 @@ namespace DNN.Modules.SecurityAnalyzer
     public partial class View : SecurityAnalyzerModuleBase
     {
         protected ArrayList Users { get; set; }
+
+        private IList<CheckResult> CheckResults
+        {
+            get
+            {
+                if (ViewState["CheckResults"] == null)
+                {
+                    var audit = new AuditChecks();
+                    ViewState["CheckResults"] = audit.DoChecks();
+                }
+
+                return ViewState["CheckResults"] as IList<CheckResult>;
+            }
+        } 
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -56,6 +71,37 @@ namespace DNN.Modules.SecurityAnalyzer
                 if (DotNetNuke.Application.DotNetNukeContext.Current.Application.Version < new Version(6, 0, 0))
                 {
                     panelResources.Visible = true;
+                }
+            }
+        }
+
+        protected void OnAuditCheck(object sender, EventArgs e)
+        {
+            var linkButton = sender as LinkButton;
+            var checkName = linkButton?.CommandArgument;
+            if (!string.IsNullOrEmpty(checkName))
+            {
+                
+                var existResult = CheckResults.FirstOrDefault(r => r.CheckName == checkName);
+                if (existResult != null)
+                {
+                    var scriptTimeout = Server.ScriptTimeout;
+                    Server.ScriptTimeout = int.MaxValue;
+
+                    try
+                    {
+                        var result = new AuditChecks().DoCheck(checkName);
+                        var index = CheckResults.IndexOf(existResult);
+                        CheckResults.RemoveAt(index);
+                        CheckResults.Insert(index, result);
+
+                        dgResults.DataSource = CheckResults;
+                        dgResults.DataBind();
+                    }
+                    finally
+                    {
+                        Server.ScriptTimeout = scriptTimeout;
+                    }                 
                 }
             }
         }
@@ -146,14 +192,16 @@ namespace DNN.Modules.SecurityAnalyzer
             return ResolveUrl("~/images/icon_help_32px.gif");
         }
 
-        public string DisplayResult(int severity, string successText, string failureTest)
+        public string DisplayResult(CheckResult checkResult)
         {
-            switch (severity)
+            switch (checkResult.Severity)
             {
-                case (int) SeverityEnum.Pass:
-                    return successText;
+                case SeverityEnum.Unverified:
+                    return checkResult.Reason;
+                case SeverityEnum.Pass:
+                    return checkResult.SuccessText;
                 default:
-                    return failureTest;
+                    return checkResult.FailureText;
             }
         }
 

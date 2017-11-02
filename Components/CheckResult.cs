@@ -4,6 +4,7 @@ using DotNetNuke.Services.Localization;
 
 namespace DNN.Modules.SecurityAnalyzer.Components
 {
+    [Serializable]
     public class CheckResult
     {
         public CheckResult(SeverityEnum severity, string checkname)

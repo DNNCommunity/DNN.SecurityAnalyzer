@@ -7,6 +7,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     {
         public string Id => "CheckSiteRegistration";
 
+        public bool LazyLoad => false;
+
         public CheckResult Execute()
         {
             var result = new CheckResult(SeverityEnum.Unverified, Id);

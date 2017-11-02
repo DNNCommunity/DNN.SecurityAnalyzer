@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="DNN.Modules.SecurityAnalyzer.View"  %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="View.ascx.cs" Inherits="DNN.Modules.SecurityAnalyzer.View" EnableViewState="true"  %>
 <%@ Import Namespace="DNN.Modules.SecurityAnalyzer.Components" %>
 <%@ Import Namespace="DotNetNuke.Entities.Users" %>
 <%@ Import Namespace="DotNetNuke.Services.Localization" %>
@@ -44,12 +44,21 @@
                         </asp:TemplateColumn>
                         <asp:TemplateColumn HeaderText="Severity" HeaderStyle-Width="50px" ItemStyle-HorizontalAlign="Center">
                             <ItemTemplate>
-                                <asp:Image ID="image1" runat="server" ImageUrl="<%# GetSeverityImageUrl((int) ((CheckResult) Container.DataItem).Severity) %>"/>
+                                <asp:Image runat="server" 
+                                    ImageUrl="<%# GetSeverityImageUrl((int) ((CheckResult) Container.DataItem).Severity) %>"
+                                    Visible="<%# ((CheckResult) Container.DataItem).Severity != SeverityEnum.Unverified %>"></asp:Image>
+                                <asp:LinkButton runat="server"
+                                    CssClass="dnnPrimaryAction"
+                                    ValidationGroup="AuditChecker"
+                                    resourcekey="Check"
+                                    OnClick="OnAuditCheck"
+                                    CommandArgument="<%# ((CheckResult) Container.DataItem).CheckName %>"
+                                    Visible="<%# ((CheckResult) Container.DataItem).Severity == SeverityEnum.Unverified %>"></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateColumn>
                         <asp:TemplateColumn HeaderText="Result">
                             <ItemTemplate>
-                                <div class="foo" id="resultDiv" runat="server"><%# DisplayResult((int) ((CheckResult) Container.DataItem).Severity, ((CheckResult) Container.DataItem).SuccessText, ((CheckResult) Container.DataItem).FailureText) %></div>
+                                <div class="foo" id="resultDiv" runat="server"><%# DisplayResult((CheckResult) Container.DataItem) %></div>
                             </ItemTemplate>
                         </asp:TemplateColumn>
                         <asp:TemplateColumn HeaderText="Notes">

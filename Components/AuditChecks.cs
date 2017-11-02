@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using DNN.Modules.SecurityAnalyzer.Components.Checks;
 using DotNetNuke.Common;
@@ -40,14 +41,14 @@ namespace DNN.Modules.SecurityAnalyzer.Components
             _auditChecks= checks.AsReadOnly();
         }
 
-        public List<CheckResult> DoChecks()
+        public IList<CheckResult> DoChecks(bool checkAll = false)
         {
             var results = new List<CheckResult>();
             foreach (var check in _auditChecks)
             {
                 try
                 {
-                    var result = check.Execute();
+                    var result = checkAll || !check.LazyLoad ? check.Execute() : new CheckResult(SeverityEnum.Unverified, check.Id);
                     results.Add(result);
                 }
                 catch (Exception ex)
@@ -59,6 +60,19 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                 
             }
             return results;
+        }
+
+        public CheckResult DoCheck(string id)
+        {
+            try
+            {
+                var check = _auditChecks.FirstOrDefault(c => c.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+                return check?.Execute();
+            }
+            catch (Exception)
+            {
+                return new CheckResult(SeverityEnum.Unverified, id);
+            }
         }
     }
 }

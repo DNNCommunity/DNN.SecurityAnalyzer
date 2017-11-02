@@ -13,6 +13,8 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
     {
         public string Id => "CheckSqlRisk";
 
+        public bool LazyLoad => false;
+
         private string LocalResourceFile
         {
             get { return "~/DesktopModules/DNNCorp/SecurityAnalyzer/App_LocalResources/view.ascx"; }
