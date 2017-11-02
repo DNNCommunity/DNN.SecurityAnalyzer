@@ -1,7 +1,4 @@
-﻿using System;
-using System.Web;
-using DotNetNuke.Entities.Controllers;
-using DotNetNuke.Entities.Host;
+﻿using DotNetNuke.Entities.Controllers;
 
 namespace DNN.Modules.SecurityAnalyzer.Components.Checks
 {
@@ -15,23 +12,16 @@ namespace DNN.Modules.SecurityAnalyzer.Components.Checks
         {
             var result = new CheckResult(SeverityEnum.Unverified, Id);
             var allowedExtensions = new FileExtensionWhitelist(HostController.Instance.GetString("FileExtensions"));
-            try
+            if (allowedExtensions.IsAllowedExtension("asp")
+                    || allowedExtensions.IsAllowedExtension("aspx")
+                    || allowedExtensions.IsAllowedExtension("php"))
             {
-                if (allowedExtensions.IsAllowedExtension("asp")
-                        || allowedExtensions.IsAllowedExtension("aspx")
-                        || allowedExtensions.IsAllowedExtension("php"))
-                {
-                    result.Severity = SeverityEnum.Failure;
-                    result.Notes.Add("Extensions: " + allowedExtensions.ToDisplayString());
-                }
-                else
-                {
-                    result.Severity = SeverityEnum.Pass;
-                }
+                result.Severity = SeverityEnum.Failure;
+                result.Notes.Add("Extensions: " + allowedExtensions.ToDisplayString());
             }
-            catch (Exception)
+            else
             {
-                throw;
+                result.Severity = SeverityEnum.Pass;
             }
             return result;
         }

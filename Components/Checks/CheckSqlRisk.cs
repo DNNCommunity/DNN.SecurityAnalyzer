@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Resources;
 using DotNetNuke.Common;
 using DotNetNuke.Data;
 using DotNetNuke.Services.Localization;

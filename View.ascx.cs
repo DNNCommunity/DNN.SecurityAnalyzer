@@ -212,22 +212,14 @@ namespace DNN.Modules.SecurityAnalyzer
 
         public string DisplayNotes(IList<String> notes)
         {
-            try
+            if (notes != null)
             {
-                if (notes != null)
+                if (notes.Count == 0)
                 {
-                    if (notes.Count == 0)
-                    {
-                        return "N/A";
-                    }
-                    return notes.Aggregate(string.Empty, (current, note) => current + note + "<br/>");
+                    return "N/A";
                 }
+                return notes.Aggregate(string.Empty, (current, note) => current + note + "<br/>");
             }
-            catch (Exception)
-            {
-                throw;
-            }
-
             return "N/A";
         }
 
