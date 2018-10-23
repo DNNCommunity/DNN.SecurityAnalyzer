@@ -15,6 +15,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
         {
             var checks = new List<IAuditCheck>
             {
+                new CheckDnnVersion(),
                 new CheckDebug(),
                 new CheckTracing(),
                 new CheckBiography(),

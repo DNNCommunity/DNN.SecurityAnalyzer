@@ -468,4 +468,16 @@ If you expect this addition, then just ignore this email; otherwise, an immediat
   <data name="Check.Text" xml:space="preserve">
     <value>Check</value>
   </data>
+  <data name="CheckDnnVersionFailure.Text" xml:space="preserve">
+    <value>There are major known security vulnerabilities in all versions of DNN Platform up until DNN 9.x, please upgrade to the latest version of DNN Platform.  Once on DNN 9.x, uninstall the Security Analyzer module, it is replaced by the Security Persona Bar extension in DNN 9.x.</value>
+  </data>
+  <data name="CheckDnnVersionName.Text" xml:space="preserve">
+    <value>Check if there are known major security vulnerabilities in this version of DNN</value>
+  </data>
+  <data name="CheckDnnVersionReason.Text" xml:space="preserve">
+    <value>This module should only be used before DNN 9.x, and every version of DNN before 9.x has known major security vulnerabilities.</value>
+  </data>
+  <data name="CheckDnnVersionSuccess.Text" xml:space="preserve">
+    <value>The version of DNN has no major known security vulnerabilities</value>
+  </data>
 </root>
