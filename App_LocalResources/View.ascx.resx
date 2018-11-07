@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -469,7 +469,7 @@ If you expect this addition, then just ignore this email; otherwise, an immediat
     <value>Check</value>
   </data>
   <data name="CheckDnnVersionFailure.Text" xml:space="preserve">
-    <value>There are major known security vulnerabilities in all versions of DNN Platform up until DNN 9.x, please upgrade to the latest version of DNN Platform.  Once on DNN 9.x, uninstall the Security Analyzer module, it is replaced by the Security Persona Bar extension in DNN 9.x.</value>
+    <value>There are multiple major known security vulnerabilities in all versions of DNN Platform prior to DNN 9.x, please upgrade to the latest version of DNN Platform.  Warning, when upgrading, the Security Analyzer module should be uninstalled prior to an upgrade in order to prevent a possible incremental upgrade issue.</value>
   </data>
   <data name="CheckDnnVersionName.Text" xml:space="preserve">
     <value>Check if there are known major security vulnerabilities in this version of DNN</value>
