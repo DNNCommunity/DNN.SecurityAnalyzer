@@ -469,13 +469,16 @@ If you expect this addition, then just ignore this email; otherwise, an immediat
     <value>Check</value>
   </data>
   <data name="CheckDnnVersionFailure.Text" xml:space="preserve">
-    <value>There are multiple major known security vulnerabilities in all versions of DNN Platform prior to DNN 9.x, please upgrade to the latest version of DNN Platform.  Warning, when upgrading, the Security Analyzer module should be uninstalled prior to an upgrade in order to prevent a possible incremental upgrade issue.</value>
+    <value>There are multiple major known security vulnerabilities in all versions of DNN Platform prior to DNN 9.x.</value>
   </data>
   <data name="CheckDnnVersionFailureNote.Text" xml:space="preserve">
-    <value>You are running a version of DNN before 9.x, you must upgrade DNN to address security vulnerabilities in your version of DNN.</value>
+    <value>You are running a version of DNN before 9.x, you must upgrade DNN to address security vulnerabilities in your version of DNN.  Warning, when upgrading, the Security Analyzer module should be uninstalled prior to an upgrade in order to prevent a possible incremental upgrade issue.</value>
   </data>
   <data name="CheckDnnVersionName.Text" xml:space="preserve">
     <value>Check if there are known major security vulnerabilities in this version of DNN</value>
+  </data>
+  <data name="CheckDnnVersionWarningNote.Text" xml:space="preserve">
+    <value>You are running DNN 9.x or later, this module is no longer being maintained and should be uninstalled. You can use the Security Analyzer included in the PersonaBar for security concerns with this version of DNN.</value>
   </data>
   <data name="CheckDnnVersionSuccess.Text" xml:space="preserve">
     <value>The version of DNN has no major known security vulnerabilities</value>
