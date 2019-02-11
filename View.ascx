@@ -90,11 +90,11 @@
         </asp:Panel>
         <br/>
         <hr/>
-        <asp:Panel ID="pnlFileresults" runat="server" CssClass="dnnFormItem dnnClear" Width="450px" Visible="False">
+        <asp:Panel ID="pnlFileresults" runat="server" CssClass="dnnFormItem dnnClear" Visible="False">
             <strong>File Results</strong><br/>
             <asp:Label ID="lblfileresults" runat="server"></asp:Label>
         </asp:Panel><br/>
-        <asp:Panel ID="pnlDatabaseresults" runat="server" CssClass="dnnFormItem dnnClear" Width="450px" Visible="False">
+        <asp:Panel ID="pnlDatabaseresults" runat="server" CssClass="dnnFormItem dnnClear" Visible="False">
             <strong>Database Results</strong>
             <asp:Label ID="lbldatabaseresults" runat="server"></asp:Label>
         </asp:Panel>

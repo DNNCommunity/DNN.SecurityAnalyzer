@@ -83,7 +83,7 @@ namespace DNN.Modules.SecurityAnalyzer.Components
                     let fileText = GetFileText(file)
                     let fileInfo = new FileInfo(file)
                     where fileText.IndexOf(searchText, StringComparison.InvariantCultureIgnoreCase) > -1
-                    select fileInfo.Name + " (" + fileInfo.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
+                    select fileInfo.FullName + " (" + fileInfo.LastWriteTime.ToString(CultureInfo.InvariantCulture) + ")";
                 return queryMatchingFiles;
             }
             catch
